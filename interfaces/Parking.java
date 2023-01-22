@@ -1,7 +1,8 @@
 package interfaces;
 
-public interface Parking {
+import interfaces.Exceptions.ParkingException;
 
-    boolean park(String matriculation);
+public interface Parking {
+    boolean park(String matriculation) throws ParkingException;
 
 }

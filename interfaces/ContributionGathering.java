@@ -5,9 +5,7 @@ import POJO.Store;
 import java.util.Map;
 
 public interface ContributionGathering {
+    Map<String, Double> inquireComparisonContribution(Store current);
 
-    Map<String,Double> inquireComparaisonContribution(Store current);
-    Map<String,Double> inquireComparaisonSell(Store current);
-
-
+    Map<String, Double> inquireComparisonSell(Store current);
 }

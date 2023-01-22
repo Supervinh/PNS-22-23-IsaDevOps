@@ -1,13 +1,15 @@
 package interfaces;
 
 import POJO.Store;
-import POJO.StoreOwner;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface StoreFinder {
+    Optional<Store> findStoreByName(String name);
 
-        Optional<Store> findStoreOwnerByName(String name, String password);
-        Optional<Store> findStoreOwnerById(UUID id, String password);
+    Optional<Store> findStoreById(UUID id);
+
+    Optional<Map<String, String>> findOpeningHoursOfStore(Store store);
 }
