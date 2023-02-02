@@ -11,4 +11,14 @@ public class Customer extends Account {
     private String creditCard;
     private List<Store> preferedStores;
     private LocalDate vfp;
+
+    public int getPoints() {
+        return points;
+    }
+    public String getMatriculation(){
+        return matriculation;
+    }
+    public double getBalance() {
+        return balance;
+    }
 }

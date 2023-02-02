@@ -6,6 +6,13 @@ public class Purchase {
     private double cost;
     private LocalDate date;
     private Customer user;
+
+    public Purchase (double c, Customer u){
+        cost = c;
+        date = LocalDate.now();
+        user = u;
+    }
+
     public double getCost() {
         return cost;
     }
