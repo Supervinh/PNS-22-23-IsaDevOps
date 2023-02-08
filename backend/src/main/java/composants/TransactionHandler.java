@@ -6,8 +6,9 @@ import interfaces.Exceptions.InsufficientBalanceException;
 import interfaces.Exceptions.NegativePointCostException;
 import interfaces.PurchaseRecording;
 import interfaces.TransactionProcessor;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class TransactionHandler implements TransactionProcessor {
     CustomerBalancesModifier customerBalancesModifier;
     PurchaseRecording purchaseRecording;
