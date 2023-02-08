@@ -13,8 +13,9 @@
     </parent>
 
     <groupId>team-b</groupId>
-    <artifactId>IsaDevops</artifactId>
+    <artifactId>server</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>server</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
