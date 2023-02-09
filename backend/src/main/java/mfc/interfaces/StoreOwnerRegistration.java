@@ -1,0 +1,10 @@
+package mfc.interfaces;
+
+import mfc.POJO.Admin;
+import mfc.POJO.StoreOwner;
+import mfc.interfaces.Exceptions.AlreadyExistingAccountException;
+
+public interface StoreOwnerRegistration {
+    StoreOwner register(String mail, String password, Admin authorization) throws AlreadyExistingAccountException;
+
+}
