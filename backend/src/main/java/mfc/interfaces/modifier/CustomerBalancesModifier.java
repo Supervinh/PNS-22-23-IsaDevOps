@@ -1,4 +1,4 @@
-package mfc.interfaces;
+package mfc.interfaces.modifier;
 
 import mfc.POJO.Customer;
 import mfc.interfaces.Exceptions.InsufficientBalanceException;

@@ -1,4 +1,4 @@
-package mfc.interfaces;
+package mfc.interfaces.notifier;
 
 import java.util.Map;
 

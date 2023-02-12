@@ -1,4 +1,4 @@
-package mfc.interfaces;
+package mfc.interfaces.explorer;
 
 import mfc.POJO.Admin;
 
