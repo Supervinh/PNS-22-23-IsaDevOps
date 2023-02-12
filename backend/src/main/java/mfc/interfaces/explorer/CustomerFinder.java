@@ -10,7 +10,5 @@ import java.util.UUID;
 public interface CustomerFinder {
     Optional<Customer> findCustomerByMail(String mail);
 
-    Optional<List<String>> findCustomersMailByStore(Store store);
-
     Optional<Customer> findCustomerById(UUID id);
 }

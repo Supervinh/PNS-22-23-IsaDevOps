@@ -1,4 +1,4 @@
-package mfc.interfaces.Exceptions;
+package mfc.interfaces.exceptions;
 
 public class InsufficientBalanceException extends Exception {
     @Override

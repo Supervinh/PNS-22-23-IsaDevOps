@@ -2,7 +2,7 @@ package mfc.interfaces.modifier;
 
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
-import mfc.interfaces.Exceptions.AlreadyExistingStoreException;
+import mfc.interfaces.exceptions.AlreadyExistingStoreException;
 
 import java.util.Map;
 

@@ -3,9 +3,10 @@ package mfc.components;
 import mfc.POJO.Customer;
 import mfc.POJO.Purchase;
 import mfc.POJO.Store;
+import mfc.interfaces.exceptions.CustomerNotFoundException;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
-import mfc.interfaces.Exceptions.InsufficientBalanceException;
-import mfc.interfaces.Exceptions.NegativePointCostException;
+import mfc.interfaces.exceptions.InsufficientBalanceException;
+import mfc.interfaces.exceptions.NegativePointCostException;
 import mfc.interfaces.modifier.PurchaseRecording;
 import mfc.interfaces.TransactionProcessor;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,8 @@ public class TransactionHandler implements TransactionProcessor {
             return purchase;
         } catch (NegativePointCostException negativePointCostException){
             System.out.println(negativePointCostException.getMessage());
+        } catch (CustomerNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -34,7 +37,7 @@ public class TransactionHandler implements TransactionProcessor {
             customerBalancesModifier.editBalance(user, -cost);
             return purchase(user, cost, store);
 
-        } catch (InsufficientBalanceException insufficientBalanceException){
+        } catch (InsufficientBalanceException | CustomerNotFoundException insufficientBalanceException){
             System.out.println(insufficientBalanceException.getMessage());
         }
         return null;

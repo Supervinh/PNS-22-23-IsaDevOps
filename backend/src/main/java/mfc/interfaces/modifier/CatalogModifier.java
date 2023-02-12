@@ -4,9 +4,9 @@ import mfc.POJO.Admin;
 import mfc.POJO.PayOff;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
-import mfc.interfaces.Exceptions.CredentialsException;
-import mfc.interfaces.Exceptions.NegativeCostException;
-import mfc.interfaces.Exceptions.NegativePointCostException;
+import mfc.interfaces.exceptions.CredentialsException;
+import mfc.interfaces.exceptions.NegativeCostException;
+import mfc.interfaces.exceptions.NegativePointCostException;
 
 public interface CatalogModifier {
     boolean addPayOff(String name, double cost, int pointCost, Store store, StoreOwner authorization) throws NegativeCostException, NegativePointCostException, CredentialsException;

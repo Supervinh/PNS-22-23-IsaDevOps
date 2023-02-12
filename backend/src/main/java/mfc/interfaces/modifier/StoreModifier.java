@@ -2,7 +2,7 @@ package mfc.interfaces.modifier;
 
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
-import mfc.interfaces.Exceptions.CredentialsException;
+import mfc.interfaces.exceptions.CredentialsException;
 
 import java.util.Map;
 
