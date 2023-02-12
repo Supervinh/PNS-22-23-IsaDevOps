@@ -26,8 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class TransactionController {
     public static final String BASE_URI = "/transaction";
 
-    @Autowired
-    private ConvertDTO convertDTO;
+    private final ConvertDTO convertDTO = new ConvertDTO();
 
     @Autowired
     private CustomerFinder customerFinder;

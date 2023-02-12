@@ -23,8 +23,7 @@ public class StoreController {
 
     public static final String BASE_URI = "/store";
 
-    @Autowired
-    private ConvertDTO convertDTO;
+    private final ConvertDTO convertDTO = new ConvertDTO();
 
     @Autowired
     private StoreFinder storeFinder;

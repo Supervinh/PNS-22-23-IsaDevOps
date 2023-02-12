@@ -28,8 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomerController {
     public static final String BASE_URI = "/customer";
 
-    @Autowired
-    private ConvertDTO convertDTO;
+    private final ConvertDTO convertDTO = new ConvertDTO();
 
     @Autowired
     private CustomerFinder customerFinder;
