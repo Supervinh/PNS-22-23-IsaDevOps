@@ -2,6 +2,7 @@ package mfc.components;
 
 import mfc.POJO.Customer;
 import mfc.POJO.Purchase;
+import mfc.POJO.Store;
 import mfc.interfaces.CustomerBalancesModifier;
 import mfc.interfaces.Exceptions.InsufficientBalanceException;
 import mfc.interfaces.Exceptions.NegativePointCostException;
@@ -15,12 +16,11 @@ public class TransactionHandler implements TransactionProcessor {
     PurchaseRecording purchaseRecording;
 
     @Override
-    public Purchase purchase(Customer customer, double cost) {
+    public Purchase purchase(Customer customer, double cost, Store store) {
         //gain a point by euro
         try {
             customerBalancesModifier.editFidelityPoints(customer, (int) cost);
-            //TODO: est ce que l'objet purchase doit etre cree ici?
-            Purchase purchase = purchaseRecording.recordPurchase(customer, cost);
+            Purchase purchase = purchaseRecording.recordPurchase(customer, cost, store);
             return purchase;
         } catch (NegativePointCostException negativePointCostException){
             System.out.println(negativePointCostException.getMessage());
@@ -29,10 +29,10 @@ public class TransactionHandler implements TransactionProcessor {
     }
 
     @Override
-    public Purchase purchaseFidelityCardBalance(Customer user, double cost) throws InsufficientBalanceException {
+    public Purchase purchaseFidelityCardBalance(Customer user, double cost, Store store) throws InsufficientBalanceException {
         try {
             customerBalancesModifier.editBalance(user, -cost);
-            return purchase(user, cost);
+            return purchase(user, cost, store);
 
         } catch (InsufficientBalanceException insufficientBalanceException){
             System.out.println(insufficientBalanceException.getMessage());

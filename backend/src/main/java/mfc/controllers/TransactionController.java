@@ -2,8 +2,13 @@ package mfc.controllers;
 
 import mfc.POJO.Customer;
 import mfc.POJO.Purchase;
+import mfc.POJO.Store;
+import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
+import mfc.controllers.dto.PurchaseDTO;
+import mfc.interfaces.CustomerFinder;
 import mfc.interfaces.PurchaseRecording;
+import mfc.interfaces.StoreFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +18,20 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.Optional;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(path = TransactionController.BASE_URI, produces = APPLICATION_JSON_VALUE)
 public class TransactionController {
     public static final String BASE_URI = "/transaction";
+
+    @Autowired
+    private CustomerFinder customerFinder;
+
+    @Autowired
+    private StoreFinder storeFinder;
 
     @Autowired
     private PurchaseRecording purchaseRecording;
@@ -37,11 +50,18 @@ public class TransactionController {
     }
 
     @PostMapping(path = "register", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<Purchase> register(@RequestBody @Valid Customer cus, @RequestParam double cost) {
+    public ResponseEntity<Purchase> register(@RequestBody @Valid PurchaseDTO purchaseDto, @RequestParam double cost) {
         // Note that there is no validation at all on the CustomerDto mapped
         try {
+            Optional<Customer> customer = customerFinder.findCustomerById(purchaseDto.getCustomerDTO().getId());
+            Optional<Store> store = storeFinder.findStoreById(purchaseDto.getStoreDTO().getId());
+            if (customer.isEmpty() || store.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(purchaseRecording.recordPurchase(cus,cost ));
+                    .body(purchaseRecording.recordPurchase(customer.get()
+                            ,cost
+                            ,store.get() ));
         } catch ( Exception e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

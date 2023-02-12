@@ -7,6 +7,7 @@ import mfc.interfaces.Exceptions.AlreadyExistingPurchaseException;
 import mfc.interfaces.PurchaseFinder;
 import mfc.interfaces.PurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import repositories.PurchaseRepository;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
+@Component
 public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
     private final PurchaseRepository purchaseRepository;
 
@@ -23,8 +25,8 @@ public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
     }
 
     @Override
-    public Purchase recordPurchase(Customer customer, double cost){
-        Purchase newPurchase = new Purchase(cost, customer);
+    public Purchase recordPurchase(Customer customer, double cost, Store store){
+        Purchase newPurchase = new Purchase(cost, customer, store);
         purchaseRepository.save(newPurchase, newPurchase.getId());
         return newPurchase;
     }

@@ -9,11 +9,14 @@ public class Purchase {
     private Customer user;
     private UUID id;
 
-    public Purchase (double c, Customer u){
+    public Store store;
+
+    public Purchase (double c, Customer u, Store s){
         cost = c;
         date = LocalDate.now();
         user = u;
         id = UUID.randomUUID();
+        store = s;
     }
 
     public double getCost() {

@@ -12,5 +12,5 @@ public interface CustomerFinder {
 
     Optional<List<String>> findCustomersMailByStore(Store store);
 
-    Optional<Customer> findCustomerById(UUID id, String password);
+    Optional<Customer> findCustomerById(UUID id);
 }

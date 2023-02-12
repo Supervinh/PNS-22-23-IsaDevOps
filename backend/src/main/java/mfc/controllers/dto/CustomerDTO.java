@@ -1,28 +1,22 @@
-package cli.model;
+package mfc.controllers.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
-public class CliCustomer {
+public class CustomerDTO {
     private UUID id;
 
+    @NotBlank(message = "name should not be blank")
     private String name;
 
     private int fidelityPoints;
 
+    @Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits")
     private String creditCard;
-
-    public CliCustomer (String n, int fp, String cc){
-        name = n;
-        fidelityPoints = fp;
-        creditCard = cc;
-    }
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -47,15 +41,5 @@ public class CliCustomer {
 
     public void setCreditCard(String creditCard) {
         this.creditCard = creditCard;
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", fidelityPoints='" + fidelityPoints + '\'' +
-                ", creditCard='" + creditCard + '\'' +
-                '}';
     }
 }
