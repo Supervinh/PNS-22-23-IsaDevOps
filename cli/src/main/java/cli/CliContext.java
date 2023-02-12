@@ -1,5 +1,6 @@
 package cli;
 
+import cli.model.CliCustomer;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -9,9 +10,9 @@ import java.util.stream.Collectors;
 @Component
 public class CliContext {
 
-    private final Map<String, /*CliCustomer*/String> customers;
+    private final Map<String, CliCustomer> customers;
 
-    public Map<String, /*CliCustomer*/String> getCustomers() {
+    public Map<String, CliCustomer> getCustomers() {
         return customers;
     }
 

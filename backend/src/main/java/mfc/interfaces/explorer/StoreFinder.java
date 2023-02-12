@@ -11,5 +11,5 @@ public interface StoreFinder {
 
     Optional<Store> findStoreById(UUID id);
 
-    Optional<Map<String, String>> findOpeningHoursOfStore(Store store);
+    Optional<Map<String, String>> findStoreOpeningHours(Store store);
 }

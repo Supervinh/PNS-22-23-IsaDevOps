@@ -3,6 +3,7 @@ package mfc.controllers;
 import mfc.POJO.Customer;
 import mfc.POJO.Purchase;
 import mfc.POJO.Store;
+import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.PurchaseDTO;
 import mfc.interfaces.explorer.CustomerFinder;
@@ -26,6 +27,9 @@ public class TransactionController {
     public static final String BASE_URI = "/transaction";
 
     @Autowired
+    private ConvertDTO convertDTO;
+
+    @Autowired
     private CustomerFinder customerFinder;
 
     @Autowired
@@ -42,13 +46,13 @@ public class TransactionController {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ErrorDTO handleExceptions(MethodArgumentNotValidException e) {
         ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setError("Cannot process Customer information");
+        errorDTO.setError("Cannot process Purchase information");
         errorDTO.setDetails(e.getMessage());
         return errorDTO;
     }
 
     @PostMapping(path = "register", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<Purchase> register(@RequestBody @Valid PurchaseDTO purchaseDto, @RequestParam double cost) {
+    public ResponseEntity<PurchaseDTO> register(@RequestBody @Valid PurchaseDTO purchaseDto, @RequestParam double cost) {
         // Note that there is no validation at all on the CustomerDto mapped
         try {
             Optional<Customer> customer = customerFinder.findCustomerById(purchaseDto.getCustomerDTO().getId());
@@ -57,12 +61,15 @@ public class TransactionController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(purchaseRecording.recordPurchase(customer.get()
+                    .body(convertDTO.convertPurchaseToDto(purchaseRecording.recordPurchase(customer.get()
                             ,cost
-                            ,store.get() ));
+                            ,store.get() )));
         } catch ( Exception e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+    // TODO: add modifier and explorer for Purchase
+
 }

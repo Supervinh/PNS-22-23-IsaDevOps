@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Purchase {
     private double cost;
     private LocalDate date;
-    private Customer user;
+    private Customer customer;
     private UUID id;
 
     public Store store;
@@ -14,7 +14,7 @@ public class Purchase {
     public Purchase (double c, Customer u, Store s){
         cost = c;
         date = LocalDate.now();
-        user = u;
+        customer = u;
         id = UUID.randomUUID();
         store = s;
     }
@@ -35,7 +35,23 @@ public class Purchase {
         this.date = date;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     public UUID getId() {
         return id;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 }

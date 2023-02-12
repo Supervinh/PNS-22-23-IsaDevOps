@@ -1,6 +1,7 @@
 package mfc.POJO;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Store {
@@ -12,11 +13,11 @@ public class Store {
 
     private StoreOwner owner;
 
-    public Store(UUID id, String name, Map<String, String> openingHours, StoreOwner owner) {
-        this.id = id;
+    public Store(String name, Map<String, String> openingHours, StoreOwner owner) {
         this.name = name;
         this.openingHours = openingHours;
         this.owner = owner;
+        this.id = UUID.randomUUID();
     }
 
     public UUID getId() {
@@ -49,5 +50,18 @@ public class Store {
 
     public void setOwner(StoreOwner owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Store store = (Store) o;
+        return Objects.equals(id, store.id) && Objects.equals(name, store.name) && Objects.equals(openingHours, store.openingHours) && Objects.equals(owner, store.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, openingHours, owner);
     }
 }

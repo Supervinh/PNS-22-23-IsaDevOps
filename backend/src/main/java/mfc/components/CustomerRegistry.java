@@ -11,7 +11,6 @@ import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
