@@ -1,4 +1,4 @@
-package components;
+package mfc.components;
 
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerRegistration;
