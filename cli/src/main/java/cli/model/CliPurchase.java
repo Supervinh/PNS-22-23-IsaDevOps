@@ -36,5 +36,15 @@ public class CliPurchase {
     public UUID getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "CliPurchase{" +
+                "cost=" + cost +
+                ", date=" + date +
+                ", user=" + user +
+                ", id=" + id +
+                '}';
+    }
 }
 

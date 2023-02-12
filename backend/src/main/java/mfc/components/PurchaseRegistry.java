@@ -7,7 +7,7 @@ import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.PurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import repositories.PurchaseRepository;
+import mfc.repositories.PurchaseRepository;
 
 import java.util.Optional;
 import java.util.Set;

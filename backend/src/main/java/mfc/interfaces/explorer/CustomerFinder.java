@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerFinder {
-    Optional<Customer> findCustomerByMail(String mail, String password);
+    Optional<Customer> findCustomerByMail(String mail);
 
     Optional<List<String>> findCustomersMailByStore(Store store);
 
