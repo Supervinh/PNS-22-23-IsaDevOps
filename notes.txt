@@ -36,4 +36,10 @@ Admin se connecte
 Le client se connecte
 
 
+ssh-keygen -t rsa -f jenkins_agent
+changer volume / clé ssh
+agent name should be identical to docker compose name (container name)
 
+dossier jenkins --> docker-compose
+ssh-keygen -t rsa -f jenkins_agent
+changer volume local / clé ssh
