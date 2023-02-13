@@ -12,6 +12,7 @@ services:
     volumes:
       - /home/theojeannes/Documents/IsaDevOps/jenkins_compose/jenkins_configuration:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
   agent:
     image: jenkins/ssh-agent:jdk17
     container_name: agent
@@ -20,4 +21,4 @@ services:
     expose:
       - 22
     environment:
-      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCYAjXv7mOVTddJN9BtjrLVS/awPyKIesL8gM+nwhE5HiXRTF+PocLPmUttwKiX0Hb5iq6aguZAinQsK9rHnzrJZmU88MskzbcJg57ATkD16TxX7lxR3mpBchhn/bwnNEvZUA3u6kAw13rjzFWghDSoFDfYtLoSCmptewWe6b0c511gxrOx30OJ1bTTMZBNqY3+rYl8/F4j/B75AB6pnlUmcOS8HziVUiaDIEOn43kytpSWzeZn2yAX6gcak61ynpullkXB8ez4khPdL4K2ZZVtQGE0jkZgc8NIUxH7PqGAgQ89YSeT9EsL8RrU2oP8SOwoeq3eQHgRrOI62MnCILEY0xAPPJYnheLgji9RWiBxSVYbHT/vo0GQ+1dTb8h8c9dunxy7igFy1wUou2r6yPvcOtouKX3khrEfkTdHqnvdOLAPGQPU96Xpcm99b9/cDEZs0pxiZc6oOZB0DtFZDjbqVKCCmkW+XIyuc+s8jp2gVqYN7vi+mq2yaecB3uCfvvU= theojeannes@pop-os
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCSfctyPqSw2IjROZ/SS6a7ue/HrOh/EGZwXZs8Ph5/z6d/6Kp08hExbvlFEXxok1t4HscjYrP+cDIyoTuYO1NuowTzXdATyK/4hHoAMcx1tnxYLgWxjXBooRb7gYFCNifkNYGUZL+kZvT9HYU8I5JLRMidLebTzPuWznSsZBwJqXuWyqtcJdgmEtAAzdwSxzJ7eK/riOL+XzVu7h35TPwDSHaq4ozipdL0E04Tt9KW87CxB+Mkym12D8LQsf4anxWK4+BGG27PIjNmCAMCmG7V5athqzOmrE+5hOMbQaeVFUVVDi6sbT7wYZz6DGuMw22LByxS+LNfaKPqGZ3QJOdz5JVHTkXUuFskRh0HDWm2LswqKRXHhy1Fn/fEYyjlrce6qJ6+nhM101KnZ9zdvlU75EqDu/DfbeTZPgv+J6Cps/ex66yyCWeXWJ8ZI5ySYg0tF8hPBzM8r7wydX8e8lDjdo6oA5uSGr4BmYlrthTVySqhtYE6mUlhMA757V+7zps= theojeannes@pop-os
