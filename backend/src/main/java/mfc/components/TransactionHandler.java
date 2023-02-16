@@ -3,12 +3,12 @@ package mfc.components;
 import mfc.POJO.Customer;
 import mfc.POJO.Purchase;
 import mfc.POJO.Store;
+import mfc.interfaces.TransactionProcessor;
 import mfc.interfaces.exceptions.CustomerNotFoundException;
-import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.exceptions.InsufficientBalanceException;
 import mfc.interfaces.exceptions.NegativePointCostException;
+import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.PurchaseRecording;
-import mfc.interfaces.TransactionProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
