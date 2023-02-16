@@ -1,10 +1,9 @@
 package mfc.controllers;
 
-import mfc.controllers.dto.ConvertDTO;
+import mfc.POJO.Customer;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
-import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,15 +18,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(path = CustomerController.BASE_URI, produces = APPLICATION_JSON_VALUE)
 public class CustomerController {
-    public static final String BASE_URI = "/customer";
 
-    private final ConvertDTO convertDTO = new ConvertDTO();
-
-    @Autowired
-    private CustomerFinder customerFinder;
+    public static final String BASE_URI = "/customers";
 
     @Autowired
-    private CustomerRegistration customerRegistration;
+    private CustomerRegistration registry;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -45,14 +40,20 @@ public class CustomerController {
     @PostMapping(path = "register", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) {
         // Note that there is no validation at all on the CustomerDto mapped
-        // Note that there is no validation at all on the CustomerDto mapped
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertDTO.convertCustomerToDto(customerRegistration.register(cusdto.getMail(), cusdto.getName(), cusdto.getPassword())));
+                    .body(
+                            convertCustomerToDto(registry.register(cusdto.getName(), cusdto.getMail(), cusdto.getPassword(), cusdto.getCreditCard()))
+                    );
         } catch (AlreadyExistingAccountException e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
-    //TODO: add modifier and explorer for Customer
+
+    private CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
+        return new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard());
+    }
+
 }
+

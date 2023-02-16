@@ -1,11 +1,11 @@
-package repositories;
+package mfc.repositories;
 
 import java.util.HashMap;
 import java.util.Optional;
 
 public class BasicRepositoryImpl<T, ID> implements Repository<T, ID> {
 
-    private final HashMap<ID, T> storage = new HashMap<>();
+    private HashMap<ID, T> storage = new HashMap<>();
 
     @Override
     public long count() {

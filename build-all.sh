@@ -6,6 +6,9 @@ function build_dir()  # $1 is the dir to get it
     ./build.sh
     cd ..
 }
+
+docker-compose down
+
 echo "** Building all"
 
 build_dir "backend"
