@@ -9,5 +9,6 @@ public interface AdminFinder {
     Optional<Admin> findAdminByMail(String mail, String password);
 
     Optional<Admin> findAdminById(UUID id, String password);
+
 }
 
