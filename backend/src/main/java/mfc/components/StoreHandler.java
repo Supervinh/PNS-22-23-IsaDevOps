@@ -2,8 +2,8 @@ package mfc.components;
 
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
-import mfc.interfaces.exceptions.AlreadyExistingStoreException;
-import mfc.interfaces.exceptions.CredentialsException;
+import mfc.exceptions.AlreadyExistingStoreException;
+import mfc.exceptions.CredentialsException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreRegistration;

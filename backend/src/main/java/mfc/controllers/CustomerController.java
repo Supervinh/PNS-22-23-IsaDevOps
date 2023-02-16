@@ -1,17 +1,11 @@
 package mfc.controllers;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Purchase;
-import mfc.POJO.Store;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
-import mfc.controllers.dto.PurchaseDTO;
-import mfc.interfaces.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.CustomerFinder;
-import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.CustomerRegistration;
-import mfc.interfaces.modifier.PurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 

@@ -2,7 +2,7 @@ package mfc.components;
 
 import mfc.POJO.Customer;
 import mfc.POJO.Store;
-import mfc.interfaces.exceptions.*;
+import mfc.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
