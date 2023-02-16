@@ -7,9 +7,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'cd backend/'
-                sh 'ls'
-                sh 'mvn clean package'
+                dir('backend/') {
+                    sh 'mvn clean package'
+                }
 //                 echo 'Building..'
             }
         }
