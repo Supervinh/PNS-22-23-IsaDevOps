@@ -6,8 +6,6 @@ function build_dir()  # $1 is the dir to get it
     ./build.sh
     cd ..
 }
-cd ..
-
 echo "** Building all"
 
 build_dir "backend"

@@ -43,3 +43,23 @@ agent name should be identical to docker compose name (container name)
 dossier jenkins --> docker-compose
 ssh-keygen -t rsa -f jenkins_agent
 changer volume local / clé ssh
+
+sudo apt install npm
+sudo npm install --global smee-client
+
+Webhooks : dans le rep Jenkins
+screen -S smee
+smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
+Ctrl+A d
+
+Pour rattacher/arreter :
+screen -r smee
+
+Jenkins :
+Utiliser JGit dans la config globale
+-Dorg.jenkinsci.plugins.gitclient.GitClient.untrustedSSL=true
+
+Pour lancer Maven :
+    -Installer Maven Integration Plugin
+    -installer maven dans les globals tools
+    -specifier dans le jenkinsfile le nom de mvn
