@@ -212,4 +212,35 @@ class CustomerRegistryTest {
             customerProfileModifier.recordNewFavoriteStore(customer, store);
         });
     }
+
+    @Test
+    public void canRemoveFavoriteStore() throws Exception {
+        Customer customer = customerRegistration.register(mail, name, password);
+        StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
+        Store store = new Store("Carrefour", new HashMap<String, String>(), storeOwner);
+        customerProfileModifier.recordNewFavoriteStore(customer, store);
+        assertTrue(customer.getFavoriteStores().contains(store));
+        customerProfileModifier.removeFavoriteStore(customer, store);
+        assertFalse(customer.getFavoriteStores().contains(store));
+    }
+
+    @Test
+    public void cannotRemoveFavoriteStoreOfUnknownCustomer() throws Exception {
+        Customer customer = new Customer(mail, name, password);
+        StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
+        Store store = new Store("Carrefour", new HashMap<String, String>(), storeOwner);
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
+            customerProfileModifier.removeFavoriteStore(customer, store);
+        });
+    }
+
+    @Test
+    public void cannotRemoveFavoriteStoreNotRegistered() throws Exception {
+        Customer customer = customerRegistration.register(mail, name, password);
+        StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
+        Store store = new Store("Carrefour", new HashMap<String, String>(), storeOwner);
+        Assertions.assertThrows(StoreNotFoundException.class, () -> {
+            customerProfileModifier.removeFavoriteStore(customer, store);
+        });
+    }
 }
