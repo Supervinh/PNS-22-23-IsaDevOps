@@ -1,14 +1,14 @@
 pipeline {
     agent any
-//     tools {
-//         maven 'Maven 3.8.7'
-//         jdk 'JDK 17'
-//     }
+    tools {
+        maven 'maven-3.9.0'
+    }
 
     stages {
         stage('Build') {
             steps {
-                sh 'cd backend'
+                sh 'cd backend/'
+                sh 'ls'
                 sh 'mvn clean package'
 //                 echo 'Building..'
             }
