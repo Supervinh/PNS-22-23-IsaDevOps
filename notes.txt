@@ -63,3 +63,9 @@ Pour lancer Maven :
     -Installer Maven Integration Plugin
     -installer maven dans les globals tools
     -specifier dans le jenkinsfile le nom de mvn
+
+
+CLI :
+
+Dto -> Mapping JSON
+Env ->
