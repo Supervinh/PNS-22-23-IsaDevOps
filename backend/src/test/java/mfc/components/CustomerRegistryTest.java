@@ -3,10 +3,7 @@ package mfc.components;
 import mfc.POJO.Customer;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
-import mfc.interfaces.exceptions.AlreadyExistingAccountException;
-import mfc.interfaces.exceptions.CustomerNotFoundException;
-import mfc.interfaces.exceptions.InsufficientBalanceException;
-import mfc.interfaces.exceptions.NegativePointCostException;
+import mfc.interfaces.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
@@ -24,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class CustomerRegistryTest {
 
@@ -42,9 +40,9 @@ class CustomerRegistryTest {
     @Autowired
     private CustomerProfileModifier customerProfileModifier;
 
-    private String mail = "Mark@pns.fr";
-    private String name = "Mark";
-    private String password = "password";
+    private final String mail = "Mark@pns.fr";
+    private final String name = "Mark";
+    private final String password = "password";
 
 
     @BeforeEach
@@ -183,14 +181,35 @@ class CustomerRegistryTest {
         });
     }
 
-//    @Test
-//    public void canRecordFavoriteStore() throws Exception {
-//        Customer customer = customerRegistration.register(mail, name, password);
-//        List<Store> favoriteStores = customer.getFavoriteStores();
-//        StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com","password");
-//        Store store = new Store("Carrefour", new HashMap<String, String>(), storeOwner);
-//        customerProfileModifier.recordNewFavoriteStore(customer, store);
-//        assertEquals("Carrefour", customer.getFavoriteStores().get(0).getName());
-//        assertNotEquals(favoriteStores, customer.getFavoriteStores());
-//    }
+    @Test
+    public void canRecordFavoriteStore() throws Exception {
+        Customer customer = customerRegistration.register(mail, name, password);
+        List<Store> favoriteStores = customer.getFavoriteStores();
+        StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
+        Store store = new Store("Carrefour", new HashMap<String, String>(), storeOwner);
+        assertFalse(favoriteStores.contains(store));
+        customerProfileModifier.recordNewFavoriteStore(customer, store);
+        assertEquals("Carrefour", customer.getFavoriteStores().get(0).getName());
+    }
+
+    @Test
+    public void cannotRecordFavoriteStoreOfUnknownCustomer() throws Exception {
+        Customer customer = new Customer(mail, name, password);
+        StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
+        Store store = new Store("Carrefour", new HashMap<String, String>(), storeOwner);
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
+            customerProfileModifier.recordNewFavoriteStore(customer, store);
+        });
+    }
+
+    @Test
+    public void favoriteStoreAlreadyRegistered() throws Exception {
+        Customer customer = customerRegistration.register(mail, name, password);
+        StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
+        Store store = new Store("Carrefour", new HashMap<String, String>(), storeOwner);
+        customerProfileModifier.recordNewFavoriteStore(customer, store);
+        Assertions.assertThrows(StoreAlreadyRegisteredException.class, () -> {
+            customerProfileModifier.recordNewFavoriteStore(customer, store);
+        });
+    }
 }
