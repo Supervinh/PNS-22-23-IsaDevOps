@@ -3,6 +3,8 @@ package mfc.components;
 import mfc.POJO.Customer;
 import mfc.interfaces.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.CustomerFinder;
+import mfc.interfaces.modifier.CustomerBalancesModifier;
+import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
 import mfc.repositories.CustomerRepository;
 import org.junit.Before;
@@ -26,6 +28,9 @@ class CustomerRegistryTest {
 
     @Autowired
     private CustomerFinder customerFinder;
+
+    @Autowired
+    private CustomerBalancesModifier customerBalancesModifier;
 
     private String mail = "Mark@pns.fr";
     private String name = "Mark";
@@ -60,5 +65,38 @@ class CustomerRegistryTest {
         Assertions.assertThrows(AlreadyExistingAccountException.class, () -> {
             customerRegistration.register(mail, name, password);
         });
+    }
+
+    @Test
+    public void canFindByMail() throws Exception {
+        customerRegistration.register(mail, name, password);
+        Optional<Customer> customer = customerFinder.findCustomerByMail(mail);
+        assertTrue(customer.isPresent());
+        assertEquals(name, customer.get().getName());
+    }
+
+    @Test
+    public void unknownCustomerByMail() {
+        assertFalse(customerFinder.findCustomerByMail(mail).isPresent());
+    }
+
+    @Test
+    public void canFindById() throws Exception {
+        Customer customer = customerRegistration.register(mail, name, password);
+        Optional<Customer> customer2 = customerFinder.findCustomerById(customer.getId());
+        assertTrue(customer2.isPresent());
+    }
+
+    @Test
+    public void unknownCustomerById() {
+        Customer customer = new Customer(mail, name, password);
+        assertFalse(customerFinder.findCustomerById(customer.getId()).isPresent());
+    }
+
+    @Test
+    public void canEditBalance() throws Exception {
+        Customer customer = customerRegistration.register(mail, name, password);
+        customerBalancesModifier.editBalance(customer, 100);
+        assertEquals(100, customer.getBalance());
     }
 }
