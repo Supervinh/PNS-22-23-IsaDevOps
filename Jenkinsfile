@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                cd 'backend'
+                sh 'cd backend'
                 sh 'mvn clean package'
 //                 echo 'Building..'
             }
