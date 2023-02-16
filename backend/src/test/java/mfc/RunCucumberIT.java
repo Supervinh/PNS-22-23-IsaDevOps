@@ -9,9 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static io.cucumber.core.options.Constants.GLUE_PROPERTY_NAME;
 
-@SpringBootTest
-public class MultiFidelityCardApplicationTests {
-    @Test
-    void contextLoads() {
-    }
+@Suite
+@IncludeEngines("cucumber")
+@SelectClasspathResource("mfc/features")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "mfc.features")
+public class RunCucumberIT {
 }
+
