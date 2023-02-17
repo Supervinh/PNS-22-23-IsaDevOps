@@ -4,6 +4,6 @@ import mfc.POJO.Admin;
 import mfc.interfaces.exceptions.AlreadyExistingAccountException;
 
 public interface AdminRegistration {
-    Admin registerAdmin(String name, String mail, String password, Admin authorization) throws AlreadyExistingAccountException;
+    Admin registerAdmin(String name, String mail, String password) throws AlreadyExistingAccountException;
 }
 

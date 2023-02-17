@@ -23,26 +23,26 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
 
     private final AdminRepository adminRepository;
 
-    private final StoreOwnerRepository ownerRepository;
-
-    public AdminRegistry(AdminRepository adminRepository, StoreOwnerRepository ownerRepository) {
+    public AdminRegistry(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
-        this.ownerRepository = ownerRepository;
     }
 
     @Override
-    public Optional<Admin> findAdminByMail(String mail, String password) {
-        return adminRepository.findByMail(mail, password);
+    public Optional<Admin> findAdminByMail(String mail) {
+        return adminRepository.findByMail(mail);
+    }
+    public Optional<Admin> findAdminByMailAndPassword(String mail, String password) {
+        return adminRepository.findByMailAndPassword(mail, password);
     }
 
     @Override
-    public Optional<Admin> findAdminById(UUID id, String password) {
-        return adminRepository.findById(id, password);
+    public Optional<Admin> findAdminById(UUID id) {
+        return adminRepository.findById(id);
     }
 
     @Override
-    public Admin registerAdmin(String name, String mail, String password, Admin authorization) throws AlreadyExistingAccountException {
-        Optional<Admin> admin = adminRepository.findByMail(mail, password);
+    public Admin registerAdmin(String name, String mail, String password) throws AlreadyExistingAccountException {
+        Optional<Admin> admin = adminRepository.findByMail(mail);
         if (admin.isEmpty()) {
             Admin newAdmin = new Admin(name, mail, password);
             adminRepository.save(newAdmin, newAdmin.getId());
@@ -50,15 +50,4 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
         }
         throw new AlreadyExistingAccountException();
     }
-//  FOR STORE OWNER REGISTRY
-//    @Override
-//    public StoreOwner registerStoreOwner(String name, String mail, String password, Admin authorization) throws AlreadyExistingAccountException {
-//        Optional<StoreOwner> owner = ownerRepository.findByMail(mail, password);
-//        if (owner.isEmpty()) {
-//            StoreOwner newOwner = new StoreOwner(name, mail, password);
-//            ownerRepository.save(newOwner, newOwner.getId());
-//            return newOwner;
-//        }
-//        throw new AlreadyExistingAccountException();
-//    }
 }

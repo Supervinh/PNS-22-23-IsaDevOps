@@ -6,9 +6,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface AdminFinder {
-    Optional<Admin> findAdminByMail(String mail, String password);
+    Optional<Admin> findAdminByMail(String mail);
 
-    Optional<Admin> findAdminById(UUID id, String password);
+    Optional<Admin> findAdminByMailAndPassword(String mail, String password);
+
+    Optional<Admin> findAdminById(UUID id);
 
 }
 

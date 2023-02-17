@@ -40,6 +40,9 @@ public class AdminController {
     private StoreOwnerRegistration ownerReg;
 
     @Autowired
+    private StoreOwnerFinder ownerFind;
+
+    @Autowired
     private AdminFinder adminFind;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -57,13 +60,13 @@ public class AdminController {
 
     public ResponseEntity<StoreOwnerDTO> registerOwner(@RequestBody @Valid StoreOwnerDTO storeOwnerDTO) {
         try {
-            Optional<Admin> authorization = adminFind.findAdminByMail(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
+            Optional<StoreOwner> authorization = ownerFind.findStoreOwnerByMailAndPassword(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
 
             if(authorization.isPresent()){
                 throw new NotEnoughRightsException();
             }
 
-            StoreOwner owner = ownerReg.registerStoreOwner(storeOwnerDTO.getName(), storeOwnerDTO.getMail(), storeOwnerDTO.getPassword(), authorization.get());
+            StoreOwner owner = ownerReg.registerStoreOwner(storeOwnerDTO.getName(), storeOwnerDTO.getMail(), storeOwnerDTO.getPassword());
 
             storeOwnerDTO.setId(owner.getId());
             storeOwnerDTO.setMail(owner.getMail());
@@ -82,13 +85,13 @@ public class AdminController {
 
     public ResponseEntity<AdminDTO> registerAdmin(@RequestBody @Valid AdminDTO adminDTO) {
         try {
-            Optional<Admin> authorization = adminFind.findAdminByMail(adminDTO.getAuthorizationMail(), adminDTO.getAuthorizationPassword());
+            Optional<Admin> authorization = adminFind.findAdminByMailAndPassword(adminDTO.getAuthorizationMail(), adminDTO.getAuthorizationPassword());
 
             if(authorization.isPresent()){
                 throw new NotEnoughRightsException();
             }
 
-            Admin admin = adminReg.registerAdmin(adminDTO.getName(), adminDTO.getMail(), adminDTO.getPassword(), authorization.get());
+            Admin admin = adminReg.registerAdmin(adminDTO.getName(), adminDTO.getMail(), adminDTO.getPassword());
 
             adminDTO.setId(admin.getId());
             adminDTO.setMail(admin.getMail());
