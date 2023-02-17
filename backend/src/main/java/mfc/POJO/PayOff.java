@@ -1,10 +1,26 @@
 package mfc.POJO;
 
+import java.util.UUID;
+
 public class PayOff {
+
+    private UUID id;
     private String name;
     private double cost;
     private int pointCost;
     private Store store;
+
+    public PayOff(String name, double cost, int pointCost, Store store) {
+        this.name = name;
+        this.cost = cost;
+        this.pointCost = pointCost;
+        this.store = store;
+        this.id = UUID.randomUUID();
+    }
+
+    public UUID getId() {
+        return id;
+    }
 
     public String getName() {
         return name;

@@ -54,6 +54,7 @@ public class AdminController {
         return errorDTO;
     }
 
+    @PostMapping(path = "registerOwner", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<StoreOwnerDTO> registerOwner(@RequestBody @Valid StoreOwnerDTO storeOwnerDTO) {
         try {
             Optional<StoreOwner> authorization = ownerFind.findStoreOwnerByMailAndPassword(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
@@ -78,7 +79,7 @@ public class AdminController {
         }
     }
 
-
+    @PostMapping(path = "registerAdmin", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<AdminDTO> registerAdmin(@RequestBody @Valid AdminDTO adminDTO) {
         try {
             Optional<Admin> authorization = adminFind.findAdminByMailAndPassword(adminDTO.getAuthorizationMail(), adminDTO.getAuthorizationPassword());
