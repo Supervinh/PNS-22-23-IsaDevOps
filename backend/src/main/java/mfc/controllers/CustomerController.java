@@ -4,6 +4,11 @@ import mfc.POJO.Customer;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.NegativeRefillException;
+import mfc.exceptions.NoCreditCardException;
+import mfc.exceptions.PaymentException;
+import mfc.interfaces.Payment;
+import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -20,9 +26,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomerController {
 
     public static final String BASE_URI = "/customers";
+    public static final String LOGGED_URI = "/{customerId}/transactions/";
 
     @Autowired
     private CustomerRegistration registry;
+
+    @Autowired
+    private CustomerFinder finder;
+
+    @Autowired
+    private Payment payment;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -53,6 +66,12 @@ public class CustomerController {
 
     private CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
         return new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard());
+    }
+
+    @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") UUID customerId) throws NoCreditCardException, PaymentException, NegativeRefillException {
+        Customer res = payment.refillBalance(finder.findCustomerById(customerId).orElseThrow(), amount); //TODO: check if customer exists
+        return ResponseEntity.ok().body(/*"Refill of " + res +" is validated"*/convertCustomerToDto(res));
     }
 
 }

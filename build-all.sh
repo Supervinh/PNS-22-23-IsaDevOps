@@ -7,15 +7,13 @@ function build_dir()  # $1 is the dir to get it
     cd ..
 }
 
-docker-compose down
-
 echo "** Building all"
 
 build_dir "backend"
 
 build_dir "cli"
 
-#build_dir "bank"
+build_dir "bank"
 
 echo "** Done all -> docker up"
 
