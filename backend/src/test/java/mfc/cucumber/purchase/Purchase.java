@@ -1,6 +1,7 @@
 package mfc.cucumber.purchase;
 
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -81,4 +82,10 @@ public class Purchase {
         Customer customer = customerFinder.findCustomerByName(name).get();
         assert customer.getFidelityPoints() == points;
     }
+
+//    @And("{string} has a fidelity card with a balance of {double} euros")
+//    public void hasAFidelityCardWithABalanceOfEuros(String name, double balance) {
+//        Customer customer = customerFinder.findCustomerByName(name).get();
+//        customer.setBalance(balance);
+//    }
 }
