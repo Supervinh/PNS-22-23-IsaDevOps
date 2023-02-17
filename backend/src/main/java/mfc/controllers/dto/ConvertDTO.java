@@ -21,7 +21,7 @@ public class ConvertDTO {
         return new PurchaseDTO(purchase.getId(), convertCustomerToDto(purchase.getCustomer()),purchase.getCost(), convertStoreToDto(purchase.getStore()));
     }
 
-    public PayoffDTO convertPayoffToDTO(Set<PayOff> payOffSet){
-        return new PayoffDTO(payOffSet);
+    public CatalogDTO convertCatalopToDTO(Set<PayOff> payOffSet){
+        return new CatalogDTO(payOffSet);
     }
 }

@@ -5,6 +5,7 @@ import mfc.controllers.dto.*;
 import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
+import mfc.interfaces.explorer.StoreOwnerFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,9 @@ public class CatalogController {
     @Autowired
     private CatalogExplorer catalogExplorer;
 
+    @Autowired
+    private StoreOwnerFinder storeOwnerFinder;
+
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
     // (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is
@@ -42,21 +46,21 @@ public class CatalogController {
     }
 
     @PostMapping(path = "availableCatalog", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> availableCatalog (@RequestBody @Valid CustomerDTO customerDTO) throws PayoffNotFoundException {
+    public ResponseEntity<CatalogDTO> availableCatalog (@RequestBody @Valid CustomerDTO customerDTO) throws PayoffNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerDTO.getId());
         if(customer.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertDTO.convertPayoffToDTO(catalogExplorer.availablePayoffs((customer.get()))));
+                    .body(convertDTO.convertCatalopToDTO(catalogExplorer.availablePayoffs((customer.get()))));
         }
         else throw new PayoffNotFoundException();
     }
 
     @PostMapping(path = "exploreCatalog", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> exploreCatalog (@RequestBody @Valid CustomerDTO customerDTO, @RequestParam String string) throws PayoffNotFoundException {
+    public ResponseEntity<CatalogDTO> exploreCatalog (@RequestBody @Valid CustomerDTO customerDTO, @RequestParam String string) throws PayoffNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerDTO.getId());
         if(customer.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertDTO.convertPayoffToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
+                    .body(convertDTO.convertCatalopToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
         }
         else throw new PayoffNotFoundException();
     }
