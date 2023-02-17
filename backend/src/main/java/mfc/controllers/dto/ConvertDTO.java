@@ -1,8 +1,11 @@
 package mfc.controllers.dto;
 
 import mfc.POJO.Customer;
+import mfc.POJO.PayOff;
 import mfc.POJO.Purchase;
 import mfc.POJO.Store;
+
+import java.util.Set;
 
 public class ConvertDTO {
 
@@ -16,5 +19,9 @@ public class ConvertDTO {
 
     public PurchaseDTO convertPurchaseToDto(Purchase purchase) {
         return new PurchaseDTO(purchase.getId(), convertCustomerToDto(purchase.getCustomer()),purchase.getCost(), convertStoreToDto(purchase.getStore()));
+    }
+
+    public PayoffDTO convertPayoffToDTO(Set<PayOff> payOffSet){
+        return new PayoffDTO(payOffSet);
     }
 }

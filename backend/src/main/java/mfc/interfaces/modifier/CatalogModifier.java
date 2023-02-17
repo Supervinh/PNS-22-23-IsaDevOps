@@ -1,28 +1,19 @@
 package mfc.interfaces.modifier;
 
-import mfc.POJO.Admin;
 import mfc.POJO.PayOff;
 import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
-import mfc.exceptions.CredentialsException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.NegativePointCostException;
+import mfc.exceptions.AlreadyExistingPayoffException;
+import mfc.exceptions.PayoffNotFoundException;
 
 public interface CatalogModifier {
-    boolean addPayOff(String name, double cost, int pointCost, Store store, StoreOwner authorization) throws NegativeCostException, NegativePointCostException, CredentialsException;
+    PayOff addPayOff(String name, double cost, int pointCost, Store store) throws NegativeCostException, NegativePointCostException, AlreadyExistingPayoffException;
 
-    boolean editPayOff(PayOff payOff, Store store, double cost, int pointCost, StoreOwner authorization) throws NegativeCostException, NegativePointCostException, CredentialsException;
+    PayOff editPayOff(PayOff payOff, Store store, double cost, int pointCost) throws NegativeCostException, NegativePointCostException, PayoffNotFoundException;
 
-    boolean editPayOff(PayOff payOff, Store store, double cost, StoreOwner authorization) throws NegativeCostException, CredentialsException;
+    PayOff editPayOff(PayOff payOff, Store store, double cost) throws NegativeCostException, PayoffNotFoundException;
 
-    boolean editPayOff(PayOff payOff, Store store, int pointCost, StoreOwner authorization) throws NegativePointCostException, CredentialsException;
-
-    boolean addPayOffAdmin(String name, double cost, int pointCost, Admin authorization) throws NegativeCostException, NegativePointCostException;
-
-    boolean editPayOff(PayOff payOff, Store store, double cost, int pointCost, Admin authorization) throws NegativeCostException, NegativePointCostException;
-
-    boolean editPayOff(PayOff payOff, Store store, double cost, Admin authorization) throws NegativeCostException;
-
-    boolean editPayOff(PayOff payOff, Store store, int pointCost, Admin authorization) throws NegativePointCostException;
+    PayOff editPayOff(PayOff payOff, Store store, int pointCost) throws NegativePointCostException, PayoffNotFoundException;
 }
 

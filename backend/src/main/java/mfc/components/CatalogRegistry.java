@@ -1,16 +1,19 @@
 package mfc.components;
 
 import mfc.POJO.*;
-import mfc.exceptions.CredentialsException;
+import mfc.exceptions.AlreadyExistingPayoffException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.NegativePointCostException;
+import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CatalogModifier;
 import mfc.repositories.CatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+@Component
 public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     private final CatalogRepository catalogRepository;
 
@@ -30,42 +33,47 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     }
 
     @Override
-    public boolean addPayOff(String name, double cost, int pointCost, Store store, StoreOwner authorization) throws NegativeCostException, NegativePointCostException, CredentialsException {
-        return false;
+    public PayOff addPayOff(String name, double cost, int pointCost, Store store) throws NegativeCostException, NegativePointCostException, AlreadyExistingPayoffException {
+        if(cost<=0) throw new NegativeCostException();
+        if (pointCost<=0) throw new NegativePointCostException();
+        if(!catalogRepository.explore(name).isEmpty()) throw new AlreadyExistingPayoffException();
+        PayOff payOff = new PayOff(name, cost, pointCost, store);
+        catalogRepository.save(payOff, payOff.getId());
+        return payOff;
     }
 
     @Override
-    public boolean editPayOff(PayOff payOff, Store store, double cost, int pointCost, StoreOwner authorization) throws NegativeCostException, NegativePointCostException, CredentialsException {
-        return false;
+    public PayOff editPayOff(PayOff payOff, Store store, double cost, int pointCost) throws NegativeCostException, NegativePointCostException, PayoffNotFoundException {
+        if(cost<=0) throw new NegativeCostException();
+        if (pointCost<=0) throw new NegativePointCostException();
+        if(catalogRepository.existsById(payOff.getId())) {
+            payOff.setCost(cost);
+            payOff.setPointCost(pointCost);
+            catalogRepository.save(payOff, payOff.getId());
+            return payOff;
+        }
+        else throw new PayoffNotFoundException();
     }
 
     @Override
-    public boolean editPayOff(PayOff payOff, Store store, double cost, StoreOwner authorization) throws NegativeCostException, CredentialsException {
-        return false;
+    public PayOff editPayOff(PayOff payOff, Store store, double cost) throws NegativeCostException, PayoffNotFoundException {
+        if(cost<=0) throw new NegativeCostException();
+        if(catalogRepository.existsById(payOff.getId())) {
+            payOff.setCost(cost);
+            catalogRepository.save(payOff, payOff.getId());
+            return payOff;
+        }
+        else throw new PayoffNotFoundException();
     }
 
     @Override
-    public boolean editPayOff(PayOff payOff, Store store, int pointCost, StoreOwner authorization) throws NegativePointCostException, CredentialsException {
-        return false;
-    }
-
-    @Override
-    public boolean addPayOffAdmin(String name, double cost, int pointCost, Admin authorization) throws NegativeCostException, NegativePointCostException {
-        return false;
-    }
-
-    @Override
-    public boolean editPayOff(PayOff payOff, Store store, double cost, int pointCost, Admin authorization) throws NegativeCostException, NegativePointCostException {
-        return false;
-    }
-
-    @Override
-    public boolean editPayOff(PayOff payOff, Store store, double cost, Admin authorization) throws NegativeCostException {
-        return false;
-    }
-
-    @Override
-    public boolean editPayOff(PayOff payOff, Store store, int pointCost, Admin authorization) throws NegativePointCostException {
-        return false;
+    public PayOff editPayOff(PayOff payOff, Store store, int pointCost) throws NegativePointCostException, PayoffNotFoundException {
+        if (pointCost<=0) throw new NegativePointCostException();
+        if(catalogRepository.existsById(payOff.getId())) {
+            payOff.setPointCost(pointCost);
+            catalogRepository.save(payOff, payOff.getId());
+            return payOff;
+        }
+        else throw new PayoffNotFoundException();
     }
 }
