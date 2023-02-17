@@ -15,35 +15,26 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CustomerRegistryTest {
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private CustomerRegistration customerRegistration;
-
-    @Autowired
-    private CustomerFinder customerFinder;
-
-    @Autowired
-    private CustomerBalancesModifier customerBalancesModifier;
-
-    @Autowired
-    private CustomerProfileModifier customerProfileModifier;
-
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
-
+    @Autowired
+    private CustomerRepository customerRepository;
+    @Autowired
+    private CustomerRegistration customerRegistration;
+    @Autowired
+    private CustomerFinder customerFinder;
+    @Autowired
+    private CustomerBalancesModifier customerBalancesModifier;
+    @Autowired
+    private CustomerProfileModifier customerProfileModifier;
 
     @BeforeEach
     void setUp() {
@@ -186,7 +177,7 @@ class CustomerRegistryTest {
         Customer customer = customerRegistration.register(mail, name, password);
         List<Store> favoriteStores = customer.getFavoriteStores();
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", new HashMap<LocalTime, LocalTime>(), storeOwner);
+        Store store = new Store("Carrefour", new HashMap<>(), storeOwner);
         assertFalse(favoriteStores.contains(store));
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         assertEquals("Carrefour", customer.getFavoriteStores().get(0).getName());
@@ -243,4 +234,5 @@ class CustomerRegistryTest {
             customerProfileModifier.removeFavoriteStore(customer, store);
         });
     }
+
 }

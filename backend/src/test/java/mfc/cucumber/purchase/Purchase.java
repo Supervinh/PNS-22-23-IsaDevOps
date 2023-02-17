@@ -34,6 +34,7 @@ public class Purchase {
     private StoreRepository storeRepository;
     @Autowired
     private StoreRegistration storeRegistration;
+    // TODO: enlever les " quand StoreOwnerRegistration et StoreOwnerRepository seront implémentés
     /*@Autowired
     private StoreOwnerRegistration storeOwnerRegistration;
     @Autowired
@@ -47,10 +48,11 @@ public class Purchase {
     @Before
     void setUp() throws AlreadyExistingStoreException {
         customerRepository.deleteAll();
+        // TODO: pareil que précédemment
         //storeOwnerRepository.deleteAll();
         storeRepository.deleteAll();
         //storeOwner = storeOwnerRegistration.register(name, mail, password);
-        StoreOwner storeOwner = new StoreOwner("Jane Doe", "jane@doe.com", "password");
+        storeOwner = new StoreOwner("Jane Doe", "jane@doe.com", "password");
         Map<LocalTime, LocalTime> openingHours = Map.of(LocalTime.of(8, 0), LocalTime.of(20, 0));
         store = storeRegistration.register(openingHours, storeOwner, "Store");
     }

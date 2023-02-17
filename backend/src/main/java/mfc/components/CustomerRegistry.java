@@ -129,10 +129,11 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findById(customer.getId());
         if (customerUpdatedFavoriteStore.isPresent()) {
             for (Store s : store) {
-                Optional<Store> storeToBeAdded = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(st -> st.getId().equals(s.getId())).findAny();
-                if (storeToBeAdded.isPresent())
-                    throw new StoreAlreadyRegisteredException();
-                customerUpdatedFavoriteStore.get().getFavoriteStores().add(s);
+//                Optional<Store> storeToBeAdded = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(st -> st.getId().equals(s.getId())).findAny();
+//                if (storeToBeAdded.isPresent())
+//                    throw new StoreAlreadyRegisteredException();
+//                customerUpdatedFavoriteStore.get().getFavoriteStores().add(s);
+                recordNewFavoriteStore(customerUpdatedFavoriteStore.get(), s);
             }
             customerRepository.save(customerUpdatedFavoriteStore.get(), customerUpdatedFavoriteStore.get().getId());
             return customerUpdatedFavoriteStore.get();
