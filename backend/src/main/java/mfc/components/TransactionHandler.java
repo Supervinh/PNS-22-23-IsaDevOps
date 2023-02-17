@@ -9,12 +9,19 @@ import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.PurchaseRecording;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TransactionHandler implements TransactionProcessor {
     CustomerBalancesModifier customerBalancesModifier;
     PurchaseRecording purchaseRecording;
+
+    @Autowired
+    public TransactionHandler(CustomerBalancesModifier customerBalancesModifier, PurchaseRecording purchaseRecording) {
+        this.customerBalancesModifier = customerBalancesModifier;
+        this.purchaseRecording = purchaseRecording;
+    }
 
     @Override
     public Purchase purchase(Customer customer, double cost, Store store) {

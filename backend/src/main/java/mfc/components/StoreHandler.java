@@ -11,6 +11,8 @@ import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +28,7 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     public StoreHandler(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
+
     @Override
     public Optional<Store> findStoreByName(String name) {
         return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
@@ -39,13 +42,13 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     }
 
     @Override
-    public Optional<Map<String, String>> findStoreOpeningHours(Store store) {
+    public Optional<Map<LocalTime, LocalTime>> findStoreOpeningHours(Store store) {
         return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
                 .filter(store::equals).findAny().map(Store::getOpeningHours);
     }
 
     @Override
-    public Store register(Map<String, String> openingHours, StoreOwner storeOwner, String name) throws AlreadyExistingStoreException {
+    public Store register(Map<LocalTime, LocalTime> openingHours, StoreOwner storeOwner, String name) throws AlreadyExistingStoreException {
         Optional<Store> store = findStoreByName(name);
         if (store.isEmpty()) {
             Store newStore = new Store(name, openingHours, storeOwner);
@@ -56,7 +59,7 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     }
 
     @Override
-    public boolean updateOpeningHours(Store store, Map<String, String> openingHours, StoreOwner storeOwner) throws CredentialsException {
+    public boolean updateOpeningHours(Store store, Map<LocalTime, LocalTime> openingHours, StoreOwner storeOwner) throws CredentialsException {
         Optional<Store> storeToUpdate = findStoreById(store.getId());
         if (storeToUpdate.isPresent()) {
             if (storeToUpdate.get().getOwner().equals(storeOwner)) {

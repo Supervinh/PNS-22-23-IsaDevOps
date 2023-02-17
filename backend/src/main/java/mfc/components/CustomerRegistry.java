@@ -39,6 +39,12 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     }
 
     @Override
+    public Optional<Customer> findCustomerByName(String name) {
+        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+                .filter(cust -> name.equals(cust.getName())).findAny();
+    }
+
+    @Override
     public Customer editBalance(Customer customer, double balanceChange) throws InsufficientBalanceException, CustomerNotFoundException {
         Optional<Customer> customerUpdatedBalance = customerRepository.findById(customer.getId());
         if (customerUpdatedBalance.isPresent()) {
