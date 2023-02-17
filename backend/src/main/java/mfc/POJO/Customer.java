@@ -31,6 +31,7 @@ public class Customer extends Account {
         favoriteStores = new ArrayList<>();
     }
 
+
 //    private void init(String creditCard) {
 //        this.creditCard = creditCard;
 //        this.setId(UUID.randomUUID());
