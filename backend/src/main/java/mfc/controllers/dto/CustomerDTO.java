@@ -12,7 +12,8 @@ public class CustomerDTO {
     private String name;
     private String mail;
     private String password;
-//    private double balance;
+    //    @Positive
+    private double balance;
 
     @Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits")
     private String creditCard;
@@ -23,17 +24,8 @@ public class CustomerDTO {
         this.creditCard = creditCard;
         this.mail = mail;
         this.password = password;
-//        balance=0;
+        balance = 0;
     }
-
-//    public CustomerDTO(UUID id, String name, String mail, String password, double balance, String creditCard) {
-//        this.id = id;
-//        this.name = name;
-//        this.mail = mail;
-//        this.password = password;
-//        this.balance = balance;
-//        this.creditCard = creditCard;
-//    }
 
     public UUID getId() {
         return id;
@@ -69,5 +61,13 @@ public class CustomerDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }
