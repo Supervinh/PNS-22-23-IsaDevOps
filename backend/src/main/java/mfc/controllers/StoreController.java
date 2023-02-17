@@ -3,7 +3,7 @@ package mfc.controllers;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreDTO;
-import mfc.interfaces.exceptions.AlreadyExistingStoreException;
+import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.StoreRegistration;
 import org.springframework.beans.factory.annotation.Autowired;

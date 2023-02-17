@@ -1,9 +1,9 @@
 package mfc.components;
 
 import mfc.POJO.*;
-import mfc.interfaces.exceptions.CredentialsException;
-import mfc.interfaces.exceptions.NegativeCostException;
-import mfc.interfaces.exceptions.NegativePointCostException;
+import mfc.exceptions.CredentialsException;
+import mfc.exceptions.NegativeCostException;
+import mfc.exceptions.NegativePointCostException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CatalogModifier;
 import mfc.repositories.CatalogRepository;

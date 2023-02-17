@@ -11,4 +11,6 @@ public interface CustomerFinder {
     Optional<Customer> findCustomerByMail(String mail);
 
     Optional<Customer> findCustomerById(UUID id);
+
+    Optional<Customer> findCustomerByName(String name);
 }

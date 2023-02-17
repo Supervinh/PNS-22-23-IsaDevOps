@@ -1,5 +1,8 @@
 package mfc.POJO;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -9,11 +12,11 @@ public class Store {
     private UUID id;
     private String name;
 
-    private Map<String,String> openingHours;
+    private Map<LocalTime, LocalTime> openingHours;
 
     private StoreOwner owner;
 
-    public Store(String name, Map<String, String> openingHours, StoreOwner owner) {
+    public Store(String name, Map<LocalTime, LocalTime> openingHours, StoreOwner owner) {
         this.name = name;
         this.openingHours = openingHours;
         this.owner = owner;
@@ -36,11 +39,11 @@ public class Store {
         this.name = name;
     }
 
-    public Map<String, String> getOpeningHours() {
+    public Map<LocalTime, LocalTime> getOpeningHours() {
         return openingHours;
     }
 
-    public void setOpeningHours(Map<String, String> openingHours) {
+    public void setOpeningHours(Map<LocalTime, LocalTime> openingHours) {
         this.openingHours = openingHours;
     }
 

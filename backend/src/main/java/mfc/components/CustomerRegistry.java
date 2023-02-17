@@ -2,7 +2,7 @@ package mfc.components;
 
 import mfc.POJO.Customer;
 import mfc.POJO.Store;
-import mfc.interfaces.exceptions.*;
+import mfc.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
@@ -36,6 +36,12 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     public Optional<Customer> findCustomerById(UUID id) {
         return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
                 .filter(cust -> id.equals(cust.getId())).findAny();
+    }
+
+    @Override
+    public Optional<Customer> findCustomerByName(String name) {
+        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+                .filter(cust -> name.equals(cust.getName())).findAny();
     }
 
     @Override

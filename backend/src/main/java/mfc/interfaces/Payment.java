@@ -1,9 +1,9 @@
 package mfc.interfaces;
 
 import mfc.POJO.Customer;
-import mfc.interfaces.exceptions.NegativeRefillException;
-import mfc.interfaces.exceptions.NoCreditCardException;
-import mfc.interfaces.exceptions.PaymentException;
+import mfc.exceptions.NegativeRefillException;
+import mfc.exceptions.NoCreditCardException;
+import mfc.exceptions.PaymentException;
 
 public interface Payment {
     boolean refillBalance(Customer user, double amount) throws NoCreditCardException, NegativeRefillException, PaymentException;

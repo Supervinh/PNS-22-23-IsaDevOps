@@ -1,7 +1,10 @@
 package mfc.controllers.dto;
 
 import mfc.POJO.StoreOwner;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,11 +12,11 @@ public class StoreDTO {
     private UUID id;
     private String name;
 
-    private Map<String,String> openingHours;
+    private Map<LocalTime, LocalTime> openingHours;
 
     private StoreOwner owner;
 
-    public StoreDTO(UUID id, String name, Map<String, String> openingHours, StoreOwner owner) {
+    public StoreDTO(UUID id, String name, Map<LocalTime, LocalTime> openingHours, StoreOwner owner) {
         this.id = id;
         this.name = name;
         this.openingHours = openingHours;
@@ -32,11 +35,11 @@ public class StoreDTO {
         this.name = name;
     }
 
-    public Map<String, String> getOpeningHours() {
+    public Map<LocalTime, LocalTime> getOpeningHours() {
         return openingHours;
     }
 
-    public void setOpeningHours(Map<String, String> openingHours) {
+    public void setOpeningHours(Map<LocalTime, LocalTime> openingHours) {
         this.openingHours = openingHours;
     }
 
