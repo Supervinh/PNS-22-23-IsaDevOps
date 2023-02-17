@@ -2,15 +2,11 @@ package mfc.controllers;
 
 import mfc.POJO.*;
 import mfc.controllers.dto.*;
-import mfc.interfaces.exceptions.NotEnoughRightsException;
+import mfc.exceptions.NotEnoughRightsException;
 import mfc.interfaces.explorer.AdminFinder;
-import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.interfaces.modifier.PurchaseRecording;
-import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
-import mfc.interfaces.modifier.StoreRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

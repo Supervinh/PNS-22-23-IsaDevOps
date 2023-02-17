@@ -1,7 +1,7 @@
 package mfc.components;
 
 import mfc.POJO.*;
-import mfc.interfaces.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
