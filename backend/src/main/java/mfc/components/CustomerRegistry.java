@@ -163,15 +163,4 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         }
         throw new CustomerNotFoundException();
     }
-
-    @Override
-    public Customer register(String mail, String name, String password) throws AlreadyExistingAccountException {
-        Optional<Customer> customer = customerRepository.findByMail(mail);
-        if (customer.isEmpty()) {
-            Customer newCustomer = new Customer(name, mail, password);
-            customerRepository.save(newCustomer, newCustomer.getId());
-            return newCustomer;
-        }
-        throw new AlreadyExistingAccountException();
-    }
 }

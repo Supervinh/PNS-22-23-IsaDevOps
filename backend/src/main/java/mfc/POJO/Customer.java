@@ -19,6 +19,10 @@ public class Customer extends Account {
         this(name, "", "", creditCard);
     }
 
+    public Customer(String name, String mail, String password) {
+        super(name, mail, password);
+    }
+
     public Customer(String name, String mail, String password, String creditCard) {
         super(name, mail, password);
         this.creditCard = creditCard;
