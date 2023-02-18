@@ -17,9 +17,7 @@ public class CliApplication {
 
     public static void main(String[] args) {
         SpringApplication.exit(SpringApplication.run(CliApplication.class, args), () -> 0);
-
     }
-
 
     /* Spring docs recommend to use the non-blocking, reactive WebClient which offers efficient support for both sync,
    async and streaming scenarios. RestTemplate will be deprecated in the future versions. -> still, MVP mode here

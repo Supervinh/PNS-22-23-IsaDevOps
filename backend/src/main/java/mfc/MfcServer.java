@@ -6,9 +6,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
-public class mfcServer {
+public class MfcServer {
 
     public static void main(String[] args) {
-        SpringApplication.run(mfcServer.class, args);
+        SpringApplication.run(MfcServer.class, args);
     }
 }

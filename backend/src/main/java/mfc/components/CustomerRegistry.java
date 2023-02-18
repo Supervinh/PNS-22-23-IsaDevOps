@@ -21,9 +21,17 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     private final CustomerRepository customerRepository;
 
-    @Autowired
+    @Autowired // annotation is optional since Spring 4.3 if component has only one constructor
     public CustomerRegistry(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+    }
+
+    @Override
+    public Customer register(String name, String mail, String password, String creditCard) throws AlreadyExistingAccountException {
+        if (findCustomerByName(name).isPresent()) throw new AlreadyExistingAccountException();
+        Customer newcustomer = new Customer(name, mail, password, creditCard);
+        customerRepository.save(newcustomer, newcustomer.getId());
+        return newcustomer;
     }
 
     @Override

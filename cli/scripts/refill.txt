@@ -1,0 +1,2 @@
+register kadoc @ abc 5251896983
+refill kadoc 5
