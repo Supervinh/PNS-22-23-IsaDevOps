@@ -1,43 +1,31 @@
 # Devops
 
-ssh-keygen -t rsa -f jenkins_agent
-changer volume / clé ssh
-agent name should be identical to docker compose name (container name)
+ssh-keygen -t rsa -f jenkins_agent changer volume / clé ssh agent name should be identical to docker compose name (
+container name)
 
-dossier jenkins --> docker-compose
-ssh-keygen -t rsa -f jenkins_agent
-changer volume local / clé ssh
+dossier jenkins --> docker-compose ssh-keygen -t rsa -f jenkins_agent changer volume local / clé ssh
 
-sudo apt install npm
-sudo npm install --global smee-client
+sudo apt install npm sudo npm install --global smee-client
 
-Webhooks : dans le rep Jenkins
-screen -S smee
-smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
-Ctrl+A d
+Webhooks : dans le rep Jenkins screen -S smee smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port
+8000 Ctrl+A d
 
 Pour rattacher/arreter :
 screen -r smee
 
 Jenkins :
-Utiliser JGit dans la config globale
--Dorg.jenkinsci.plugins.gitclient.GitClient.untrustedSSL=true
+Utiliser JGit dans la config globale -Dorg.jenkinsci.plugins.gitclient.GitClient.untrustedSSL=true
 
 Pour lancer Maven :
--Installer Maven Integration Plugin
--installer maven dans les globals tools
--specifier dans le jenkinsfile le nom de mvn
+-Installer Maven Integration Plugin -installer maven dans les globals tools -specifier dans le jenkinsfile le nom de mvn
 
 https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose
 http://vmpx02.polytech.unice.fr:8000/ (s'adresser a moi pour avoir des ids :p )
 
-sudo apt install npm
-sudo npm install --global smee-client
+sudo apt install npm sudo npm install --global smee-client
 
-Webhooks : dans le rep Jenkins
-screen -S smee
-smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
-Ctrl+A d
+Webhooks : dans le rep Jenkins screen -S smee smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port
+8000 Ctrl+A d
 
 Pour rattacher/arreter :
 screen -r smee

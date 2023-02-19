@@ -1,19 +1,19 @@
-package mfc.controllers.dto;
+package cli.model;
 
 import java.util.UUID;
 
-public class PayoffDTO {
+public class CliPayoff {
     private UUID id;
     private String name;
     private double cost;
     private int pointCost;
-//    private StoreDTO store;
+//    private CliStore store;
 
 
-    public PayoffDTO() {
+    public CliPayoff() {
     }
 
-    public PayoffDTO(String name, double cost, int pointCost, /*StoreDTO store,*/ UUID id) {
+    public CliPayoff(String name, double cost, int pointCost, /*CliStore store,*/ UUID id) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
@@ -49,18 +49,18 @@ public class PayoffDTO {
         this.pointCost = pointCost;
     }
 
-//    public void setStore(StoreDTO store) {
-//        this.store = store;
+//    public CliStore getStore() {
+//        return store;
 //    }
 //
-//    public Store getStore() {
-//        return new Store(store.getName()/*,store.getOpeningHours()*/,store.getOwner());
+//    public void setStore(CliStore store) {
+//        this.store = store;
 //    }
 
 
     @Override
     public String toString() {
-        return "PayoffDTO{" +
+        return "CliPayoff{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", cost=" + cost +

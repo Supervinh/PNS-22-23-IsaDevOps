@@ -1,18 +1,23 @@
 package mfc.controllers;
 
 import mfc.POJO.Customer;
+import mfc.POJO.StoreOwner;
 import mfc.controllers.dto.*;
-import mfc.exceptions.PayoffNotFoundException;
+import mfc.exceptions.*;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
+import mfc.interfaces.modifier.CatalogModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.UUID;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -20,6 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CatalogController {
 
     public static final String BASE_URI = "/catalog";
+    public static final String LOGGED_URI = "/{customerID}/cat/";
 
     private final ConvertDTO convertDTO = new ConvertDTO();
 
@@ -28,6 +34,9 @@ public class CatalogController {
 
     @Autowired
     private CatalogExplorer catalogExplorer;
+
+    @Autowired
+    private CatalogModifier catalogModifier;
 
     @Autowired
     private StoreOwnerFinder storeOwnerFinder;
@@ -45,23 +54,38 @@ public class CatalogController {
         return errorDTO;
     }
 
-    @PostMapping(path = "availableCatalog", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<CatalogDTO> availableCatalog (@RequestBody @Valid CustomerDTO customerDTO) throws PayoffNotFoundException {
-        Optional<Customer> customer = customerFinder.findCustomerById(customerDTO.getId());
-        if(customer.isPresent()) {
+    @GetMapping(path = LOGGED_URI + "availableCatalog")
+    // path is a REST CONTROLLER NAME
+    public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
+        Optional<Customer> customer = customerFinder.findCustomerById(customerID);
+        if (customer.isPresent()) {
+            CatalogDTO c = convertDTO.convertCatalogToDTO(catalogExplorer.availablePayoffs((customer.get())));
+            System.out.println(c);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertDTO.convertCatalopToDTO(catalogExplorer.availablePayoffs((customer.get()))));
-        }
-        else throw new PayoffNotFoundException();
+                    .body(c);
+        } else throw new CustomerNotFoundException();
     }
 
     @PostMapping(path = "exploreCatalog", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<CatalogDTO> exploreCatalog (@RequestBody @Valid CustomerDTO customerDTO, @RequestParam String string) throws PayoffNotFoundException {
+    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody @Valid CustomerDTO customerDTO, @RequestParam String string) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerDTO.getId());
-        if(customer.isPresent()) {
+        if (customer.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertDTO.convertCatalopToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
+                    .body(/*convertDTO.convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer.get(), string))*/null);
+        } else throw new CustomerNotFoundException();
+    }
+
+    @PostMapping(path = "addPayoff", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
+    public ResponseEntity<PayoffDTO> addPayoff(@RequestBody @Valid StoreOwnerDTO storeOwnerDTO, @RequestBody PayoffDTO payoffDTO) throws StoreOwnerNotFoundException {
+        try {
+            Optional<StoreOwner> storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerDTO.getId());
+            if (storeOwner.isPresent()) {
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(convertDTO.convertPayoffToDTO(catalogModifier.addPayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), null/*, payoffDTO.getStore()*/)));
+            } else throw new StoreOwnerNotFoundException();
+        } catch (NegativeCostException | NegativePointCostException | AlreadyExistingPayoffException e) {
+            System.out.println(e.getMessage());
+            return null;
         }
-        else throw new PayoffNotFoundException();
     }
 }

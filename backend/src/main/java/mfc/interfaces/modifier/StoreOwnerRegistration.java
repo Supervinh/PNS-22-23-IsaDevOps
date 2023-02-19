@@ -1,6 +1,5 @@
 package mfc.interfaces.modifier;
 
-import mfc.POJO.Admin;
 import mfc.POJO.StoreOwner;
 import mfc.exceptions.AlreadyExistingAccountException;
 

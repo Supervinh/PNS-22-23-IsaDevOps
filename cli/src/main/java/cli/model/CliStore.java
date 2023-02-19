@@ -1,18 +1,16 @@
-package mfc.controllers.dto;
-
-import mfc.POJO.StoreOwner;
+package cli.model;
 
 import java.util.UUID;
 
-public class StoreDTO {
+public class CliStore {
     private UUID id;
     private String name;
 
 //    private Map<LocalTime, LocalTime> openingHours;
 
-    private StoreOwnerDTO owner;
+    private CliStoreOwner owner;
 
-    public StoreDTO(UUID id, String name,/*, Map<LocalTime, LocalTime> openingHours,*/ StoreOwnerDTO owner) {
+    public CliStore(UUID id, String name, CliStoreOwner owner) {
         this.id = id;
         this.name = name;
 //        this.openingHours = openingHours;
@@ -39,11 +37,11 @@ public class StoreDTO {
 //        this.openingHours = openingHours;
 //    }
 
-    public StoreOwner getOwner() {
-        return new StoreOwner(owner.getName(), owner.getPassword(), owner.getPassword());
+    public CliStoreOwner getOwner() {
+        return owner;
     }
 
-    public void setOwner(StoreOwnerDTO owner) {
+    public void setOwner(CliStoreOwner owner) {
         this.owner = owner;
     }
 

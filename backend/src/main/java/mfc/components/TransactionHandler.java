@@ -3,10 +3,10 @@ package mfc.components;
 import mfc.POJO.Customer;
 import mfc.POJO.Purchase;
 import mfc.POJO.Store;
-import mfc.interfaces.TransactionProcessor;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NegativePointCostException;
+import mfc.interfaces.TransactionProcessor;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.PurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,8 @@ public class TransactionHandler implements TransactionProcessor {
         //gain a point by euro
         try {
             customerBalancesModifier.editFidelityPoints(customer, (int) cost);
-            Purchase purchase = purchaseRecording.recordPurchase(customer, cost, store);
-            return purchase;
-        } catch (NegativePointCostException negativePointCostException){
+            return purchaseRecording.recordPurchase(customer, cost, store);
+        } catch (NegativePointCostException negativePointCostException) {
             System.out.println(negativePointCostException.getMessage());
         } catch (CustomerNotFoundException e) {
             throw new RuntimeException(e);
@@ -39,12 +38,12 @@ public class TransactionHandler implements TransactionProcessor {
     }
 
     @Override
-    public Purchase purchaseFidelityCardBalance(Customer user, double cost, Store store) throws InsufficientBalanceException {
+    public Purchase purchaseFidelityCardBalance(Customer user, double cost, Store store) {
         try {
             customerBalancesModifier.editBalance(user, -cost);
             return purchase(user, cost, store);
 
-        } catch (InsufficientBalanceException | CustomerNotFoundException insufficientBalanceException){
+        } catch (InsufficientBalanceException | CustomerNotFoundException insufficientBalanceException) {
             System.out.println(insufficientBalanceException.getMessage());
         }
         return null;

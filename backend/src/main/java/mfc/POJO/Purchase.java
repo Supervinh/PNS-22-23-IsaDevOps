@@ -11,7 +11,7 @@ public class Purchase {
 
     public Store store;
 
-    public Purchase (double c, Customer u, Store s){
+    public Purchase(double c, Customer u, Store s) {
         cost = c;
         date = LocalDate.now();
         customer = u;

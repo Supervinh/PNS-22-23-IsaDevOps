@@ -1,9 +1,5 @@
 package mfc.POJO;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,13 +8,13 @@ public class Store {
     private UUID id;
     private String name;
 
-    private Map<LocalTime, LocalTime> openingHours;
+//    private Map<LocalTime, LocalTime> openingHours;
 
     private StoreOwner owner;
 
-    public Store(String name, Map<LocalTime, LocalTime> openingHours, StoreOwner owner) {
+    public Store(String name, /*Map<LocalTime, LocalTime> openingHours, */StoreOwner owner) {
         this.name = name;
-        this.openingHours = openingHours;
+//        this.openingHours = openingHours;
         this.owner = owner;
         this.id = UUID.randomUUID();
     }
@@ -39,13 +35,13 @@ public class Store {
         this.name = name;
     }
 
-    public Map<LocalTime, LocalTime> getOpeningHours() {
-        return openingHours;
-    }
-
-    public void setOpeningHours(Map<LocalTime, LocalTime> openingHours) {
-        this.openingHours = openingHours;
-    }
+//    public Map<LocalTime, LocalTime> getOpeningHours() {
+//        return openingHours;
+//    }
+//
+//    public void setOpeningHours(Map<LocalTime, LocalTime> openingHours) {
+//        this.openingHours = openingHours;
+//    }
 
     public StoreOwner getOwner() {
         return owner;
@@ -60,11 +56,11 @@ public class Store {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Store store = (Store) o;
-        return Objects.equals(id, store.id) && Objects.equals(name, store.name) && Objects.equals(openingHours, store.openingHours) && Objects.equals(owner, store.owner);
+        return Objects.equals(id, store.id) && Objects.equals(name, store.name) && Objects.equals(owner, store.owner);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, openingHours, owner);
+        return Objects.hash(id, name, owner);
     }
 }

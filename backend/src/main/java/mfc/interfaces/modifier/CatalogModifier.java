@@ -2,9 +2,9 @@ package mfc.interfaces.modifier;
 
 import mfc.POJO.PayOff;
 import mfc.POJO.Store;
+import mfc.exceptions.AlreadyExistingPayoffException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.NegativePointCostException;
-import mfc.exceptions.AlreadyExistingPayoffException;
 import mfc.exceptions.PayoffNotFoundException;
 
 public interface CatalogModifier {

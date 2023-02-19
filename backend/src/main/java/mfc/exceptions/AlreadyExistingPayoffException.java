@@ -1,4 +1,4 @@
 package mfc.exceptions;
 
-public class AlreadyExistingPayoffException extends Exception{
+public class AlreadyExistingPayoffException extends Exception {
 }

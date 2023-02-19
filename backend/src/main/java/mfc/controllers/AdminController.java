@@ -1,7 +1,11 @@
 package mfc.controllers;
 
-import mfc.POJO.*;
-import mfc.controllers.dto.*;
+import mfc.POJO.Admin;
+import mfc.POJO.StoreOwner;
+import mfc.controllers.dto.AdminDTO;
+import mfc.controllers.dto.ConvertDTO;
+import mfc.controllers.dto.ErrorDTO;
+import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.exceptions.NotEnoughRightsException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
@@ -14,7 +18,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -57,11 +60,11 @@ public class AdminController {
     @PostMapping(path = "registerOwner", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<StoreOwnerDTO> registerOwner(@RequestBody @Valid StoreOwnerDTO storeOwnerDTO) {
         try {
-            Optional<StoreOwner> authorization = ownerFind.findStoreOwnerByMailAndPassword(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
-
-            if(authorization.isPresent()){
-                throw new NotEnoughRightsException();
-            }
+//            Optional<StoreOwner> authorization = ownerFind.findStoreOwnerByMailAndPassword(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
+//
+//            if (authorization.isPresent()) {
+//                throw new NotEnoughRightsException();
+//            }
 
             StoreOwner owner = ownerReg.registerStoreOwner(storeOwnerDTO.getName(), storeOwnerDTO.getMail(), storeOwnerDTO.getPassword());
 
@@ -72,8 +75,7 @@ public class AdminController {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(storeOwnerDTO);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //TODO Handle exception
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -84,7 +86,7 @@ public class AdminController {
         try {
             Optional<Admin> authorization = adminFind.findAdminByMailAndPassword(adminDTO.getAuthorizationMail(), adminDTO.getAuthorizationPassword());
 
-            if(authorization.isPresent()){
+            if (authorization.isPresent()) {
                 throw new NotEnoughRightsException();
             }
 
@@ -97,8 +99,7 @@ public class AdminController {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(adminDTO);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //TODO Handle exception
 //            if (e instanceof NotEnoughRightsException){
 //                ErrorDTO err = new ErrorDTO();

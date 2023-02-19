@@ -1,4 +1,4 @@
 package mfc.exceptions;
 
-public class PayoffNotFoundException extends Exception{
+public class PayoffNotFoundException extends Exception {
 }

@@ -1,4 +1,4 @@
 package mfc.exceptions;
 
-public class AlreadyExistingPurchaseException extends Exception{
+public class AlreadyExistingPurchaseException extends Exception {
 }

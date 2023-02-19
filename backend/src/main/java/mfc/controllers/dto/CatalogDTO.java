@@ -1,21 +1,30 @@
 package mfc.controllers.dto;
 
-import mfc.POJO.PayOff;
 import java.util.Set;
 
 public class CatalogDTO {
 
-    private Set<PayOff> payoffs;
+    private Set<PayoffDTO> payoffs;
 
-    public CatalogDTO(Set<PayOff> payoffs) {
+    public CatalogDTO() {
+    }
+
+    public CatalogDTO(Set<PayoffDTO> payoffs) {
         this.payoffs = payoffs;
     }
 
-    public Set<PayOff> getPayoffs() {
+    public Set<PayoffDTO> getPayoffs() {
         return payoffs;
     }
 
-    public void setPayoffs(Set<PayOff> payoffs) {
+    public void setPayoffs(Set<PayoffDTO> payoffs) {
         this.payoffs = payoffs;
+    }
+
+    @Override
+    public String toString() {
+        return "CatalogDTO{" +
+                "payoffs=" + payoffs +
+                '}';
     }
 }

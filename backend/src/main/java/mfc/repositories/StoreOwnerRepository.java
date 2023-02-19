@@ -1,10 +1,7 @@
 package mfc.repositories;
 
-import mfc.POJO.Admin;
-import mfc.POJO.Customer;
 import mfc.POJO.StoreOwner;
 import org.springframework.stereotype.Repository;
-import repositories.BasicRepositoryImpl;
 
 import java.util.Optional;
 import java.util.UUID;

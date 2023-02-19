@@ -11,7 +11,6 @@ import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
 import java.util.Optional;
@@ -41,17 +40,17 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
                 .filter(store -> id.equals(store.getId())).findAny();
     }
 
-    @Override
-    public Optional<Map<LocalTime, LocalTime>> findStoreOpeningHours(Store store) {
-        return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
-                .filter(store::equals).findAny().map(Store::getOpeningHours);
-    }
+//    @Override
+//    public Optional<Map<LocalTime, LocalTime>> findStoreOpeningHours(Store store) {
+//        return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
+//                .filter(store::equals).findAny().map(Store::getOpeningHours);
+//    }
 
     @Override
-    public Store register(Map<LocalTime, LocalTime> openingHours, StoreOwner storeOwner, String name) throws AlreadyExistingStoreException {
+    public Store register(/*Map<LocalTime, LocalTime> openingHours, */StoreOwner storeOwner, String name) throws AlreadyExistingStoreException {
         Optional<Store> store = findStoreByName(name);
         if (store.isEmpty()) {
-            Store newStore = new Store(name, openingHours, storeOwner);
+            Store newStore = new Store(name/*, openingHours*/, storeOwner);
             storeRepository.save(newStore, newStore.getId());
             return newStore;
         }
@@ -63,7 +62,7 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
         Optional<Store> storeToUpdate = findStoreById(store.getId());
         if (storeToUpdate.isPresent()) {
             if (storeToUpdate.get().getOwner().equals(storeOwner)) {
-                storeToUpdate.get().setOpeningHours(openingHours);
+//                storeToUpdate.get().setOpeningHours(openingHours);
                 storeRepository.save(storeToUpdate.get(), storeToUpdate.get().getId());
                 return true;
             }

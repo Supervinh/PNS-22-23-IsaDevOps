@@ -1,22 +1,14 @@
 package mfc.components;
 
-import mfc.POJO.*;
+import mfc.POJO.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
-import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.interfaces.modifier.PurchaseRecording;
-import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.AdminRepository;
-import mfc.repositories.PurchaseRepository;
-import mfc.repositories.StoreOwnerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 @Component
 public class AdminRegistry implements AdminFinder, AdminRegistration {
@@ -31,6 +23,7 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
     public Optional<Admin> findAdminByMail(String mail) {
         return adminRepository.findByMail(mail);
     }
+
     public Optional<Admin> findAdminByMailAndPassword(String mail, String password) {
         return adminRepository.findByMailAndPassword(mail, password);
     }
