@@ -7,17 +7,17 @@ public class CliPayoff {
     private String name;
     private double cost;
     private int pointCost;
-//    private CliStore store;
+    private CliStore store;
 
 
     public CliPayoff() {
     }
 
-    public CliPayoff(String name, double cost, int pointCost, /*CliStore store,*/ UUID id) {
+    public CliPayoff(String name, double cost, int pointCost, CliStore store, UUID id) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
-//        this.store = store;
+        this.store = store;
         this.id = id;
     }
 
@@ -49,13 +49,13 @@ public class CliPayoff {
         this.pointCost = pointCost;
     }
 
-//    public CliStore getStore() {
-//        return store;
-//    }
-//
-//    public void setStore(CliStore store) {
-//        this.store = store;
-//    }
+    public CliStore getStore() {
+        return store;
+    }
+
+    public void setStore(CliStore store) {
+        this.store = store;
+    }
 
 
     @Override

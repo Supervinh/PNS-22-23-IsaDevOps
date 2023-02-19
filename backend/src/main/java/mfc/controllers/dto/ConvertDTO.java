@@ -30,6 +30,6 @@ public class ConvertDTO {
     }
 
     public PayoffDTO convertPayoffToDTO(PayOff payOff) {
-        return new PayoffDTO(payOff.getName(), payOff.getCost(), payOff.getPointCost()/*, convertStoreToDto(payOff.getStore())*/, payOff.getId());
+        return new PayoffDTO(payOff.getName(), payOff.getCost(), payOff.getPointCost(), convertStoreToDto(payOff.getStore()), payOff.getId());
     }
 }

@@ -5,8 +5,7 @@ import java.util.UUID;
 public class CliStore {
     private UUID id;
     private String name;
-
-//    private Map<LocalTime, LocalTime> openingHours;
+//    private Pair<LocalTime,LocalTime>[] openingHours;
 
     private CliStoreOwner owner;
 

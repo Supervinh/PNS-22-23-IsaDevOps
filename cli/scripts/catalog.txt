@@ -1,0 +1,4 @@
+register kadoc @ abc 5251896983
+refill kadoc 50
+available-catalog kadoc
+explore-catalog kadoc test
