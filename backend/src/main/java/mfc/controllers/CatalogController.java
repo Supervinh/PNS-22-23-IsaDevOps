@@ -66,10 +66,11 @@ public class CatalogController {
         } else throw new CustomerNotFoundException();
     }
 
-    @PostMapping(path = LOGGED_URI + "exploreCatalog", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(path = LOGGED_URI + "exploreCatalog")
     public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
+            System.out.println(string);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(convertDTO.convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
         } else throw new CustomerNotFoundException();

@@ -28,7 +28,6 @@ public class CatalogCommands {
         return restTemplate.postForObject(getUriForCustomer(name) + "/exploreCatalog", search, CliCatalog.class);
     }
 
-
     private String getUriForCustomer(String name) {
         return BASE_URI + "/" + cliContext.getCustomers().get(name).getId() + "/cat";
     }
