@@ -1,45 +1,45 @@
-# Devops
-
-ssh-keygen -t rsa -f jenkins_agent changer volume / clé ssh agent name should be identical to docker compose name (
-container name)
-
-dossier jenkins --> docker-compose ssh-keygen -t rsa -f jenkins_agent changer volume local / clé ssh
-
-sudo apt install npm sudo npm install --global smee-client
-
-Webhooks : dans le rep Jenkins screen -S smee smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port
-8000 Ctrl+A d
-
-Pour rattacher/arreter :
-screen -r smee
-
-Jenkins :
-Utiliser JGit dans la config globale -Dorg.jenkinsci.plugins.gitclient.GitClient.untrustedSSL=true
-
-Pour lancer Maven :
--Installer Maven Integration Plugin -installer maven dans les globals tools -specifier dans le jenkinsfile le nom de mvn
-
-https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose
-http://vmpx02.polytech.unice.fr:8000/ (s'adresser a moi pour avoir des ids :p )
-
-sudo apt install npm sudo npm install --global smee-client
-
-Webhooks : dans le rep Jenkins screen -S smee smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port
-8000 Ctrl+A d
-
-Pour rattacher/arreter :
-screen -r smee
-
-Jenkins :
-Utiliser JGit dans la config globale
-
 # ISA
 
-    Sur les finder, pas d'exception -> si mauvais credentials ou compte non existant, Optional.empty
-    PayOff -> Un commerce par ville
-    Chaque commerce a un owner, un owner peut avoir plusieurs commerces
+### Git Branching :
 
-# Scenarios
+#### Main
+
+* Versions stables uniquement, ne lance que des tests end-2-ends
+
+#### Dev
+
+* Versions instables, lance des TI (Cucumber)
+
+#### Feature
+
+* Branches pour développer une feature spécifique, doit comporter des tests unitaires pour valider le fonctionnement
+  métier
+
+#### Bonnes Pratiques à respecter
+
+* Toujours faire une PR, à valider par au moins deux personnes sur 5 avant de merge
+* Pas de merge si les tests ne passent pas ou ne sont pas fait
+* Pensez à utiliser [SonarQube]() pour vous assurer de la qualité de votre code
+* Pour tout les DTO & Cli, utilisez un constructeur vide, créez les setters correspondants et créez au besoin une
+  fonction init() dans l'objet avec les arguments nécessaires pour redefiner les attributs souhaités
+* Pour les codes d'erreur, referez-vous
+  à [REST API Design](https://drive.google.com/file/d/1Vv8m1Sub5WFFe2O1NEZPyP88C0muBpUY/view)
+* Liez vos commits à des issues au maximum, normalement les seuls commits non liés sont ceux d'un merge
+* Créez des issues si nécessaires et placer les dans les milestones associés (à creer au besoin)
+* Commentez le code produit, l'intérêt étant d'expliquer pourquoi vous faites ça, et comment si la logique est
+  particulierement complexe
+* Évitez au maximum de sur complexifier les méthodes, préférez créer des fonctions intermediares ou des helpers
+* ChatGPT et Copilot sont à utiliser avec parcimonie, et en les relisant
+
+#### A savoir
+
+* Sur les finder, pas d'exceptions → si mauvais credentials ou compte non existant, Optional.empty
+* Chaque ville a un commerce pour pouvoir délivrer les recompenses liées a la commune (e.g Reduction Bus)
+* Chaque commerce a un owner, un owner peut avoir plusieurs commerces
+
+## Scenarios
+
+*(Liste non exhaustive, à completer ou modifier dès que nécessaire)*
 
     L’administrateur enregistre un commerçant dans le système (CLI→AdminController→ StoreOwnerRegistry → StoreHandler → StoreRepository)(Création du magasin réussi dans StoreRepository → StoreHandler → StoreOwnerRegistry → StoreOwnerRepository pour creer le compte commercant)
     L’inscription d’un client (CLI → CustomerController → CustomerRegistry → CustomerRepository)
@@ -69,3 +69,31 @@ Utiliser JGit dans la config globale
     Magasin se connecte
     Admin se connecte
     Le client se connecte
+
+# Devops
+
+### Jenkins :
+
+Utiliser JGit dans la config globale  
+ssh-keygen -t rsa -f jenkins_agent  
+changer volume / clé ssh  
+agent name should be identical to docker compose name (
+container name)
+
+### Webhooks : dans le repository Jenkins
+
+sudo apt install npm sudo npm install --global smee-client screen -S smee smee --url https://smee.io/uTN3kiLqSU3wkZp
+--path /github-webhook/ --port 8000
+
+#### Screen :
+
+screen -r smee  
+screen -ls  
+Ctrl+A d pour détacher  
+Ctrl+A k pour tuer
+
+Pour lancer Maven :
+-Installer Maven Integration Plugin → installer maven dans global tools -> specifier dans le Jenkins file le nom de mvn
+
+https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose   
+http://vmpx02.polytech.unice.fr:8000/ (s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids)
