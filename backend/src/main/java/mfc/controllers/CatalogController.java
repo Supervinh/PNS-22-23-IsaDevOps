@@ -66,12 +66,12 @@ public class CatalogController {
         } else throw new CustomerNotFoundException();
     }
 
-    @PostMapping(path = "exploreCatalog", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody @Valid CustomerDTO customerDTO, @RequestParam String string) throws CustomerNotFoundException {
-        Optional<Customer> customer = customerFinder.findCustomerById(customerDTO.getId());
+    @PostMapping(path = LOGGED_URI + "exploreCatalog", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
+        Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(/*convertDTO.convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer.get(), string))*/null);
+                    .body(convertDTO.convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
         } else throw new CustomerNotFoundException();
     }
 
