@@ -21,30 +21,30 @@ public class CustomerCommands {
 
     @ShellMethod("Register a customer in the CoD backend (register CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
     public CliCustomer register(String name, String mail, String password, @ShellOption (defaultValue = "null") String creditCard) {
-        CliCustomer res = creditCard.equals("null") ?
+        return creditCard.equals("null") ?
                 restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, "0000000000"), CliCustomer.class): //TODO trouver comment faire pour que le credit card soit null
                 restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard), CliCustomer.class);
-        cliContext.getCustomers().put(res.getName(), res);
-        return res;
     }
 
     // Always use a POST request for login and not a GET request
     @ShellMethod("Login a customer in the CoD backend (login CUSTOMER_MAIL CUSTOMER_PASSWORD)")
     public CliCustomer login(String mail, String password) {
-        return restTemplate.postForObject(BASE_URI + "/login", new CliCustomer(mail, password), CliCustomer.class);
+        if (cliContext.getLoggedInUser() != null) {
+            System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
+            return null;
+        }
+        CliCustomer res = restTemplate.postForObject(BASE_URI + "/login", new CliCustomer(mail, password), CliCustomer.class);
+        cliContext.setLoggedInUser(res);
+        return res;
     }
 
-    @ShellMethod("Logout a customer in the CoD backend (logout CUSTOMER_NAME)")
-    public void logout(String name) {
-        restTemplate.postForObject(getUriForCustomer(name) + "/logout", cliContext.getCustomers().get(name), CliCustomer.class);
+    @ShellMethod("Logout a customer in the CoD backend (logout)")
+    public void logout() {
+        cliContext.setLoggedInUser(null);
     }
 
-    @ShellMethod("List all customers")
-    public String customers() {
-        return cliContext.getCustomers().toString();
-    }
-
-    private String getUriForCustomer(String name) {
-        return BASE_URI + "/" + cliContext.getCustomers().get(name).getId();
+    @ShellMethod("Display the logged in user (who)")
+    public String who() {
+        return cliContext.getLoggedInUser() == null ? "" : cliContext.getLoggedInUser().toString();
     }
 }

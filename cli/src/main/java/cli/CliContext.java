@@ -1,30 +1,30 @@
 package cli;
 
+import cli.model.CliAccount;
 import cli.model.CliCustomer;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 public class CliContext {
 
-    private final Map<String, CliCustomer> customers;
+    private CliAccount loggedInUser;
 
-    public Map<String, CliCustomer> getCustomers() {
-        return customers;
+    public CliAccount getLoggedInUser() {
+        return loggedInUser;
     }
 
     public CliContext() {
-        customers = new HashMap<>();
+        loggedInUser = null;
     }
 
     @Override
     public String toString() {
-        return customers.keySet().stream()
-                .map(key -> key + "=" + customers.get(key))
-                .collect(Collectors.joining(",\n", "\n{", "}"));
+        return "CliContext{" +
+                "userLoggedIn=" + loggedInUser +
+                '}';
     }
 
+    public void setLoggedInUser(CliCustomer user) {
+        this.loggedInUser = user;
+    }
 }

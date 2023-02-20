@@ -7,21 +7,15 @@ import java.util.UUID;
 
 // A cli side class being equivalent to the backend CustomerDTO, in terms of attributes
 // so that the automatic JSON (de-)/serialization will make the two compatible on each side
-public class CliCustomer {
+public class CliCustomer extends CliAccount{
 
     private UUID id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
-    private String name;
-    private String mail;
-    private String password;
     private double balance;
     private String creditCard;
 
     @JsonCreator
     public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail") String mail, @JsonProperty("password") String password, @JsonProperty("creditCard") String creditCard) {
-        this.name = name;
-        this.creditCard = creditCard;
-        this.mail = mail;
-        this.password = password;
+        super(name, mail, password);
     }
 
     /***
@@ -31,9 +25,7 @@ public class CliCustomer {
      */
     public CliCustomer(String mail, String password) {
         //We need to initialize the name to "default" because the backend will not accept a null or a blank value
-        this.name = "default";
-        this.mail = mail;
-        this.password = password;
+        super("default", mail, password);
     }
 
     public UUID getId() {
@@ -45,11 +37,11 @@ public class CliCustomer {
     }
 
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     public void setName(String name) {
-        this.name = name;
+        super.setName(name);
     }
 
     public String getCreditCard() {
@@ -61,19 +53,19 @@ public class CliCustomer {
     }
 
     public String getMail() {
-        return mail;
+        return super.getMail();
     }
 
     public void setMail(String mail) {
-        this.mail = mail;
+        super.setMail(mail);
     }
 
     public String getPassword() {
-        return password;
+        return super.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        super.setPassword(password);
     }
 
     public double getBalance() {
@@ -88,9 +80,9 @@ public class CliCustomer {
     public String toString() {
         return "CliCustomer{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", mail='" + mail + '\'' +
-                ", password='" + password + '\'' +
+                ", name='" + super.getName() + '\'' +
+                ", mail='" + super.getMail() + '\'' +
+                ", password='" + super.getPassword() + '\'' +
                 ", balance=" + balance +
                 ", creditCard='" + creditCard + '\'' +
                 '}';

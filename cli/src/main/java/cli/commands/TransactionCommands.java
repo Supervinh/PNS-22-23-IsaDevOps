@@ -24,6 +24,6 @@ public class TransactionCommands {
     }
 
     private String getUriForCustomer(String name) {
-        return BASE_URI + "/" + cliContext.getCustomers().get(name).getId() + "/transactions";
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId() + "/transactions";
     }
 }

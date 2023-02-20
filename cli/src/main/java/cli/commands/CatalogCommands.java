@@ -24,7 +24,7 @@ public class CatalogCommands {
     }
 
     private String getUriForCustomer(String name) {
-        return BASE_URI + "/" + cliContext.getCustomers().get(name).getId() + "/cat";
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId() + "/cat";
     }
 
 }
