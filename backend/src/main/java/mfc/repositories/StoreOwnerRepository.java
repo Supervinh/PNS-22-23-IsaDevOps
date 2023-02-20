@@ -21,9 +21,4 @@ public class StoreOwnerRepository extends BasicRepositoryImpl<StoreOwner, UUID> 
                 .findFirst();
     }
 
-    public Optional<StoreOwner> findById(UUID id) {
-        return StreamSupport.stream(findAll().spliterator(), false)
-                .filter(owner -> owner.getId().equals(id))
-                .findFirst();
-    }
 }

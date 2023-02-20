@@ -21,9 +21,4 @@ public class AdminRepository extends BasicRepositoryImpl<Admin, UUID> {
                 .findFirst();
     }
 
-    public Optional<Admin> findById(UUID id) {
-        return StreamSupport.stream(findAll().spliterator(), false)
-                .filter(admin -> admin.getId().equals(id))
-                .findFirst();
-    }
 }

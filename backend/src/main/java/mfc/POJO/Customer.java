@@ -5,7 +5,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Customer extends Account {
     private String matriculation;
@@ -35,73 +34,40 @@ public class Customer extends Account {
         favoriteStores = new ArrayList<>();
     }
 
-
-//    private void init(String creditCard) {
-//        this.creditCard = creditCard;
-//        this.setId(UUID.randomUUID());
-//        //Initiate vfp to yesterday, to avoid any advantage before the acquisition of the status
-//        vfp =  LocalDate.now().minus(Period.ofDays(1));
-//        fidelityPoints= 0;
-//        balance = 0;
-//        matriculation ="";
-//        favoriteStores = new ArrayList<>();
-//    }
-
-    //
-//    public Customer(String name, String mail, String password, String matriculation, String creditCard) {
-//        super(name, mail, password);
-//        this.matriculation = matriculation;
-//        this.fidelityPoints = 0;
-//        this.balance = 0;
-//        this.creditCard = creditCard;
-//        this.favoriteStores = new ArrayList<>();
-//        this.vfp = null;
-//    }
-//
-//    public Customer(String name, String mail, String password) {
-//        super(name, mail, password);
-//        this.matriculation = null;
-//        this.fidelityPoints = 0;
-//        this.balance = 0;
-//        this.creditCard = null;
-//        this.favoriteStores = new ArrayList<>();
-//        this.vfp = null;
-//    }
-
     public String getMatriculation() {
         return matriculation;
-    }
-
-    public int getFidelityPoints() {
-        return fidelityPoints;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public List<Store> getFavoriteStores() {
-        return favoriteStores;
-    }
-
-    public LocalDate getVfp() {
-        return vfp;
     }
 
     public void setMatriculation(String matriculation) {
         this.matriculation = matriculation;
     }
 
+    public int getFidelityPoints() {
+        return fidelityPoints;
+    }
+
     public void setFidelityPoints(int fidelityPoints) {
         this.fidelityPoints = fidelityPoints;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     public void setBalance(double balance) {
         this.balance = balance;
     }
 
+    public List<Store> getFavoriteStores() {
+        return favoriteStores;
+    }
+
     public void setFavoriteStores(List<Store> favoriteStores) {
         this.favoriteStores = favoriteStores;
+    }
+
+    public LocalDate getVfp() {
+        return vfp;
     }
 
     public void setVfp(LocalDate vfp) {

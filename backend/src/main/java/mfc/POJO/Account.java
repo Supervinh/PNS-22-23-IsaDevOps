@@ -9,7 +9,7 @@ public abstract class Account {
     private String mail;
     private String password;
 
-    public Account(String name, String mail, String password) {
+    protected Account(String name, String mail, String password) {
         this.name = name;
         this.mail = mail;
         this.password = password;
