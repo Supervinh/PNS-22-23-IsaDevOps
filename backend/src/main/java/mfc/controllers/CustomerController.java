@@ -25,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomerController {
 
     public static final String BASE_URI = "/customers";
-    public static final String LOGGED_URI = BASE_URI + "/{customerId}/";
+    public static final String LOGGED_URI = "/{customerId}/";
 
     @Autowired
     private CustomerRegistration registry;
@@ -83,6 +83,7 @@ public class CustomerController {
 
     @PostMapping(path= LOGGED_URI + "logout", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> logout(@PathVariable("customerId") UUID customerId, @RequestBody @Valid CustomerDTO cusdto) {
+        //TODO : check if the customer is logged in
         return ResponseEntity.status(HttpStatus.OK).body(convertCustomerToDto(finder.findCustomerById(customerId).orElseThrow()));
     }
 
