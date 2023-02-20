@@ -25,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomerController {
 
     public static final String BASE_URI = "/customers";
-    public static final String LOGGED_URI = "/{customerId}/transactions/";
+    public static final String LOGGED_URI = BASE_URI + "/{customerId}/";
 
     @Autowired
     private CustomerRegistration registry;
@@ -81,17 +81,22 @@ public class CustomerController {
         }
     }
 
+    @PostMapping(path= LOGGED_URI + "logout", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerDTO> logout(@PathVariable("customerId") UUID customerId, @RequestBody @Valid CustomerDTO cusdto) {
+        return ResponseEntity.status(HttpStatus.OK).body(convertCustomerToDto(finder.findCustomerById(customerId).orElseThrow()));
+    }
+
     private CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
         CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard());
         dto.setBalance(customer.getBalance());
         return dto;
     }
 
-    @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
+    /*@PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") UUID customerId) throws NoCreditCardException, PaymentException, NegativeRefillException {
         Customer res = payment.refillBalance(finder.findCustomerById(customerId).orElseThrow(), amount); //TODO: check if customer exists
-        return ResponseEntity.ok().body(/*"Refill of " + res +" is validated"*/convertCustomerToDto(res));
-    }
+        return ResponseEntity.ok().body(*//*"Refill of " + res +" is validated"*//*convertCustomerToDto(res));
+    }*/
 
 }
 

@@ -32,7 +32,11 @@ public class CustomerCommands {
     @ShellMethod("Login a customer in the CoD backend (login CUSTOMER_MAIL CUSTOMER_PASSWORD)")
     public CliCustomer login(String mail, String password) {
         return restTemplate.postForObject(BASE_URI + "/login", new CliCustomer(mail, password), CliCustomer.class);
+    }
 
+    @ShellMethod("Logout a customer in the CoD backend (logout CUSTOMER_NAME)")
+    public void logout(String name) {
+        restTemplate.postForObject(getUriForCustomer(name) + "/logout", cliContext.getCustomers().get(name), CliCustomer.class);
     }
 
     @ShellMethod("List all customers")
@@ -40,4 +44,7 @@ public class CustomerCommands {
         return cliContext.getCustomers().toString();
     }
 
+    private String getUriForCustomer(String name) {
+        return BASE_URI + "/" + cliContext.getCustomers().get(name).getId();
+    }
 }
