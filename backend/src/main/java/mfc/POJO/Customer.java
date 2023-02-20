@@ -21,12 +21,17 @@ public class Customer extends Account {
 
     public Customer(String name, String mail, String password) {
         super(name, mail, password);
+        this.creditCard = "";
+        vfp = LocalDate.now().minus(Period.ofDays(1));
+        fidelityPoints = 0;
+        balance = 0;
+        matriculation = "";
+        favoriteStores = new ArrayList<>();
     }
 
     public Customer(String name, String mail, String password, String creditCard) {
         super(name, mail, password);
         this.creditCard = creditCard;
-        this.setId(UUID.randomUUID());
         //Initiate vfp to yesterday, to avoid any advantage before the acquisition of the status
         vfp = LocalDate.now().minus(Period.ofDays(1));
         fidelityPoints = 0;
