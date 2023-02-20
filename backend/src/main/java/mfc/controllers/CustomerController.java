@@ -63,17 +63,20 @@ public class CustomerController {
         }
     }
 
-    @GetMapping(path = "login", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "login", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> login(@RequestBody @Valid CustomerDTO cusdto) {
         // Note that there is no validation at all on the CustomerDto mapped
         Optional<Customer> customer = finder.findCustomerByMail(cusdto.getMail());
         if (customer.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
+            // If no customer is found, we return a 404 (Not Found) status code
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         if (!customer.get().getPassword().equals(cusdto.getPassword())) {
+            // If the password is wrong, we return a 401 (Unauthorized) status code
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         else {
+            // If the password is correct, we return a 200 (OK) status code
             return ResponseEntity.status(HttpStatus.OK).body(convertCustomerToDto(customer.get()));
         }
     }

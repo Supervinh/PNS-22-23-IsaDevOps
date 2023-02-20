@@ -28,9 +28,11 @@ public class CustomerCommands {
         return res;
     }
 
+    // Always use a POST request for login and not a GET request
     @ShellMethod("Login a customer in the CoD backend (login CUSTOMER_MAIL CUSTOMER_PASSWORD)")
     public CliCustomer login(String mail, String password) {
-        return restTemplate.getForObject(BASE_URI + "/login", CliCustomer.class, new CliCustomer(mail, password));
+        return restTemplate.postForObject(BASE_URI + "/login", new CliCustomer(mail, password), CliCustomer.class);
+
     }
 
     @ShellMethod("List all customers")

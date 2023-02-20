@@ -17,7 +17,7 @@ public class CliCustomer {
     private String creditCard;
 
     @JsonCreator
-    public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail")String mail, @JsonProperty("password")String password, @JsonProperty("creditCard")String creditCard) {
+    public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail") String mail, @JsonProperty("password") String password, @JsonProperty("creditCard") String creditCard) {
         this.name = name;
         this.creditCard = creditCard;
         this.mail = mail;
@@ -30,6 +30,8 @@ public class CliCustomer {
      * @param password : the password used to log in
      */
     public CliCustomer(String mail, String password) {
+        //We need to initialize the name to "default" because the backend will not accept a null or a blank value
+        this.name = "default";
         this.mail = mail;
         this.password = password;
     }
