@@ -1,5 +1,6 @@
 package mfc.components;
 
+import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.exceptions.AlreadyExistingStoreException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,17 +42,17 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
                 .filter(store -> id.equals(store.getId())).findAny();
     }
 
-//    @Override
-//    public Optional<Map<LocalTime, LocalTime>> findStoreOpeningHours(Store store) {
-//        return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
-//                .filter(store::equals).findAny().map(Store::getOpeningHours);
-//    }
+    @Override
+    public Optional<List<Schedule>> findStoreOpeningHours(Store store) {
+        return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
+                .filter(store::equals).findAny().map(Store::getSchedule);
+    }
 
     @Override
-    public Store register(/*Map<LocalTime, LocalTime> openingHours, */StoreOwner storeOwner, String name) throws AlreadyExistingStoreException {
+    public Store register(String name, List<Schedule> schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException {
         Optional<Store> store = findStoreByName(name);
         if (store.isEmpty()) {
-            Store newStore = new Store(name/*, openingHours*/, storeOwner);
+            Store newStore = new Store(name, schedule, storeOwner);
             storeRepository.save(newStore, newStore.getId());
             return newStore;
         }
@@ -58,11 +60,11 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     }
 
     @Override
-    public boolean updateOpeningHours(Store store, Map<LocalTime, LocalTime> openingHours, StoreOwner storeOwner) throws CredentialsException {
+    public boolean updateOpeningHours(Store store, List<Schedule> schedule, StoreOwner storeOwner) throws CredentialsException {
         Optional<Store> storeToUpdate = findStoreById(store.getId());
         if (storeToUpdate.isPresent()) {
             if (storeToUpdate.get().getOwner().equals(storeOwner)) {
-//                storeToUpdate.get().setOpeningHours(openingHours);
+                storeToUpdate.get().setSchedule(schedule);
                 storeRepository.save(storeToUpdate.get(), storeToUpdate.get().getId());
                 return true;
             }

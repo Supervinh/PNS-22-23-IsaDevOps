@@ -1,7 +1,9 @@
 package mfc.interfaces.notifier;
 
-import java.util.Map;
+import mfc.POJO.Schedule;
+
+import java.util.List;
 
 public interface StoreNotifier {
-    boolean notify(Map<String, String> openingHours);
+    boolean notify(List<Schedule> scheduleList);
 }

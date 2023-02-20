@@ -1,9 +1,12 @@
 package mfc.controllers.dto;
 
 import mfc.POJO.PayOff;
+import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,11 +17,25 @@ public class ConvertDTO {
 //    }
 
     public StoreDTO convertStoreToDto(Store store) {
-        return new StoreDTO(store.getId(), store.getName(), /*store.getOpeningHours(),*/ convertStoreOwnerToDto(store.getOwner()));
+        return new StoreDTO(store.getName(),convertScheduleToDTO(store.getSchedule()),convertStoreOwnerToDto(store.getOwner()), store.getId());
     }
 
-    public StoreOwnerDTO convertStoreOwnerToDto(StoreOwner store) {
-        return new StoreOwnerDTO(store.getId(), store.getName(), store.getMail(), store.getPassword());
+    public List<ScheduleDTO> convertScheduleToDTO(List<Schedule> scheduleList){
+        List<ScheduleDTO> ret = new ArrayList<>();
+        for (Schedule s : scheduleList){
+            ScheduleDTO currentSchedule = new ScheduleDTO(s.getOpeningTime(), s.getClosingTime());
+            ret.add(currentSchedule);
+        }
+        return ret;
+    }
+
+    public StoreOwnerDTO convertStoreOwnerToDto(StoreOwner owner) {
+        StoreOwnerDTO ret = new StoreOwnerDTO();
+        ret.setName(owner.getName());
+        ret.setMail(owner.getMail());
+        ret.setPassword(owner.getPassword());
+        ret.setId(owner.getId());
+        return ret;
     }
 
 //    public PurchaseDTO convertPurchaseToDto(Purchase purchase) {
