@@ -1,5 +1,6 @@
 package mfc.controllers.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.UUID;
@@ -10,6 +11,7 @@ public class CustomerDTO {
 
     @NotBlank(message = "name should not be blank")
     private String name;
+    @Email(message = "mail should be a valid email")
     private String mail;
     private String password;
     //    @Positive
@@ -27,9 +29,6 @@ public class CustomerDTO {
         balance = 0;
     }
 
-//    public CustomerDTO(UUID id, String mail, int fidelityPoints, String creditCard) {
-//
-//    }
 
     public UUID getId() {
         return id;

@@ -3,13 +3,11 @@ package mfc.controllers;
 import mfc.POJO.Customer;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
-import mfc.exceptions.AlreadyExistingAccountException;
-import mfc.exceptions.NegativeRefillException;
-import mfc.exceptions.NoCreditCardException;
-import mfc.exceptions.PaymentException;
+import mfc.exceptions.*;
 import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerRegistration;
+import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -61,6 +60,21 @@ public class CustomerController {
         } catch (AlreadyExistingAccountException e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @GetMapping(path = "login", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerDTO> login(@RequestBody @Valid CustomerDTO cusdto) {
+        // Note that there is no validation at all on the CustomerDto mapped
+        Optional<Customer> customer = finder.findCustomerByMail(cusdto.getMail());
+        if (customer.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
+        }
+        if (!customer.get().getPassword().equals(cusdto.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(convertCustomerToDto(customer.get()));
         }
     }
 

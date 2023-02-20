@@ -1,5 +1,8 @@
 package cli.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
 // A cli side class being equivalent to the backend CustomerDTO, in terms of attributes
@@ -13,9 +16,20 @@ public class CliCustomer {
     private double balance;
     private String creditCard;
 
-    public CliCustomer(String name, String mail, String password, String creditCard) {
+    @JsonCreator
+    public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail")String mail, @JsonProperty("password")String password, @JsonProperty("creditCard")String creditCard) {
         this.name = name;
         this.creditCard = creditCard;
+        this.mail = mail;
+        this.password = password;
+    }
+
+    /***
+     * Constructor for a customer that is not logged in yet
+     * @param mail : the mail used to log in
+     * @param password : the password used to log in
+     */
+    public CliCustomer(String mail, String password) {
         this.mail = mail;
         this.password = password;
     }

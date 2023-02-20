@@ -24,7 +24,7 @@ public class CliContext {
     public String toString() {
         return customers.keySet().stream()
                 .map(key -> key + "=" + customers.get(key))
-                .collect(Collectors.joining(", ", "{", "}"));
+                .collect(Collectors.joining(",\n", "\n{", "}"));
     }
 
 }

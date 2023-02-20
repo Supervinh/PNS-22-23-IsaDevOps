@@ -5,6 +5,7 @@ import cli.model.CliCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.RestTemplate;
 
 @ShellComponent
@@ -19,10 +20,17 @@ public class CustomerCommands {
     private CliContext cliContext;
 
     @ShellMethod("Register a customer in the CoD backend (register CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
-    public CliCustomer register(String name, String mail, String password, String creditCard) {
-        CliCustomer res = restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard), CliCustomer.class);
+    public CliCustomer register(String name, String mail, String password, @ShellOption (defaultValue = "null") String creditCard) {
+        CliCustomer res = creditCard.equals("null") ?
+                restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, "0000000000"), CliCustomer.class): //TODO trouver comment faire pour que le credit card soit null
+                restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard), CliCustomer.class);
         cliContext.getCustomers().put(res.getName(), res);
         return res;
+    }
+
+    @ShellMethod("Login a customer in the CoD backend (login CUSTOMER_MAIL CUSTOMER_PASSWORD)")
+    public CliCustomer login(String mail, String password) {
+        return restTemplate.getForObject(BASE_URI + "/login", CliCustomer.class, new CliCustomer(mail, password));
     }
 
     @ShellMethod("List all customers")
