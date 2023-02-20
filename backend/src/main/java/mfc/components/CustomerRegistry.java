@@ -27,6 +27,14 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     }
 
     @Override
+    public Customer register(String name, String mail, String password) throws AlreadyExistingAccountException {
+        if (findCustomerByName(name).isPresent()) throw new AlreadyExistingAccountException();
+        Customer newcustomer = new Customer(name, mail, password);
+        customerRepository.save(newcustomer, newcustomer.getId());
+        return newcustomer;
+    }
+
+    @Override
     public Customer register(String name, String mail, String password, String creditCard) throws AlreadyExistingAccountException {
         if (findCustomerByName(name).isPresent()) throw new AlreadyExistingAccountException();
         Customer newcustomer = new Customer(name, mail, password, creditCard);
