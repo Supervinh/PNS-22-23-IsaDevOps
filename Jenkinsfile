@@ -1,27 +1,44 @@
 pipeline {
-    agent any
-    tools {
-        maven 'maven-3.9.0'
-    }
-
+    agent {dockerfile true}
     stages {
+        stage ('Initialize') {
+                steps {
+                    sh '''
+                        echo "PATH = ${PATH}"
+                        echo "M2_HOME = ${M2_HOME}"
+                        cp settings.xml ${M2_HOME}/
+                        ls -lah ${M2_HOME}
+                        java -version
+                        mvn -version
+                    '''
+                }
+            }
         stage('Build') {
             steps {
-                dir('backend/') {
-                    sh 'mvn clean package'
+                sh './build-all.sh'
                 }
-//                 echo 'Building..'
+            }
+        stage('Test') {
+            steps {
+            echo 'Should send on SonarQube (8005)..'
+                dir('backend'){
+                    sh 'mvn install'
+                }
+                dir('cli'){
+                    sh 'mvn install'
+                }
             }
         }
-//         stage('Test') {
-//             steps {
-//                 echo 'Testing..'
-//             }
-//         }
-//         stage('Deploy') {
-//             steps {
-//                 echo 'Deploying..'
-//             }
-//         }
+        stage('Deploy') {
+            steps {
+            echo 'Should deploy on artifactory(8002)..'
+                dir('backend'){
+                    sh 'mvn deploy'
+                }
+                dir('cli'){
+                    sh 'mvn deploy'
+                }
+            }
+        }
     }
  }

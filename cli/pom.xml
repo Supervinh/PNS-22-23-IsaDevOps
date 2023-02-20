@@ -17,6 +17,14 @@
     <version>1.0-SNAPSHOT</version>
     <name>cli</name>
 
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>e3f855244eeb-releases</name>
+            <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

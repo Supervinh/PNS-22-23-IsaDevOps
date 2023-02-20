@@ -26,6 +26,14 @@
         <cucumber.version>7.10.1</cucumber.version>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>e3f855244eeb-releases</name>
+            <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-release-local</url>
+        </repository>
+    </distributionManagement>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -155,4 +163,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
