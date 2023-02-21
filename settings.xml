@@ -4,25 +4,16 @@
           xmlns="http://maven.apache.org/SETTINGS/1.2.0">
     <servers>
         <server>
-            <username>admin</username>
-            <password>@yZvRLf3AG8BdS79w</password>
+            <username>${security.getCurrentUsername()}</username>
+            <password>${security.getEscapedEncryptedPassword()!"AP7dafW3Bzt3HD2khYr3ci8hheVNAMFGGqcZCX"}</password>
             <id>central</id>
         </server>
         <server>
-            <username>admin</username>
-            <password>@yZvRLf3AG8BdS79w</password>
+            <username>${security.getCurrentUsername()}</username>
+            <password>${security.getEscapedEncryptedPassword()!"AP7dafW3Bzt3HD2khYr3ci8hheVNAMFGGqcZCX"}</password>
             <id>snapshots</id>
         </server>
     </servers>
-    <mirrors>
-        <mirror>
-            <id>maven-default-http-blocker</id>
-            <mirrorOf>external:dont-match-anything-mate:*</mirrorOf>
-            <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
-            <url>http://0.0.0.0/</url>
-            <blocked>false</blocked>
-        </mirror>
-    </mirrors>
     <profiles>
         <profile>
             <repositories>
