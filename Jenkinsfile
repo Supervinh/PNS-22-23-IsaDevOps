@@ -10,10 +10,7 @@ pipeline {
                         mvn -version
                         docker -v
                         docker compose version
-                        ls ~/.local -la
-
-                        ls /home/jenkins/.m2 -la
-                        ls ~/.local/bin -la
+                        mkdir -p ${M2_HOME}/
                         cp settings.xml ${M2_HOME}/
                         ls -lah ${M2_HOME}
                     '''
