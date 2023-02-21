@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+            http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,11 +27,11 @@
     </properties>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>e3f855244eeb-snapshots</name>
-            <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
+        <repository>
+            <id>central</id>
+            <name>e3f855244eeb-releases</name>
+            <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-release</url>
+        </repository>
     </distributionManagement>
 
     <dependencyManagement>
