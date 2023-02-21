@@ -4,13 +4,13 @@
           xmlns="http://maven.apache.org/SETTINGS/1.2.0">
     <servers>
         <server>
-            <username>${security.getCurrentUsername()}</username>
-            <password>${security.getEscapedEncryptedPassword()!"AP7dafW3Bzt3HD2khYr3ci8hheVNAMFGGqcZCX"}</password>
+            <username>admin</username>
+            <password>@yZvRLf3AG8BdS79w</password>
             <id>central</id>
         </server>
         <server>
-            <username>${security.getCurrentUsername()}</username>
-            <password>${security.getEscapedEncryptedPassword()!"AP7dafW3Bzt3HD2khYr3ci8hheVNAMFGGqcZCX"}</password>
+            <username>admin</username>
+            <password>@yZvRLf3AG8BdS79w</password>
             <id>snapshots</id>
         </server>
     </servers>
