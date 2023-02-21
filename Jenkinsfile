@@ -1,5 +1,5 @@
 pipeline {
-    agent {dockerfile true}
+    agent any
     stages {
         stage ('Initialize') {
                 steps {
@@ -10,6 +10,8 @@ pipeline {
                         ls -lah ${M2_HOME}
                         java -version
                         mvn -version
+                        docker -v
+                        docker-compose -v
                     '''
                 }
             }
