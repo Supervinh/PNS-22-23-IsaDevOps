@@ -15,11 +15,11 @@ pipeline {
                     '''
                 }
             }
-        stage('Build') {
-            steps {
+//         stage('Build') {
+//             steps {
 //                 sh './build-all.sh'
-                }
-            }
+//                 }
+//             }
         stage('Test') {
             steps {
             echo 'Should send on SonarQube (8005)..'
