@@ -9,7 +9,11 @@ pipeline {
                         java -version
                         mvn -version
                         docker -v
-                        docker compose -v
+                        docker compose version
+                        ls / -lah
+                        ls /home/ -la
+                        ls /home/jenkins/ -la
+                        ls /home/jenkins/.m2 -la
                         cp settings.xml ${M2_HOME}/
                         ls -lah ${M2_HOME}
                     '''
