@@ -17,4 +17,4 @@ build_dir "bank"
 
 echo "** Done all -> docker up"
 
-docker-compose up
+docker compose up

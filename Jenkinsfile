@@ -9,7 +9,7 @@ pipeline {
                         java -version
                         mvn -version
                         docker -v
-                        docker-compose -v
+                        docker compose -v
                         cp settings.xml ${M2_HOME}
                         ls -lah ${M2_HOME}
                     '''
