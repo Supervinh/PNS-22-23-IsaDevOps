@@ -10,14 +10,14 @@ pipeline {
                         mvn -version
                         docker -v
                         docker compose -v
-                        cp settings.xml ${M2_HOME}
+                        cp settings.xml ${M2_HOME}/
                         ls -lah ${M2_HOME}
                     '''
                 }
             }
         stage('Build') {
             steps {
-                sh './build-all.sh'
+//                 sh './build-all.sh'
                 }
             }
         stage('Test') {
