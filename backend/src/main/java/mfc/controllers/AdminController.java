@@ -60,11 +60,11 @@ public class AdminController {
     @PostMapping(path = "registerOwner", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<StoreOwnerDTO> registerOwner(@RequestBody @Valid StoreOwnerDTO storeOwnerDTO) {
         try {
-//            Optional<StoreOwner> authorization = ownerFind.findStoreOwnerByMailAndPassword(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
-//
-//            if (authorization.isPresent()) {
-//                throw new NotEnoughRightsException();
-//            }
+            Optional<Admin> authorization = adminFind.findAdminByMailAndPassword(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
+
+            if (authorization.isPresent()) {
+                throw new NotEnoughRightsException();
+            }
 
             StoreOwner owner = ownerReg.registerStoreOwner(storeOwnerDTO.getName(), storeOwnerDTO.getMail(), storeOwnerDTO.getPassword());
 

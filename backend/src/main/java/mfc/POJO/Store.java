@@ -1,5 +1,8 @@
 package mfc.POJO;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -7,14 +10,13 @@ public class Store {
 
     private UUID id;
     private String name;
-
-//    private Map<LocalTime, LocalTime> openingHours;
+    private List<Schedule> schedule;
 
     private StoreOwner owner;
 
-    public Store(String name, /*Map<LocalTime, LocalTime> openingHours, */StoreOwner owner) {
+    public Store(String name, List<Schedule> schedule,StoreOwner owner) {
         this.name = name;
-//        this.openingHours = openingHours;
+        this.schedule = schedule;
         this.owner = owner;
         this.id = UUID.randomUUID();
     }
@@ -35,13 +37,13 @@ public class Store {
         this.name = name;
     }
 
-//    public Map<LocalTime, LocalTime> getOpeningHours() {
-//        return openingHours;
-//    }
-//
-//    public void setOpeningHours(Map<LocalTime, LocalTime> openingHours) {
-//        this.openingHours = openingHours;
-//    }
+    public List<Schedule> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(List<Schedule> schedule) {
+        this.schedule = schedule;
+    }
 
     public StoreOwner getOwner() {
         return owner;

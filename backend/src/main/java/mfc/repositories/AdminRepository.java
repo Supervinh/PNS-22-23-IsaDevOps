@@ -3,12 +3,15 @@ package mfc.repositories;
 import mfc.POJO.Admin;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Repository
 public class AdminRepository extends BasicRepositoryImpl<Admin, UUID> {
+
     public Optional<Admin> findByMail(String mail) {
         return StreamSupport.stream(findAll().spliterator(), false)
                 .filter(admin -> admin.getMail().equals(mail))
@@ -21,9 +24,4 @@ public class AdminRepository extends BasicRepositoryImpl<Admin, UUID> {
                 .findFirst();
     }
 
-    public Optional<Admin> findById(UUID id) {
-        return StreamSupport.stream(findAll().spliterator(), false)
-                .filter(admin -> admin.getId().equals(id))
-                .findFirst();
-    }
 }

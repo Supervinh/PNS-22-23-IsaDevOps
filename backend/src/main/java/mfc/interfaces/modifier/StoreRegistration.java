@@ -1,9 +1,13 @@
 package mfc.interfaces.modifier;
 
+import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.exceptions.AlreadyExistingStoreException;
 
+import java.time.LocalTime;
+import java.util.List;
+
 public interface StoreRegistration {
-    Store register(/*Map<LocalTime, LocalTime> openingHours, */StoreOwner storeOwner, String name) throws AlreadyExistingStoreException;
+    Store register(String name, List<Schedule> schedule , StoreOwner storeOwner) throws AlreadyExistingStoreException;
 }
