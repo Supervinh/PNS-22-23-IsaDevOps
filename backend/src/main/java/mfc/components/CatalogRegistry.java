@@ -45,7 +45,7 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     }
 
     @Override
-    public PayOff editPayOff(PayOff payOff, Store store, double cost, int pointCost) throws NegativeCostException, NegativePointCostException, PayoffNotFoundException {
+    public PayOff editPayOff(PayOff payOff, double cost, int pointCost) throws NegativeCostException, NegativePointCostException, PayoffNotFoundException {
         if (cost <= 0) throw new NegativeCostException();
         if (pointCost <= 0) throw new NegativePointCostException();
         if (catalogRepository.existsById(payOff.getId())) {
@@ -57,7 +57,7 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     }
 
     @Override
-    public PayOff editPayOff(PayOff payOff, Store store, double cost) throws NegativeCostException, PayoffNotFoundException {
+    public PayOff editPayOff(PayOff payOff, double cost) throws NegativeCostException, PayoffNotFoundException {
         if (cost <= 0) throw new NegativeCostException();
         if (catalogRepository.existsById(payOff.getId())) {
             payOff.setCost(cost);
@@ -67,11 +67,19 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     }
 
     @Override
-    public PayOff editPayOff(PayOff payOff, Store store, int pointCost) throws NegativePointCostException, PayoffNotFoundException {
+    public PayOff editPayOff(PayOff payOff, int pointCost) throws NegativePointCostException, PayoffNotFoundException {
         if (pointCost <= 0) throw new NegativePointCostException();
         if (catalogRepository.existsById(payOff.getId())) {
             payOff.setPointCost(pointCost);
             catalogRepository.save(payOff, payOff.getId());
+            return payOff;
+        } else throw new PayoffNotFoundException();
+    }
+
+    @Override
+    public PayOff deletePayoff(PayOff payOff) throws PayoffNotFoundException {
+        if (catalogRepository.existsById(payOff.getId())) {
+            catalogRepository.deleteById(payOff.getId());
             return payOff;
         } else throw new PayoffNotFoundException();
     }

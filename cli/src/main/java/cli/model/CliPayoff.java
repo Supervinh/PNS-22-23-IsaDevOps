@@ -21,6 +21,14 @@ public class CliPayoff {
         this.id = id;
     }
 
+    public CliPayoff(String name, double cost, int pointCost, CliStore store) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.cost = cost;
+        this.pointCost = pointCost;
+        this.store = store;
+    }
+
     public UUID getId() {
         return id;
     }

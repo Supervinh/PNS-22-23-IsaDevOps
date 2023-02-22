@@ -2,6 +2,7 @@ package cli.commands;
 
 import cli.CliContext;
 import cli.model.CliCatalog;
+import cli.model.CliPayoff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -28,8 +29,22 @@ public class CatalogCommands {
         return restTemplate.postForObject(getUriForCustomer(name) + "/exploreCatalog", search, CliCatalog.class);
     }
 
+    @ShellMethod("Adds a payoff to the catalog(addPayoff STORE_OWNER_NAME PAYOFF_NAME COST POINT_COST STORE_NAME )")
+    public CliPayoff addPayoff(String storeOwner_name, String payoff_name, double cost, int pointCost, String store_name) {
+        CliPayoff cliPayoff = new CliPayoff(payoff_name, cost, pointCost, cliContext.getStores().get(store_name));
+        return restTemplate.postForObject(getUriForStoreOwner(storeOwner_name) + "/addPayoff", cliPayoff, CliPayoff.class);
+    }
+
+    @ShellMethod("Deletes a payoff from the catalog(deletePayoff STORE_OWNER_NAME PAYOFF)")
+    public CliPayoff deletePayoff(String name, CliPayoff payoff) {
+        return restTemplate.postForObject(getUriForStoreOwner(name) + "/deletePayoff/", payoff, CliPayoff.class);
+    }
+
     private String getUriForCustomer(String name) {
         return BASE_URI + "/" + cliContext.getCustomers().get(name).getId() + "/cat";
     }
 
+    private String getUriForStoreOwner(String name) {
+        return BASE_URI + "/" + cliContext.getStoreOwners().get(name).getId() + "/cat";
+    }
 }
