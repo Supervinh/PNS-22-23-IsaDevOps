@@ -1,24 +1,28 @@
 package cli.model;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CliStore {
     private UUID id;
     private String name;
+    private String[][] schedule;
 
-//    private Map<LocalTime, LocalTime> openingHours;
+    private String owner;
 
-    private CliStoreOwner owner;
-
-    public CliStore(UUID id, String name, CliStoreOwner owner) {
-        this.id = id;
+    public CliStore(String name, String[][] schedule, String owner) {
         this.name = name;
-//        this.openingHours = openingHours;
-        this.owner = owner;
+        this.schedule = schedule;
+        this.owner = owner;;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -29,20 +33,33 @@ public class CliStore {
         this.name = name;
     }
 
-//    public Map<LocalTime, LocalTime> getOpeningHours() {
-//        return openingHours;
-//    }
+    public String[][] getSchedule() {
+        return schedule;
+    }
 
-//    public void setOpeningHours(Map<LocalTime, LocalTime> openingHours) {
-//        this.openingHours = openingHours;
-//    }
+    public void setSchedule(String[][] schedule) {
+        this.schedule = schedule;
+    }
 
-    public CliStoreOwner getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(CliStoreOwner owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CliStore store = (CliStore) o;
+        return Objects.equals(id, store.id) && Objects.equals(name, store.name) && Objects.equals(owner, store.owner);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, owner);
     }
 
 }

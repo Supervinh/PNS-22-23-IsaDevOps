@@ -2,7 +2,7 @@ package cli.model;
 
 import java.util.UUID;
 
-public class CliStoreOwner {
+public class CliAdmin {
     private String name;
     private UUID id;
     private String mail;
@@ -11,22 +11,11 @@ public class CliStoreOwner {
     private String authorizationMail;
     private String authorizationPassword;
 
-    public CliStoreOwner() {
-    }
-
-    public String getAuthorizationMail() {
-        return authorizationMail;
-    }
-
-    public void setAuthorizationMail(String authorizationMail) {
+    public CliAdmin(String name, String mail, String password, String authorizationMail, String authorizationPassword) {
+        this.name = name;
+        this.mail = mail;
+        this.password = password;
         this.authorizationMail = authorizationMail;
-    }
-
-    public String getAuthorizationPassword() {
-        return authorizationPassword;
-    }
-
-    public void setAuthorizationPassword(String authorizationPassword) {
         this.authorizationPassword = authorizationPassword;
     }
 
@@ -40,6 +29,14 @@ public class CliStoreOwner {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAuthorizationMail() {
+        return authorizationMail;
+    }
+
+    public String getAuthorizationPassword() {
+        return authorizationPassword;
     }
 
     public UUID getId() {

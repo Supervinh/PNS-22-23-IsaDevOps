@@ -10,11 +10,11 @@ public class StoreDTO {
 
     private UUID id;
     private String name;
-    private List<ScheduleDTO> schedule;
+    private String[][] schedule;
 
-    private StoreOwnerDTO owner;
+    private String owner;
 
-    public StoreDTO(String name, List<ScheduleDTO> schedule, StoreOwnerDTO owner, UUID id) {
+    public StoreDTO(String name, String[][] schedule, String owner, UUID id) {
         this.name = name;
         this.schedule = schedule;
         this.owner = owner;
@@ -37,19 +37,19 @@ public class StoreDTO {
         this.name = name;
     }
 
-    public List<ScheduleDTO> getSchedule() {
+    public String[][] getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<ScheduleDTO> schedule) {
+    public void setSchedule(String[][] schedule) {
         this.schedule = schedule;
     }
 
-    public StoreOwnerDTO getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(StoreOwnerDTO owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 

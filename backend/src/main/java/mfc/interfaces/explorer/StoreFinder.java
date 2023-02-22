@@ -1,6 +1,5 @@
 package mfc.interfaces.explorer;
 
-import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 
 import java.util.List;
@@ -12,5 +11,5 @@ public interface StoreFinder {
 
     Optional<Store> findStoreById(UUID id);
 
-    Optional<List<Schedule>> findStoreOpeningHours(Store store);
+    Optional<String[][]> findStoreOpeningHours(Store store);
 }

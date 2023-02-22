@@ -2,7 +2,6 @@ package mfc.cucumber.purchase;
 
 import io.cucumber.java.en.*;
 import mfc.POJO.Customer;
-import mfc.POJO.Schedule;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.exceptions.InsufficientBalanceException;
@@ -59,11 +58,10 @@ public class Purchase {
     @Given("a store named {string}, owned by {string}, with opening hours from {int}:{int} to {int}:{int}")
     public void aStoreNamedOwnedByWithOpeningHoursFromTo(String storeName, String ownerMail, int openingHour, int openingMinute, int closingHour, int closingMinute) throws AlreadyExistingStoreException, AlreadyExistingAccountException {
         storeRepository.deleteAll();
-        List<Schedule> scheduleList = new ArrayList<>();
-        //every day of the week
-        for(int i = 0; i <=6 ; i++){
-            Schedule s = new Schedule(LocalTime.of(openingHour, openingMinute), LocalTime.of(closingHour, closingMinute));
-            scheduleList.add(s);
+        String[][] scheduleList = new String[7][2];
+        for(int i = 0; i <= 6; i++){
+            scheduleList[i][0] = "7h00";
+            scheduleList[i][1] = "19h30";
         }
         storeRegistration.register(storeName ,scheduleList ,storeOwnerRepository.findByMail(ownerMail).get());
     }

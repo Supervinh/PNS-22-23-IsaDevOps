@@ -1,17 +1,14 @@
 package mfc.components;
 
-import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.exceptions.CredentialsException;
-import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.constraints.AssertTrue;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +30,10 @@ public class StoreHandlerTest {
     @BeforeEach
     void setUp() {
         storeRepository.deleteAll();
-        List<Schedule> setupList = new ArrayList<>();
+        String[][] setupList = new String[7][2];
         for(int i = 0; i <= 6; i++){
-            Schedule s = new Schedule(LocalTime.of(8,0), LocalTime.of(20,0));
-            setupList.add(s);
+            setupList[i][0] = "8h00";
+            setupList[i][1] = "20h00";
         }
         storeRepository.save(new Store("Leclerc",setupList,new StoreOwner("Philippe", "p@gmail.com", "pwd")), UUID.randomUUID());
     }
@@ -44,13 +41,13 @@ public class StoreHandlerTest {
 
     @Test
     public void UpdateStoreSchedule() throws CredentialsException {
-        List<Schedule> update = new ArrayList<>();
+        String[][] update = new String[7][2];
         for(int i = 0; i <= 6; i++){
-            Schedule s = new Schedule(LocalTime.of(7,0), LocalTime.of(21,0));
-                update.add(s);
+            update[i][0] = "7h00";
+            update[i][1] = "19h30";
         }
         Optional<Store> carrouf = storeRepository.findByName("Leclerc");
-        List<Schedule> tocompare = carrouf.get().getSchedule();
+        String[][] tocompare = carrouf.get().getSchedule();
         StoreOwner own = carrouf.get().getOwner();
         storeHandler.updateOpeningHours(carrouf.get(), update, own);
 
