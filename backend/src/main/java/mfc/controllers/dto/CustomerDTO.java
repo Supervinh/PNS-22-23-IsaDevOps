@@ -17,17 +17,21 @@ public class CustomerDTO {
     @NotBlank(message = "password should not be blank")
     private String password;
     //    @Positive
-    private double balance;
 
     private String creditCard;
 
+    private String matriculation;
 
-    public CustomerDTO(UUID id, String name, String mail, String password, String creditCard) {
+    private double balance;
+
+
+    public CustomerDTO(UUID id, String name, String mail, String password, String creditCard, String matriculation) {
         this.id = id;
         this.name = name;
-        this.creditCard = creditCard;
         this.mail = mail;
         this.password = password;
+        this.creditCard = creditCard;
+        this.matriculation = matriculation;
         balance = 0;
     }
 
@@ -75,5 +79,13 @@ public class CustomerDTO {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getMatriculation() {
+        return matriculation;
+    }
+
+    public void setMatriculation(String matriculation) {
+        this.matriculation = matriculation;
     }
 }

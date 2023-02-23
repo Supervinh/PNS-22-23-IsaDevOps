@@ -12,11 +12,13 @@ public class CliCustomer extends CliAccount {
     private UUID id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
     private double balance;
     private String creditCard;
+    private String matriculation;
 
     @JsonCreator
-    public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail") String mail, @JsonProperty("password") String password, @JsonProperty("creditCard") String creditCard) {
+    public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail") String mail, @JsonProperty("password") String password, @JsonProperty("creditCard") String creditCard, @JsonProperty("matriculation") String matriculation) {
         super(name, mail, password);
         this.creditCard = creditCard;
+        this.matriculation = matriculation;
     }
 
     /***
@@ -77,6 +79,14 @@ public class CliCustomer extends CliAccount {
         this.balance = balance;
     }
 
+    public String getMatriculation() {
+        return matriculation;
+    }
+
+    public void setMatriculation(String matriculation) {
+        this.matriculation = matriculation;
+    }
+
     @Override
     public String toString() {
         return "CliCustomer{" +
@@ -86,6 +96,7 @@ public class CliCustomer extends CliAccount {
                 ", password='" + super.getPassword() + '\'' +
                 ", balance=" + balance +
                 ", creditCard='" + creditCard + '\'' +
+                ", matriculation='" + matriculation + '\'' +
                 '}';
     }
 }

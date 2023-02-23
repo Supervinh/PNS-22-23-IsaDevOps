@@ -95,22 +95,25 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.ok().body(
-                convertCustomerToDto(modifier.recordCreditCard
-                        (finder.findCustomerById(customerId).orElseThrow(), creditCard)));
+                convertCustomerToDto(
+                        modifier.recordCreditCard(
+                        finder.findCustomerById(customerId).orElseThrow(), creditCard)));
+
+    }
+
+    @PostMapping(path = LOGGED_URI + "modifyMatriculation", consumes = ALL_VALUE)
+    public ResponseEntity<CustomerDTO> modifyMatriculation(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String matriculation) throws CustomerNotFoundException {
+        return ResponseEntity.ok().body(
+                convertCustomerToDto(
+                        modifier.recordMatriculation(
+                        finder.findCustomerById(customerId).orElseThrow(), matriculation)));
 
     }
 
     private CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
-        CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard());
+        CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard(), customer.getMatriculation());
         dto.setBalance(customer.getBalance());
         return dto;
     }
-
-    /*@PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") UUID customerId) throws NoCreditCardException, PaymentException, NegativeRefillException {
-        Customer res = payment.refillBalance(finder.findCustomerById(customerId).orElseThrow(), amount); //TODO: check if customer exists
-        return ResponseEntity.ok().body(*//*"Refill of " + res +" is validated"*//*convertCustomerToDto(res));
-    }*/
-
 }
 

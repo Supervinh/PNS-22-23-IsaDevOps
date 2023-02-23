@@ -21,7 +21,7 @@ public class CustomerCommands {
 
     @ShellMethod("Register a customer in the CoD backend (register CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
     public CliCustomer register(String name, String mail, String password, @ShellOption(defaultValue = "null") String creditCard) {
-        return restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard), CliCustomer.class);
+        return restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard,"null"), CliCustomer.class);
     }
 
     // Always use a POST request for login and not a GET request
@@ -54,6 +54,19 @@ public class CustomerCommands {
         }
         CliCustomer res = restTemplate.postForObject(getUriForCustomer() + "/modifyCreditCard",
                 creditCard,
+                CliCustomer.class);
+        cliContext.setLoggedInUser(res);
+        return res;
+    }
+
+    @ShellMethod("Modify the credit card of the logged in user (modifyCreditCard CREDIT_CARD_NUMBER)")
+    public CliCustomer modifyMatriculation(String matriculation) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
+        CliCustomer res = restTemplate.postForObject(getUriForCustomer() + "/modifyMatriculation",
+                matriculation,
                 CliCustomer.class);
         cliContext.setLoggedInUser(res);
         return res;
