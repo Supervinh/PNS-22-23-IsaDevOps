@@ -30,7 +30,6 @@ public class StoreCommands {
             sch[i][1] = closing;
         }
         CliStore res = restTemplate.postForObject(BASE_URI + "/register", new CliStore(name, sch, ownerName), CliStore.class);
-        cliContext.getStores().put(res.getName(), res);
         return res;
     }
 

@@ -7,30 +7,22 @@ public class CliPayoff {
     private String name;
     private double cost;
     private int pointCost;
-    private CliStore store;
+    private String storeName;
 
-
-    public CliPayoff() {
-    }
-
-    public CliPayoff(String name, double cost, int pointCost, CliStore store, UUID id) {
-        this.name = name;
-        this.cost = cost;
-        this.pointCost = pointCost;
-        this.store = store;
-        this.id = id;
-    }
-
-    public CliPayoff(String name, double cost, int pointCost, CliStore store) {
+    public CliPayoff(String name, double cost, int pointCost, String storeName) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
-        this.store = store;
+        this.storeName = storeName;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -57,14 +49,13 @@ public class CliPayoff {
         this.pointCost = pointCost;
     }
 
-    public CliStore getStore() {
-        return store;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setStore(CliStore store) {
-        this.store = store;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
-
 
     @Override
     public String toString() {
@@ -73,6 +64,7 @@ public class CliPayoff {
                 ", name='" + name + '\'' +
                 ", cost=" + cost +
                 ", pointCost=" + pointCost +
+                ", storeName='" + storeName + '\'' +
                 '}';
     }
 }

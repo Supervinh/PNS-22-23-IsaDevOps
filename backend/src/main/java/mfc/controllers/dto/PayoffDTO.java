@@ -7,17 +7,17 @@ public class PayoffDTO {
     private String name;
     private double cost;
     private int pointCost;
-    private StoreDTO store;
+    private String storeName;
 
 
     public PayoffDTO() {
     }
 
-    public PayoffDTO(String name, double cost, int pointCost, StoreDTO store, UUID id) {
+    public PayoffDTO(UUID id, String name, double cost, int pointCost, String storeName) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
-        this.store = store;
+        this.storeName = storeName;
         this.id = id;
     }
 
@@ -49,12 +49,16 @@ public class PayoffDTO {
         this.pointCost = pointCost;
     }
 
-    public StoreDTO getStore() {
-        return store;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setStore(StoreDTO store) {
-        this.store = store;
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     @Override
@@ -64,6 +68,7 @@ public class PayoffDTO {
                 ", name='" + name + '\'' +
                 ", cost=" + cost +
                 ", pointCost=" + pointCost +
+                ", storeName='" + storeName + '\'' +
                 '}';
     }
 }

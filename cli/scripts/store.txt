@@ -1,0 +1,6 @@
+register-owner to @ abc admin admin
+register-store abcdaire 22 15 08 20 to
+add-payoff to dico 200 15 abcdaire
+edit-payoff to abcdaire dico 5 3
+edit-payoff to abcdaire dico --newCost 50
+edit-payoff to abcdaire dico --newPointCost 50
