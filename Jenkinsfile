@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools {
-        maven 'maven-3.6.3'
-      }
     stages {
         stage ('Initialize') {
                 steps {
@@ -29,10 +26,10 @@ pipeline {
             steps {
             echo 'Should send on SonarQube (8005)..'
                 dir('backend'){
-                    sh 'mvn install -U -e -s ../settings.xml'
+                    sh 'mvn install -U -e'
                 }
                 dir('cli'){
-                     sh 'mvn install -U -e -s ../settings.xml'
+                     sh 'mvn install -U -e'
                 }
             }
         }
@@ -40,10 +37,10 @@ pipeline {
             steps {
             echo 'Should deploy on artifactory(8002)..'
                 dir('backend'){
-                     sh 'mvn deploy -s ../settings.xml'
+                     sh 'mvn deploy'
                 }
                 dir('cli'){
-                    sh 'mvn deploy -s ../settings.xml'
+                    sh 'mvn deploy'
                 }
             }
         }
