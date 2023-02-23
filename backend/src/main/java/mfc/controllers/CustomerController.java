@@ -3,11 +3,12 @@ package mfc.controllers;
 import mfc.POJO.Customer;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
-import mfc.exceptions.*;
+import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.CustomerNotFoundException;
 import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
+import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
-import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -33,6 +34,9 @@ public class CustomerController {
 
     @Autowired
     private CustomerFinder finder;
+
+    @Autowired
+    private CustomerProfileModifier modifier;
 
     @Autowired
     private Payment payment;
@@ -54,8 +58,8 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) {
         // Note that there is no validation at all on the CustomerDto mapped
         String creditCard = cusdto.getCreditCard();
-        if(!creditCard.equals("null") && !creditCard.matches("\\d{10}+") ) {
-            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+        if (!creditCard.equals("null") && !creditCard.matches("\\d{10}+")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -79,18 +83,21 @@ public class CustomerController {
         if (!customer.get().getPassword().equals(cusdto.getPassword())) {
             // If the password is wrong, we return a 401 (Unauthorized) status code
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        else {
+        } else {
             // If the password is correct, we return a 200 (OK) status code
             return ResponseEntity.status(HttpStatus.OK).body(convertCustomerToDto(customer.get()));
         }
     }
 
-    @PostMapping(path = LOGGED_URI + "modifyCreditCard", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String creditCard) {
-        Customer res = finder.findCustomerById(customerId).orElseThrow();
-        res.setCreditCard(creditCard);
-        return ResponseEntity.ok().body(convertCustomerToDto(res));
+    @PostMapping(path = LOGGED_URI + "modifyCreditCard", consumes = ALL_VALUE)
+    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String creditCard) throws CustomerNotFoundException {
+        if (!creditCard.matches("\\d{10}+")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok().body(
+                convertCustomerToDto(modifier.recordCreditCard
+                        (finder.findCustomerById(customerId).orElseThrow(), creditCard)));
+
     }
 
     private CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper

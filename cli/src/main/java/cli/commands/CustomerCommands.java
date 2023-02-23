@@ -8,9 +8,6 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @ShellComponent
 public class CustomerCommands {
 
@@ -23,7 +20,7 @@ public class CustomerCommands {
     private CliContext cliContext;
 
     @ShellMethod("Register a customer in the CoD backend (register CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
-    public CliCustomer register(String name, String mail, String password, @ShellOption (defaultValue = "null") String creditCard) {
+    public CliCustomer register(String name, String mail, String password, @ShellOption(defaultValue = "null") String creditCard) {
         return restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard), CliCustomer.class);
     }
 
@@ -61,6 +58,7 @@ public class CustomerCommands {
         cliContext.setLoggedInUser(res);
         return res;
     }
+
 
     private String getUriForCustomer() {
         return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
