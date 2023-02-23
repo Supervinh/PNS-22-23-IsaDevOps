@@ -12,13 +12,15 @@ public class CustomerDTO {
     @NotBlank(message = "name should not be blank")
     private String name;
     @Email(message = "mail should be a valid email")
+    @NotBlank(message = "mail should not be blank")
     private String mail;
+    @NotBlank(message = "password should not be blank")
     private String password;
     //    @Positive
     private double balance;
 
-    @Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits")
     private String creditCard;
+
 
     public CustomerDTO(UUID id, String name, String mail, String password, String creditCard) {
         this.id = id;
@@ -46,7 +48,8 @@ public class CustomerDTO {
         return creditCard;
     }
 
-    public void setCreditCard(String creditCard) {
+
+    public void setCreditCard( @Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits") String creditCard) {
         this.creditCard = creditCard;
     }
 

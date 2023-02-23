@@ -8,6 +8,9 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ShellComponent
 public class CustomerCommands {
 
@@ -21,9 +24,7 @@ public class CustomerCommands {
 
     @ShellMethod("Register a customer in the CoD backend (register CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
     public CliCustomer register(String name, String mail, String password, @ShellOption (defaultValue = "null") String creditCard) {
-        return creditCard.equals("null") ?
-                restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, "0000000000"), CliCustomer.class): //TODO trouver comment faire pour que le credit card soit null
-                restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard), CliCustomer.class);
+        return restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard), CliCustomer.class);
     }
 
     // Always use a POST request for login and not a GET request
@@ -47,4 +48,22 @@ public class CustomerCommands {
     public String who() {
         return cliContext.getLoggedInUser() == null ? "" : cliContext.getLoggedInUser().toString();
     }
+
+    @ShellMethod("Modify the credit card of the logged in user (modifyCreditCard CREDIT_CARD_NUMBER)")
+    public CliCustomer modifyCreditCard(String creditCard) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
+        CliCustomer res = restTemplate.postForObject(getUriForCustomer() + "/modifyCreditCard",
+                creditCard,
+                CliCustomer.class);
+        cliContext.setLoggedInUser(res);
+        return res;
+    }
+
+    private String getUriForCustomer() {
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
+    }
+
 }

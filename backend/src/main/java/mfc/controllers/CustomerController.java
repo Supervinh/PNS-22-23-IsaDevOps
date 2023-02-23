@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -81,10 +82,11 @@ public class CustomerController {
         }
     }
 
-    @PostMapping(path= LOGGED_URI + "logout", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> logout(@PathVariable("customerId") UUID customerId, @RequestBody @Valid CustomerDTO cusdto) {
-        //TODO : check if the customer is logged in
-        return ResponseEntity.status(HttpStatus.OK).body(convertCustomerToDto(finder.findCustomerById(customerId).orElseThrow()));
+    @PostMapping(path = LOGGED_URI + "modifyCreditCard", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String creditCard) {
+        Customer res = finder.findCustomerById(customerId).orElseThrow();
+        res.setCreditCard(creditCard);
+        return ResponseEntity.ok().body(convertCustomerToDto(res));
     }
 
     private CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
