@@ -1,7 +1,6 @@
 package mfc.components;
 
 import mfc.POJO.Customer;
-import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.exceptions.*;
@@ -15,11 +14,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +28,7 @@ class CustomerRegistryTest {
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
-    private List<Schedule> scheduleList = new ArrayList<>();
+    private String[][] schedule = new String[7][2];
     private static boolean setUpIsDone = false;
     @Autowired
     private CustomerRepository customerRepository;
@@ -48,12 +45,12 @@ class CustomerRegistryTest {
     @BeforeEach
     void setUp() {
         if(setUpIsDone){
-            List<Schedule> setupList = new ArrayList<>();
+            String[][] setupList = new String[7][2];
             for(int i = 0; i <= 6; i++){
-                Schedule s = new Schedule(LocalTime.of(8,0), LocalTime.of(20,0));
-                setupList.add(s);
+                setupList[i][0] = "7h00";
+                setupList[i][1] = "19h30";
             }
-            scheduleList = setupList;
+            schedule = setupList;
         }
         customerRepository.deleteAll();
     }
@@ -194,7 +191,7 @@ class CustomerRegistryTest {
         Customer customer = customerRegistration.register(name, mail, password);
         List<Store> favoriteStores = customer.getFavoriteStores();
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", scheduleList, storeOwner);
+        Store store = new Store("Carrefour", schedule, storeOwner);
         assertFalse(favoriteStores.contains(store));
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         assertEquals("Carrefour", customer.getFavoriteStores().get(0).getName());
@@ -204,7 +201,7 @@ class CustomerRegistryTest {
     public void cannotRecordFavoriteStoreOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", scheduleList, storeOwner);
+        Store store = new Store("Carrefour", schedule, storeOwner);
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerProfileModifier.recordNewFavoriteStore(customer, store);
         });
@@ -214,7 +211,7 @@ class CustomerRegistryTest {
     public void favoriteStoreAlreadyRegistered() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", scheduleList, storeOwner);
+        Store store = new Store("Carrefour", schedule, storeOwner);
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         Assertions.assertThrows(StoreAlreadyRegisteredException.class, () -> {
             customerProfileModifier.recordNewFavoriteStore(customer, store);
@@ -225,7 +222,7 @@ class CustomerRegistryTest {
     public void canRemoveFavoriteStore() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", scheduleList, storeOwner);
+        Store store = new Store("Carrefour", schedule, storeOwner);
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         assertTrue(customer.getFavoriteStores().contains(store));
         customerProfileModifier.removeFavoriteStore(customer, store);
@@ -236,7 +233,7 @@ class CustomerRegistryTest {
     public void cannotRemoveFavoriteStoreOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour",scheduleList,  storeOwner);
+        Store store = new Store("Carrefour",schedule,  storeOwner);
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerProfileModifier.removeFavoriteStore(customer, store);
         });
@@ -246,7 +243,7 @@ class CustomerRegistryTest {
     public void cannotRemoveFavoriteStoreNotRegistered() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", scheduleList, storeOwner);
+        Store store = new Store("Carrefour", schedule, storeOwner);
         Assertions.assertThrows(StoreNotFoundException.class, () -> {
             customerProfileModifier.removeFavoriteStore(customer, store);
         });

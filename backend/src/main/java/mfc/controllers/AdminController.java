@@ -6,6 +6,7 @@ import mfc.controllers.dto.AdminDTO;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
+import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.NotEnoughRightsException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
@@ -86,9 +87,11 @@ public class AdminController {
         try {
             Optional<Admin> authorization = adminFind.findAdminByMailAndPassword(adminDTO.getAuthorizationMail(), adminDTO.getAuthorizationPassword());
 
-            if (authorization.isPresent()) {
-                throw new NotEnoughRightsException();
-            }
+            //TODO
+//            if (authorization.isEmpty()) {
+//                throw new NotEnoughRightsException();
+//            }
+
 
             Admin admin = adminReg.registerAdmin(adminDTO.getName(), adminDTO.getMail(), adminDTO.getPassword());
 
@@ -99,8 +102,8 @@ public class AdminController {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(adminDTO);
-        } catch (Exception e) {
-            //TODO Handle exception
+        } catch (AlreadyExistingAccountException e) {
+            //TODO Handle exception (cf handlers)
 //            if (e instanceof NotEnoughRightsException){
 //                ErrorDTO err = new ErrorDTO();
 //                err.setError("Cannot create admin account");

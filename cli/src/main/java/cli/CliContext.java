@@ -1,5 +1,6 @@
 package cli;
 
+import cli.model.CliAdmin;
 import cli.model.CliCustomer;
 import cli.model.CliStore;
 import cli.model.CliStoreOwner;
@@ -13,25 +14,23 @@ import java.util.stream.Collectors;
 public class CliContext {
 
     private final Map<String, CliCustomer> customers;
-    private final Map<String, CliStoreOwner> storeOwners;
-    private final Map<String, CliStore> stores;
+    private final Map<String, CliAdmin> admins;
+    private final Map<String, CliStoreOwner> owners;
 
     public Map<String, CliCustomer> getCustomers() {
         return customers;
     }
+    public Map<String, CliAdmin> getAdmins() {
+        return admins;
+    }
+    public Map<String, CliStoreOwner> getOwners() {
+        return owners;
+    }
 
     public CliContext() {
         customers = new HashMap<>();
-        storeOwners = new HashMap<>();
-        stores = new HashMap<>();
-    }
-
-    public Map<String, CliStoreOwner> getStoreOwners() {
-        return storeOwners;
-    }
-
-    public Map<String, CliStore> getStores() {
-        return stores;
+        admins = new HashMap<>();
+        owners = new HashMap<>();
     }
 
     @Override

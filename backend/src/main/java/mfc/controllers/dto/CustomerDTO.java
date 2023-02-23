@@ -27,10 +27,6 @@ public class CustomerDTO {
         balance = 0;
     }
 
-//    public CustomerDTO(UUID id, String mail, int fidelityPoints, String creditCard) {
-//
-//    }
-
     public UUID getId() {
         return id;
     }

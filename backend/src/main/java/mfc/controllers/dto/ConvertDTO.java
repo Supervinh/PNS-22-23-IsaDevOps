@@ -1,12 +1,9 @@
 package mfc.controllers.dto;
 
 import mfc.POJO.PayOff;
-import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,17 +14,9 @@ public class ConvertDTO {
 //    }
 
     public StoreDTO convertStoreToDto(Store store) {
-        return new StoreDTO(store.getName(),convertScheduleToDTO(store.getSchedule()),convertStoreOwnerToDto(store.getOwner()), store.getId());
+        return new StoreDTO(store.getId(), store.getName(), store.getSchedule(), store.getOwner().getName());
     }
 
-    public List<ScheduleDTO> convertScheduleToDTO(List<Schedule> scheduleList){
-        List<ScheduleDTO> ret = new ArrayList<>();
-        for (Schedule s : scheduleList){
-            ScheduleDTO currentSchedule = new ScheduleDTO(s.getOpeningTime(), s.getClosingTime());
-            ret.add(currentSchedule);
-        }
-        return ret;
-    }
 
     public StoreOwnerDTO convertStoreOwnerToDto(StoreOwner owner) {
         StoreOwnerDTO ret = new StoreOwnerDTO();

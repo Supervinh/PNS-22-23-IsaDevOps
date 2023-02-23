@@ -10,13 +10,13 @@ public class Store {
 
     private UUID id;
     private String name;
-    private List<Schedule> schedule;
+    private String[][] schedule ;
 
     private StoreOwner owner;
 
-    public Store(String name, List<Schedule> schedule,StoreOwner owner) {
+    public Store(String name, String[][] schedule,StoreOwner owner) {
         this.name = name;
-        this.schedule = schedule;
+        this.schedule = new String[7][2];
         this.owner = owner;
         this.id = UUID.randomUUID();
     }
@@ -37,11 +37,11 @@ public class Store {
         this.name = name;
     }
 
-    public List<Schedule> getSchedule() {
+    public String[][] getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<Schedule> schedule) {
+    public void setSchedule(String[][] schedule) {
         this.schedule = schedule;
     }
 

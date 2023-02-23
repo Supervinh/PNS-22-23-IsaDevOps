@@ -2,36 +2,20 @@ package cli.model;
 
 import java.util.UUID;
 
-public class CliStoreOwner {
-    private UUID id; //empty at register, not when returned by the server
+public class CliAdmin {
     private String name;
+    private UUID id;
     private String mail;
     private String password;
 
     private String authorizationMail;
     private String authorizationPassword;
 
-    public CliStoreOwner(String name, String mail, String password, String authorizationMail, String authorizationPassword) {
+    public CliAdmin(String name, String mail, String password, String authorizationMail, String authorizationPassword) {
         this.name = name;
         this.mail = mail;
         this.password = password;
         this.authorizationMail = authorizationMail;
-        this.authorizationPassword = authorizationPassword;
-    }
-
-    public String getAuthorizationMail() {
-        return authorizationMail;
-    }
-
-    public void setAuthorizationMail(String authorizationMail) {
-        this.authorizationMail = authorizationMail;
-    }
-
-    public String getAuthorizationPassword() {
-        return authorizationPassword;
-    }
-
-    public void setAuthorizationPassword(String authorizationPassword) {
         this.authorizationPassword = authorizationPassword;
     }
 
@@ -45,6 +29,14 @@ public class CliStoreOwner {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAuthorizationMail() {
+        return authorizationMail;
+    }
+
+    public String getAuthorizationPassword() {
+        return authorizationPassword;
     }
 
     public UUID getId() {
@@ -69,9 +61,9 @@ public class CliStoreOwner {
 
     @Override
     public String toString() {
-        return "CliStoreOwner{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+        return "CliAdmin{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
                 ", mail='" + mail + '\'' +
                 ", password='" + password + '\'' +
                 ", authorizationMail='" + authorizationMail + '\'' +
