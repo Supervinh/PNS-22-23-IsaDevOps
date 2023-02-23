@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        maven 'maven-3.6.3'
+      }
     stages {
         stage ('Initialize') {
                 steps {
@@ -8,14 +11,15 @@ pipeline {
                         echo "M2_HOME = ${M2_HOME}"
                         java -version
                         mvn -version
-                        docker -v
-                        docker compose version
                         mkdir -p ${M2_HOME}/
                         cp settings.xml ${M2_HOME}/
                         ls -lah ${M2_HOME}
                     '''
                 }
             }
+//             docker -v
+//             docker compose version
+
 //         stage('Build') {
 //             steps {
 //                 sh './build-all.sh'
