@@ -16,6 +16,7 @@ public class CliCustomer extends CliAccount{
     @JsonCreator
     public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail") String mail, @JsonProperty("password") String password, @JsonProperty("creditCard") String creditCard) {
         super(name, mail, password);
+        this.creditCard = creditCard;
     }
 
     /***
