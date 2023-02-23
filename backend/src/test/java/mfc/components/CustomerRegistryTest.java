@@ -1,6 +1,7 @@
 package mfc.components;
 
 import mfc.POJO.Customer;
+import mfc.POJO.Schedule;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.exceptions.*;
@@ -14,7 +15,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +31,8 @@ class CustomerRegistryTest {
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
+    private List<Schedule> scheduleList = new ArrayList<>();
+    private static boolean setUpIsDone = false;
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
@@ -37,8 +44,17 @@ class CustomerRegistryTest {
     @Autowired
     private CustomerProfileModifier customerProfileModifier;
 
+
     @BeforeEach
     void setUp() {
+        if(setUpIsDone){
+            List<Schedule> setupList = new ArrayList<>();
+            for(int i = 0; i <= 6; i++){
+                Schedule s = new Schedule(LocalTime.of(8,0), LocalTime.of(20,0));
+                setupList.add(s);
+            }
+            scheduleList = setupList;
+        }
         customerRepository.deleteAll();
     }
 
@@ -63,7 +79,7 @@ class CustomerRegistryTest {
     void cannotRegisterTwice() throws Exception {
         customerRegistration.register(mail, name, password);
         Assertions.assertThrows(AlreadyExistingAccountException.class, () -> {
-            customerRegistration.register(mail, name, password);
+            customerRegistration.register(name, mail, password);
         });
     }
 
@@ -88,12 +104,14 @@ class CustomerRegistryTest {
     }
 
     @Test
+
     void unknownCustomerById() {
         Customer customer = new Customer(mail, name, password);
         assertFalse(customerFinder.findCustomerById(customer.getId()).isPresent());
     }
 
     @Test
+
     void canEditBalance() throws Exception {
         Customer customer = customerRegistration.register(mail, name, password);
         customerBalancesModifier.editBalance(customer, 100);
@@ -178,7 +196,7 @@ class CustomerRegistryTest {
         Customer customer = customerRegistration.register(mail, name, password);
         List<Store> favoriteStores = customer.getFavoriteStores();
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", storeOwner); //TODO: changer l'initialisation de Store ici quand le constructeur sera fonctionnel
+        Store store = new Store("Carrefour", scheduleList, storeOwner);
         assertFalse(favoriteStores.contains(store));
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         assertEquals("Carrefour", customer.getFavoriteStores().get(0).getName());
@@ -188,7 +206,7 @@ class CustomerRegistryTest {
     void cannotRecordFavoriteStoreOfUnknownCustomer() {
         Customer customer = new Customer(mail, name, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", storeOwner); //TODO: changer l'initialisation de Store ici quand le constructeur sera fonctionnel
+        Store store = new Store("Carrefour", scheduleList, storeOwner);
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerProfileModifier.recordNewFavoriteStore(customer, store);
         });
@@ -198,7 +216,7 @@ class CustomerRegistryTest {
     void favoriteStoreAlreadyRegistered() throws Exception {
         Customer customer = customerRegistration.register(mail, name, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", storeOwner); //TODO: changer l'initialisation de Store ici quand le constructeur sera fonctionnel
+        Store store = new Store("Carrefour", scheduleList, storeOwner);
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         Assertions.assertThrows(StoreAlreadyRegisteredException.class, () -> {
             customerProfileModifier.recordNewFavoriteStore(customer, store);
@@ -209,7 +227,7 @@ class CustomerRegistryTest {
     void canRemoveFavoriteStore() throws Exception {
         Customer customer = customerRegistration.register(mail, name, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", storeOwner); //TODO: changer l'initialisation de Store ici quand le constructeur sera fonctionnel
+        Store store = new Store("Carrefour", scheduleList, storeOwner);
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         assertTrue(customer.getFavoriteStores().contains(store));
         customerProfileModifier.removeFavoriteStore(customer, store);
@@ -220,7 +238,7 @@ class CustomerRegistryTest {
     void cannotRemoveFavoriteStoreOfUnknownCustomer() {
         Customer customer = new Customer(mail, name, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", storeOwner); //TODO: changer l'initialisation de Store ici quand le constructeur sera fonctionnel
+        Store store = new Store("Carrefour",scheduleList,  storeOwner);
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerProfileModifier.removeFavoriteStore(customer, store);
         });
@@ -230,7 +248,7 @@ class CustomerRegistryTest {
     void cannotRemoveFavoriteStoreNotRegistered() throws Exception {
         Customer customer = customerRegistration.register(mail, name, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour", storeOwner); //TODO: changer l'initialisation de Store ici quand le constructeur sera fonctionnel
+        Store store = new Store("Carrefour", scheduleList, storeOwner);
         Assertions.assertThrows(StoreNotFoundException.class, () -> {
             customerProfileModifier.removeFavoriteStore(customer, store);
         });

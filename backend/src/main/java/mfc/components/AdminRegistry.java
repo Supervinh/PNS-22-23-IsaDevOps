@@ -5,6 +5,7 @@ import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
 import mfc.repositories.AdminRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -13,10 +14,14 @@ import java.util.UUID;
 @Component
 public class AdminRegistry implements AdminFinder, AdminRegistration {
 
+    @Autowired
     private final AdminRepository adminRepository;
 
     public AdminRegistry(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
+        //create a basic Admin by default
+        Admin admin = new Admin("a","a@a","a");
+        adminRepository.save(admin, admin.getId());
     }
 
     @Override

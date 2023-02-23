@@ -2,6 +2,7 @@ package mfc.cucumber.purchase;
 
 import io.cucumber.java.en.*;
 import mfc.POJO.Customer;
+import mfc.POJO.Schedule;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.exceptions.InsufficientBalanceException;
@@ -16,6 +17,10 @@ import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 public class Purchase {
@@ -54,8 +59,13 @@ public class Purchase {
     @Given("a store named {string}, owned by {string}, with opening hours from {int}:{int} to {int}:{int}")
     public void aStoreNamedOwnedByWithOpeningHoursFromTo(String storeName, String ownerMail, int openingHour, int openingMinute, int closingHour, int closingMinute) throws AlreadyExistingStoreException, AlreadyExistingAccountException {
         storeRepository.deleteAll();
-        //Map<LocalTime, LocalTime> openingHours = Map.of(LocalTime.of(openingHour, openingMinute), LocalTime.of(closingHour, closingMinute));TODO: change this when opening hours are implemented
-        storeRegistration.register(storeOwnerRepository.findByMail(ownerMail).get(), storeName);
+        List<Schedule> scheduleList = new ArrayList<>();
+        //every day of the week
+        for(int i = 0; i <=6 ; i++){
+            Schedule s = new Schedule(LocalTime.of(openingHour, openingMinute), LocalTime.of(closingHour, closingMinute));
+            scheduleList.add(s);
+        }
+        storeRegistration.register(storeName ,scheduleList ,storeOwnerRepository.findByMail(ownerMail).get());
     }
 
     @Given("{string} has {int} points")
