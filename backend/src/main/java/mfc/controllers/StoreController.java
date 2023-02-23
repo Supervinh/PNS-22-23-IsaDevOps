@@ -3,7 +3,6 @@ package mfc.controllers;
 import mfc.POJO.StoreOwner;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.ErrorDTO;
-import mfc.controllers.dto.ScheduleDTO;
 import mfc.controllers.dto.StoreDTO;
 import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.interfaces.explorer.StoreFinder;
@@ -16,9 +15,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -56,11 +52,12 @@ public class StoreController {
     @PostMapping(path = "register", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<StoreDTO> register(@RequestBody @Valid StoreDTO storeDTO) {
         try {
+            System.out.println("tEST");
             // from DTO to POJO
             Optional<StoreOwner> owner = ownerFinder.findStoreOwnerByName(storeDTO.getOwner());
-
-
-
+            if (owner.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(convertDTO.convertStoreToDto(storeRegistration.register(storeDTO.getName(), storeDTO.getSchedule(), owner.get())));
         } catch (AlreadyExistingStoreException e) {

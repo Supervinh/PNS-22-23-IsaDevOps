@@ -3,15 +3,20 @@ package cli.model;
 import java.util.UUID;
 
 public class CliStoreOwner {
+    private UUID id; //empty at register, not when returned by the server
     private String name;
-    private UUID id;
     private String mail;
     private String password;
 
     private String authorizationMail;
     private String authorizationPassword;
 
-    public CliStoreOwner() {
+    public CliStoreOwner(String name, String mail, String password, String authorizationMail, String authorizationPassword) {
+        this.name = name;
+        this.mail = mail;
+        this.password = password;
+        this.authorizationMail = authorizationMail;
+        this.authorizationPassword = authorizationPassword;
     }
 
     public String getAuthorizationMail() {
@@ -60,5 +65,17 @@ public class CliStoreOwner {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "CliStoreOwner{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", mail='" + mail + '\'' +
+                ", password='" + password + '\'' +
+                ", authorizationMail='" + authorizationMail + '\'' +
+                ", authorizationPassword='" + authorizationPassword + '\'' +
+                '}';
     }
 }

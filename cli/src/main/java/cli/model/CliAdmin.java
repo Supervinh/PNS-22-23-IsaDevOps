@@ -58,4 +58,16 @@ public class CliAdmin {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "CliAdmin{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                ", mail='" + mail + '\'' +
+                ", password='" + password + '\'' +
+                ", authorizationMail='" + authorizationMail + '\'' +
+                ", authorizationPassword='" + authorizationPassword + '\'' +
+                '}';
+    }
 }

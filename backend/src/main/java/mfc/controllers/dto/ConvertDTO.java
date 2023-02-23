@@ -4,8 +4,6 @@ import mfc.POJO.PayOff;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,7 +14,7 @@ public class ConvertDTO {
 //    }
 
     public StoreDTO convertStoreToDto(Store store) {
-        return new StoreDTO(store.getName(),store.getSchedule(),store.getOwner().getName(), store.getId());
+        return new StoreDTO(store.getId(), store.getName(), store.getSchedule(), store.getOwner().getName());
     }
 
 

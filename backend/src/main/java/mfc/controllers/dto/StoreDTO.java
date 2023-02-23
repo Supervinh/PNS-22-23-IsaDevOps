@@ -1,8 +1,5 @@
 package mfc.controllers.dto;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,10 +8,9 @@ public class StoreDTO {
     private UUID id;
     private String name;
     private String[][] schedule;
-
     private String owner;
 
-    public StoreDTO(String name, String[][] schedule, String owner, UUID id) {
+    public StoreDTO(UUID id, String name, String[][] schedule, String owner) {
         this.name = name;
         this.schedule = schedule;
         this.owner = owner;
@@ -23,10 +19,6 @@ public class StoreDTO {
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {

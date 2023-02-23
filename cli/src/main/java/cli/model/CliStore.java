@@ -1,6 +1,6 @@
 package cli.model;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -8,13 +8,12 @@ public class CliStore {
     private UUID id;
     private String name;
     private String[][] schedule;
-
     private String owner;
 
     public CliStore(String name, String[][] schedule, String owner) {
         this.name = name;
         this.schedule = schedule;
-        this.owner = owner;;
+        this.owner = owner;
     }
 
     public UUID getId() {
@@ -62,4 +61,13 @@ public class CliStore {
         return Objects.hash(id, name, owner);
     }
 
+    @Override
+    public String toString() {
+        return "CliStore{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", schedule=" + Arrays.toString(schedule) +
+                ", owner='" + owner + '\'' +
+                '}';
+    }
 }
