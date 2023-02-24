@@ -10,8 +10,6 @@ pipeline {
                         java -version
                         mvn -version
                         mv settings.xml /home/jenkins/
-                        ls -lah ${M2_HOME}/
-                        rm ${M2_HOME}/settings.xml
                     '''
                 }
             }
