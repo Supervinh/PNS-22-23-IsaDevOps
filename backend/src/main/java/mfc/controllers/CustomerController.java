@@ -58,7 +58,7 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) {
         // Note that there is no validation at all on the CustomerDto mapped
         String creditCard = cusdto.getCreditCard();
-        if (!creditCard.equals("null") && !creditCard.matches("\\d{10}+")) {
+        if (!creditCard.equals("") && !creditCard.matches("\\d{10}+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         try {

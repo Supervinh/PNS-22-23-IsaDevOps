@@ -9,7 +9,6 @@ import java.util.UUID;
 // so that the automatic JSON (de-)/serialization will make the two compatible on each side
 public class CliCustomer extends CliAccount {
 
-    private UUID id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
     private double balance;
     private String creditCard;
     private String matriculation;
@@ -31,21 +30,6 @@ public class CliCustomer extends CliAccount {
         super("default", mail, password);
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return super.getName();
-    }
-
-    public void setName(String name) {
-        super.setName(name);
-    }
 
     public String getCreditCard() {
         return creditCard;
@@ -53,22 +37,6 @@ public class CliCustomer extends CliAccount {
 
     public void setCreditCard(String creditCard) {
         this.creditCard = creditCard;
-    }
-
-    public String getMail() {
-        return super.getMail();
-    }
-
-    public void setMail(String mail) {
-        super.setMail(mail);
-    }
-
-    public String getPassword() {
-        return super.getPassword();
-    }
-
-    public void setPassword(String password) {
-        super.setPassword(password);
     }
 
     public double getBalance() {
@@ -90,7 +58,7 @@ public class CliCustomer extends CliAccount {
     @Override
     public String toString() {
         return "CliCustomer{" +
-                "id=" + id +
+                "id=" + super.getId() +
                 ", name='" + super.getName() + '\'' +
                 ", mail='" + super.getMail() + '\'' +
                 ", password='" + super.getPassword() + '\'' +

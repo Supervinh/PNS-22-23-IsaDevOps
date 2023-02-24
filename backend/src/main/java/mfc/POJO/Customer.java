@@ -35,7 +35,7 @@ public class Customer extends Account {
         vfp = LocalDate.now().minus(Period.ofDays(1));
         fidelityPoints = 0;
         balance = 0;
-        matriculation = "null";
+        matriculation = "";
         favoriteStores = new ArrayList<>();
     }
 
