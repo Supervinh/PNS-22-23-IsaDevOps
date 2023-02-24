@@ -9,6 +9,7 @@ pipeline {
                         echo "M2_HOME = ${M2_HOME}"
                         java -version
                         mvn -version
+                        mv settings.xml /
                     '''
                 }
             }
@@ -28,10 +29,10 @@ pipeline {
             steps {
 //             echo 'Should send on SonarQube (8005)..'
                 dir('backend'){
-                    sh 'mvn package -s ../settings.xml'
+                    sh 'mvn package -U -s /settings.xml'
                 }
                 dir('cli'){
-                     sh 'mvn package -s ../settings.xml'
+                     sh 'mvn package -U -s /settings.xml'
                 }
             }
         }
@@ -39,10 +40,10 @@ pipeline {
             steps {
             echo 'Should deploy on artifactory(8002)..'
                 dir('backend'){
-                     sh 'mvn deploy -U -e -s ../settings.xml'
+                     sh 'mvn deploy -U -e -s /settings.xml'
                 }
                 dir('cli'){
-                    sh 'mvn deploy -U -e -s ../settings.xml'
+                    sh 'mvn deploy -U -e -s /settings.xml'
                 }
             }
         }
