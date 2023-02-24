@@ -16,7 +16,6 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    systemctl start docker
                     ./build-all.sh
                 '''
                 }
