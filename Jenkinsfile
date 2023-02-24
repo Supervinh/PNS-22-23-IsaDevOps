@@ -16,11 +16,11 @@ pipeline {
 //             docker -v
 //             docker compose version
 
-//         stage('Build') {
-//             steps {
-//                 sh './build-all.sh'
-//                 }
-//             }
+        stage('Build') {
+            steps {
+                sh 'sudo ./build-all.sh'
+                }
+            }
         stage('Test') {
             steps {
             echo 'Should send on SonarQube (8005)..'
@@ -33,16 +33,16 @@ pipeline {
             }
         }
 //         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
-        stage('Deploy') {
-            steps {
-            echo 'Should deploy on artifactory(8002)..'
-                dir('backend'){
-                     sh 'mvn deploy -U -e -s ../settings.xml'
-                }
-                dir('cli'){
-                    sh 'mvn deploy -U -e -s ../settings.xml'
-                }
-            }
-        }
+//         stage('Deploy') {
+//             steps {
+//             echo 'Should deploy on artifactory(8002)..'
+//                 dir('backend'){
+//                      sh 'mvn deploy -U -e -s ../settings.xml'
+//                 }
+//                 dir('cli'){
+//                     sh 'mvn deploy -U -e -s ../settings.xml'
+//                 }
+//             }
+//         }
     }
  }
