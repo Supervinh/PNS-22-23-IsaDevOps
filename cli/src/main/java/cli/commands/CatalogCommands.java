@@ -19,11 +19,11 @@ public class CatalogCommands {
     private CliContext cliContext;
 
     @ShellMethod("Shows avaible catalog to the customer(availableCatalog CUSTOMERNAME)")
-    public CliCatalog availableCatalog(String name) {
-        return restTemplate.getForObject(getUriForCustomer(name) + "/availableCatalog", CliCatalog.class);
+    public CliCatalog availableCatalog() {
+        return restTemplate.getForObject(getUriForCustomer() + "/availableCatalog", CliCatalog.class);
     }
 
-    private String getUriForCustomer(String name) {
+    private String getUriForCustomer() {
         return BASE_URI + "/" + cliContext.getLoggedInUser().getId() + "/cat";
     }
 
