@@ -9,7 +9,7 @@ pipeline {
                         echo "M2_HOME = ${M2_HOME}"
                         java -version
                         mvn -version
-                        mv settings.xml /home/jenkins/
+                        cp settings.xml /home/jenkins/
                     '''
                 }
             }
