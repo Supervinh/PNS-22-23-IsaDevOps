@@ -25,10 +25,10 @@ pipeline {
             steps {
             echo 'Should send on SonarQube (8005)..'
                 dir('backend'){
-                    sh 'mvn package -U -s ../settings.xml'
+                    sh 'mvn package'
                 }
                 dir('cli'){
-                     sh 'mvn package -U -s ../settings.xml'
+                     sh 'mvn package'
                 }
             }
         }
