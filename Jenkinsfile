@@ -3,11 +3,10 @@ pipeline {
     stages {
         stage ('Initialize') {
                 steps {
-                    sh '''
-                        java -version
+                    sh 'java -version
                         mvn -version
                         cp settings.xml /home/jenkins/
-                    '''
+                    '
                 }
             }
 //             docker -v
@@ -15,9 +14,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh '
-                systemctl start docker
-                ./build-all.sh'
+                sh 'systemctl start docker
+                    ./build-all.sh'
                 }
             }
         stage('Test') {
