@@ -9,12 +9,10 @@ pipeline {
                         java -version
                         mvn -version
                         ls -lah
-                        mkdir -p ${M2_HOME}/
-                        cp settings.xml ${M2_HOME}/
-                        ls -lah ${M2_HOME}
                     '''
                 }
             }
+//             mkdir -p ${M2_HOME}/
 //             docker -v
 //             docker compose version
 
@@ -27,10 +25,10 @@ pipeline {
             steps {
             echo 'Should send on SonarQube (8005)..'
                 dir('backend'){
-                    sh 'mvn install -U -e -s /home/jenkins/.m2/settings.xml'
+                    sh 'mvn package -U -e -s /settings.xml'
                 }
                 dir('cli'){
-                     sh 'mvn install -U -e -s /home/jenkins/.m2/settings.xml'
+                     sh 'mvn package -U -e -s /settings.xml'
                 }
             }
         }
@@ -38,10 +36,10 @@ pipeline {
             steps {
             echo 'Should deploy on artifactory(8002)..'
                 dir('backend'){
-                     sh 'mvn deploy -U -e -s /home/jenkins/.m2/settings.xml'
+                     sh 'mvn deploy -U -e -s /settings.xml'
                 }
                 dir('cli'){
-                    sh 'mvn deploy -U -e -s /home/jenkins/.m2/settings.xml'
+                    sh 'mvn deploy -U -e -s /settings.xml'
                 }
             }
         }
