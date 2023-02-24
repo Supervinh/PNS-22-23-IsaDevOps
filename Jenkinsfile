@@ -32,6 +32,7 @@ pipeline {
                 }
             }
         }
+//         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
         stage('Deploy') {
             steps {
             echo 'Should deploy on artifactory(8002)..'
