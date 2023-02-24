@@ -4,9 +4,6 @@ pipeline {
         stage ('Initialize') {
                 steps {
                     sh '''
-                        pwd
-                        echo "PATH = ${PATH}"
-                        echo "M2_HOME = ${M2_HOME}"
                         java -version
                         mvn -version
                         cp settings.xml /home/jenkins/
@@ -18,7 +15,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh './build-all.sh'
+                sh '
+                systemctl start docker
+                ./build-all.sh'
                 }
             }
         stage('Test') {
