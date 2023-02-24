@@ -10,13 +10,11 @@ pipeline {
                         java -version
                         mvn -version
                         mv settings.xml /home/jenkins/
+                        ls -lah ${M2_HOME}/
+                        rm ${M2_HOME}/settings.xml
                     '''
                 }
             }
-//              ls -lah
-//                                     ls -lah /usr/local/
-//                                     ls -lah -R
-//             mkdir -p ${M2_HOME}/
 //             docker -v
 //             docker compose version
 
