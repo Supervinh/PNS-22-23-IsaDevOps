@@ -7,12 +7,11 @@ pipeline {
                         java -version
                         mvn -version
                         cp settings.xml /home/jenkins/
+                        docker -v
+                        docker compose version
                     '''
                 }
             }
-//             docker -v
-//             docker compose version
-
         stage('Build') {
             steps {
                 sh '''
