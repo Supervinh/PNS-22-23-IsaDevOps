@@ -80,17 +80,27 @@ changer volume / clé ssh
 agent name should be identical to docker compose name (
 container name)
 
+sudo ./launch.sh
+
 ### Webhooks : dans le repository Jenkins
 
-sudo apt install npm sudo npm install --global smee-client screen -S smee smee --url https://smee.io/uTN3kiLqSU3wkZp
---path /github-webhook/ --port 8000
+sudo apt install npm  
+sudo npm install --global smee-client  
+screen -S smee  
+smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
 
-#### Screen :
+### Screen :
 
 screen -r smee  
 screen -ls  
 Ctrl+A d pour détacher  
 Ctrl+A k pour tuer
+
+### Artifactory :
+
+docker compose up (apres avoir lancer docker)
+
+### Divers :
 
 Pour lancer Maven :
 -Installer Maven Integration Plugin → installer maven dans global tools -> specifier dans le Jenkins file le nom de mvn
