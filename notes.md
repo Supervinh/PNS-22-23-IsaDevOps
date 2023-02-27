@@ -102,8 +102,11 @@ docker compose up (apres avoir lancer docker)
 
 ### Divers :
 
-Pour lancer Maven :
--Installer Maven Integration Plugin → installer maven dans global tools -> specifier dans le Jenkins file le nom de mvn
+L'image de l'agent embarque maven, docker et docker-compose. Il faut partager le socket docker avec le container
+Jenkins.
+
+chmod 666 /var/run/docker.sock est probablement une mauvaise pratique, a changer
+chmod 660 pour remettre a l'etat d'origine
 
 https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose   
 http://vmpx02.polytech.unice.fr:8000/ (s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids)
