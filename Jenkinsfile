@@ -42,6 +42,7 @@ pipeline {
                 dir('cli'){
                     sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
                 }
+            }
         }
 //         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
 //         stage('Deploy') {
@@ -62,5 +63,6 @@ pipeline {
                         rm ${M2_HOME}/settings.xml
                      '''
                 }
+        }
     }
  }
