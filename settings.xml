@@ -32,13 +32,13 @@
                     </snapshots>
                     <id>central</id>
                     <name>libs-release</name>
-                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release</url>
+                    <url>http://artifactory:8081/artifactory/libs-release</url>
                 </repository>
                 <repository>
                     <snapshots/>
                     <id>snapshots</id>
                     <name>libs-snapshot</name>
-                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-snapshot</url>
+                    <url>http://artifactory:8081/artifactory/libs-snapshot</url>
                 </repository>
             </repositories>
             <pluginRepositories>
@@ -48,23 +48,27 @@
                     </snapshots>
                     <id>central</id>
                     <name>libs-release</name>
-                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release</url>
+                    <url>http://artifactory:8081/artifactory/libs-release</url>
                 </pluginRepository>
                 <pluginRepository>
                     <snapshots/>
                     <id>snapshots</id>
                     <name>libs-snapshot</name>
-                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-snapshot</url>
+                    <url>http://artifactory:8081/artifactory/libs-snapshot</url>
                 </pluginRepository>
             </pluginRepositories>
-
+            <properties>
+                <sonar.host.url>
+                    http://sonarqube:9000
+                </sonar.host.url>
+            </properties>
             <id>artifactory</id>
         </profile>
         <profile>
             <id>sonar</id>
             <properties>
                 <sonar.host.url>
-                    http://vmpx02.polytech.unice.fr:8001
+                    http://sonarqube:9000
                 </sonar.host.url>
             </properties>
         </profile>
@@ -73,6 +77,6 @@
         <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
     </pluginGroups>
     <activeProfiles>
-        <activeProfile>sonar</activeProfile>
+        <activeProfile>artifactory</activeProfile>
     </activeProfiles>
 </settings>

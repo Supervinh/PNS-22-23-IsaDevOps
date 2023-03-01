@@ -11,8 +11,6 @@ pipeline {
                         mvn -version
                         docker -v
                         docker compose version
-                        curl http://sonarqube:9000/
-                        curl http://sonarqube:8001/
                     '''
                 }
             }
@@ -38,6 +36,7 @@ pipeline {
                 SONAR_ID = credentials('Sonar')
             }
             steps{
+                echo "Send to Sonar (8001:9000)"
                 dir('backend'){
                     sh 'curl http://localhost:8001'
                     sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
@@ -49,17 +48,17 @@ pipeline {
         }
     }
 //         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
-//         stage('Deploy') {
-//             steps {
-//             echo 'Should deploy on artifactory(8002)..'
-//                 dir('backend'){
-//                      sh 'mvn deploy -U -e -s ../settings.xml'
-//                 }
-//                 dir('cli'){
-//                     sh 'mvn deploy -U -e -s ../settings.xml'
-//                 }
-//             }
-//         }
+        stage('Deploy') {
+            steps {
+            echo 'Should deploy on artifactory(8002:8081)..'
+                dir('backend'){
+                     sh 'mvn deploy -U -e -s ../settings.xml'
+                }
+                dir('cli'){
+                    sh 'mvn deploy -U -e -s ../settings.xml'
+                }
+            }
+        }
     post {
        always {
         sh '''
