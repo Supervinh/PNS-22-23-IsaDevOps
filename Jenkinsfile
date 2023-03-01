@@ -14,13 +14,6 @@ pipeline {
                     '''
                 }
             }
-        stage('Build') {
-            steps {
-                sh '''
-                    ./build-all.sh
-                '''
-                }
-            }
         stage('Tests unitaires') {
             steps {
                 dir('backend'){
@@ -31,34 +24,39 @@ pipeline {
                 }
             }
         }
-        stage('Sonar'){
+        stage('Tests Integration') {
+            steps {
+                dir('backend'){
+                    sh 'mvn verify'
+                }
+                dir('cli'){
+                     sh 'mvn verify'
+                }
+            }
+        }
+        stage('Build') {
+                    steps {
+                        sh '''
+                          ./build-all.sh
+                          '''
+                        }//TODO attach cli & run scripts (any automatic verifications ?) & docker compose down
+                }
+       stage('Deploy') {
             environment {
                 SONAR_ID = credentials('Sonar')
             }
-            steps{
-                echo "Send to Sonar (8001:9000)"
-                dir('backend'){
-                    sh 'curl http://localhost:8001'
-                    sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
-                }
-                dir('cli'){
-                    sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
-                }
-            }
-        }
-//         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
-        stage('Deploy') {
             steps {
-            echo 'Should deploy on artifactory(8002:8081)..'
+            echo 'Should deploy on artifactory(8002:8081) and SonarQube (8001:9000)..'
                 dir('backend'){
-                     sh 'mvn deploy -U -e -s ../settings.xml'
+                     sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID}'
                 }
                 dir('cli'){
-                    sh 'mvn deploy -U -e -s ../settings.xml'
+                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID}'
                 }
             }
         }
-        }
+
+    }
     post {
        always {
         sh '''
