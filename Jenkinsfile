@@ -46,7 +46,6 @@ pipeline {
                 }
             }
         }
-    }
 //         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
         stage('Deploy') {
             steps {
@@ -58,6 +57,7 @@ pipeline {
                     sh 'mvn deploy -U -e -s ../settings.xml'
                 }
             }
+        }
         }
     post {
        always {
