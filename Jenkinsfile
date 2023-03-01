@@ -11,6 +11,10 @@ pipeline {
                         mvn -version
                         docker -v
                         docker compose version
+                        curl http://localhost:8001/
+                        curl http://localhost:9000/
+                        curl http://vmpx02.polytech.unice.fr:8001/
+                        curl http://vmpx02.polytech.unice.fr:9000/
                     '''
                 }
             }
@@ -37,6 +41,7 @@ pipeline {
             }
             steps{
                 dir('backend'){
+                    sh 'curl http://localhost:8001'
                     sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
                 }
                 dir('cli'){
@@ -60,7 +65,7 @@ pipeline {
     post {
        always {
         sh '''
-            docker-compose down
+            docker compose down
             rm ${M2_HOME}/settings.xml
         '''
         }
