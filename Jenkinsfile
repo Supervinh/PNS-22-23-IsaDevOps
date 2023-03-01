@@ -4,11 +4,11 @@ pipeline {
         stage ('Initialize') {
                 steps {
                     sh '''
-                        java -version
-                        mvn -version
-                        echo ${M2_HOME}
                         mkdir -p ${M2_HOME}/
                         cp settings.xml ${M2_HOME}/
+                        echo ${M2_HOME}
+                        java -version
+                        mvn -version
                         docker -v
                         docker compose version
                     '''
@@ -21,9 +21,8 @@ pipeline {
                 '''
                 }
             }
-        stage('Test') {
+        stage('Tests unitaires') {
             steps {
-            echo 'Should send on SonarQube (8005)..'
                 dir('backend'){
                     sh 'mvn package'
                 }
@@ -44,5 +43,13 @@ pipeline {
 //                 }
 //             }
 //         }
+        stage('Clean') {
+                    steps {
+                        sh '''
+                            docker-compose down
+                            rm ${M2_HOME}/settings.xml
+                        '''
+                    }
+                }
     }
  }
