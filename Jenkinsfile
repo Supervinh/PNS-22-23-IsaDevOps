@@ -11,7 +11,6 @@ pipeline {
                         mvn -version
                         docker -v
                         docker compose version
-                        curl http://vmpx02.polytech.unice.fr:8001/
                         curl http://sonarqube:9000/
                         curl http://sonarqube:8001/
                     '''
