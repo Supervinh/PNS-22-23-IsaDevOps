@@ -32,13 +32,13 @@
                     </snapshots>
                     <id>central</id>
                     <name>libs-release</name>
-                    <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-release</url>
+                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release</url>
                 </repository>
                 <repository>
                     <snapshots/>
                     <id>snapshots</id>
                     <name>libs-snapshot</name>
-                    <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-snapshot</url>
+                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-snapshot</url>
                 </repository>
             </repositories>
             <pluginRepositories>
@@ -48,18 +48,26 @@
                     </snapshots>
                     <id>central</id>
                     <name>libs-release</name>
-                    <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-release</url>
+                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release</url>
                 </pluginRepository>
                 <pluginRepository>
                     <snapshots/>
                     <id>snapshots</id>
                     <name>libs-snapshot</name>
-                    <url>http://vmpx02.polytech.unice.fr:8081/artifactory/libs-snapshot</url>
+                    <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-snapshot</url>
                 </pluginRepository>
             </pluginRepositories>
+            <properties>
+                <sonar.host.url>
+                    http://vmpx02.polytech.unice.fr:8001
+                </sonar.host.url>
+            </properties>
             <id>artifactory</id>
         </profile>
     </profiles>
+    <pluginGroups>
+        <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+    </pluginGroups>
     <activeProfiles>
         <activeProfile>artifactory</activeProfile>
     </activeProfiles>

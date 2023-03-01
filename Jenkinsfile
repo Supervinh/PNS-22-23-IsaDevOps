@@ -6,7 +6,9 @@ pipeline {
                     sh '''
                         java -version
                         mvn -version
-                        cp settings.xml /home/jenkins/
+                        echo ${M2_HOME}
+                        mkdir -p ${M2_HOME}/
+                        cp settings.xml ${M2_HOME}/
                         docker -v
                         docker compose version
                     '''

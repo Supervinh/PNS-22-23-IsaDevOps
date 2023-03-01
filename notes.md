@@ -102,11 +102,17 @@ docker compose up (apres avoir lancer docker)
 
 ### Divers :
 
-L'image de l'agent embarque maven, docker et docker-compose. Il faut partager le socket docker avec le container
+Jenkins : 8000
+SonarQube : 8001
+Artifactory : 8002
+Artifactory-config:8003
+L'image de l'agent embarque maven, docker et docker compose. Il faut partager le socket docker avec le container
 Jenkins.
 
 chmod 666 /var/run/docker.sock est probablement une mauvaise pratique, a changer
-chmod 660 pour remettre a l'etat d'origine
+chmod 660 pour remettre à l'état d'origine
 
 https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose   
-http://vmpx02.polytech.unice.fr:8000/ (s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids)
+s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids
+
+mvn deploy -U -s ../settings.xml -Dsonar.login=squ_b8f734ecbc34afa41cda6efa4d97e152ec6df991
