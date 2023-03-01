@@ -35,6 +35,7 @@ pipeline {
             environment {
                 SONAR_ID = credentials('Sonar')
             }
+            steps{
                 dir('backend'){
                     sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
                 }
