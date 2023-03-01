@@ -44,6 +44,7 @@ pipeline {
                 }
             }
         }
+    }
 //         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
 //         stage('Deploy') {
 //             steps {
@@ -56,13 +57,12 @@ pipeline {
 //                 }
 //             }
 //         }
-        post {
-                always {
-                     sh '''
-                        docker-compose down
-                        rm ${M2_HOME}/settings.xml
-                     '''
-                }
+    post {
+       always {
+        sh '''
+            docker-compose down
+            rm ${M2_HOME}/settings.xml
+        '''
         }
     }
- }
+}
