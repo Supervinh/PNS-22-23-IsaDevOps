@@ -57,18 +57,22 @@
                     <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-snapshot</url>
                 </pluginRepository>
             </pluginRepositories>
+
+            <id>artifactory</id>
+        </profile>
+        <profile>
+            <id>sonar</id>
             <properties>
                 <sonar.host.url>
                     http://vmpx02.polytech.unice.fr:8001
                 </sonar.host.url>
             </properties>
-            <id>artifactory</id>
         </profile>
     </profiles>
     <pluginGroups>
         <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
     </pluginGroups>
     <activeProfiles>
-        <activeProfile>artifactory</activeProfile>
+        <activeProfile>sonar</activeProfile>
     </activeProfiles>
 </settings>

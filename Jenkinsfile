@@ -31,6 +31,17 @@ pipeline {
                 }
             }
         }
+        stage('Sonar'){
+            environment {
+                SONAR_ID = credentials('Sonar')
+            }
+                dir('backend'){
+                    sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
+                }
+                dir('cli'){
+                    sh 'mvn sonar:sonar -Dsonar.login=${SONAR_ID}'
+                }
+        }
 //         For some reasons, artifactory isn't found by jenkins despite being found by the docker-compose
 //         stage('Deploy') {
 //             steps {
@@ -43,13 +54,12 @@ pipeline {
 //                 }
 //             }
 //         }
-        stage('Clean') {
-                    steps {
-                        sh '''
-                            docker-compose down
-                            rm ${M2_HOME}/settings.xml
-                        '''
-                    }
+        post {
+                always {
+                     sh '''
+                        docker-compose down
+                        rm ${M2_HOME}/settings.xml
+                     '''
                 }
     }
  }

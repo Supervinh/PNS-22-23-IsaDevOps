@@ -115,4 +115,4 @@ chmod 660 pour remettre à l'état d'origine
 https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose   
 s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids
 
-mvn deploy -U -s ../settings.xml -Dsonar.login=squ_b8f734ecbc34afa41cda6efa4d97e152ec6df991
+mvn deploy -U -s ../settings.xml -Dsonar.login=
