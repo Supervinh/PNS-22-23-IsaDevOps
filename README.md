@@ -5,7 +5,7 @@ TeamB-2023 - Carte Multi Fidélité
 
 Ce projet a pour but de mettre en place un système de carte multi-fidélité dans le cadre du cours d'ISA/DevOps avancé.
 Ce projet inclut une chaine DevOps incluant Jenkins pour automatiser les tests, ainsi que Sonarqube et Jenkins.
-Les details sur le fonctionnement sont dans le dossier [devops](devops/README.md).
+Les détails sur le fonctionnement sont dans le dossier [devops](devops).
 
 Projet développé par :
 

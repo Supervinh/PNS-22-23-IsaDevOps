@@ -25,34 +25,58 @@ Se connecter à la machine virtuelle :
 * vpn : (ids unice) e.g username@etu.polytech:mdpENT
 * ssh : sftp://teamb@vmpx02.polytech.unice.fr/
 
-Une fois dans la vm :
+Une fois dans la vm, une commande :
 
 ```shell
-screen -S smee
-smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
+./launch-all.sh
 ```
 
-+ Ctrl+A d
+[//]: # (```shell)
 
-```shell
-smee -S docker
-./jenkins/launch.sh
-```
+[//]: # (screen -S smee)
 
-+ Ctrl+A d
+[//]: # (smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000)
 
-```shell
-smee -S artifactory
-cd artifactory-oss-7.49.8/
-docker compose up
-```
+[//]: # (```)
 
-+ Ctrl+A d
+[//]: # ()
+
+[//]: # (+ Ctrl+A d)
+
+[//]: # ()
+
+[//]: # (```shell)
+
+[//]: # (smee -S docker)
+
+[//]: # (./jenkins/launch.sh)
+
+[//]: # (```)
+
+[//]: # (+ Ctrl+A d)
+
+[//]: # ()
+
+[//]: # (```shell)
+
+[//]: # (smee -S artifactory)
+
+[//]: # (cd artifactory-oss-7.49.8/)
+
+[//]: # (docker compose up)
+
+[//]: # (```)
+
+[//]: # (+ Ctrl+A d)
 
 ## Installation
 
 Tous les fichiers de configuration nécessaires sont dans ce dossier. Il faut commencer par copier le dossier DevOps dans
-la machine virtuelle, s'ils ne sont pas présents.
+la machine virtuelle, s'ils ne sont pas présents. Il faut rendre le script principal executable :
+
+```shell
+  chmod +x config.sh
+```
 
 ### Jenkins et SonarQube
 
@@ -69,11 +93,12 @@ ssh-keygen -t rsa -f jenkins_agent
 
 + Penser à changer le volume et la clé ssh dans le [docker-compose.yml](jenkins/docker-compose.yml)
 + Le nom de l'agent doit être identique au nom du conteneur dans le docker compose :
-    + Le dockerfile dans le dossier [jenkins](jenkins/Dockerfile) permet de construire une image
-      qui se base sur un ssh-agent avec le jdk 17 et ajoute maven, docker et docker-compose.
-+ Pour construire l'agent et démarrer jenkins et sonarqube une fois les configurations faites :
+  + Le dockerfile dans le dossier [jenkins](jenkins/Dockerfile) permet de construire une image
+    qui se base sur un ssh-agent avec le jdk 17 et ajoute maven, docker et docker-compose.
++ Pour construire l'agent :
 
 ```shell
+  chmod +x launch.sh
  ./launch.sh
  ```
 
@@ -83,10 +108,7 @@ En se plaçant dans le dossier jenkins de la vm :
 
 ```shell
 sudo apt install npm  
-sudo npm install --global smee-client  
-screen -S smee  
-smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
-Ctrl+A d
+sudo npm install --global smee-client
 ```
 
 ### Artifactory
@@ -105,16 +127,24 @@ chmod +x config.sh
 + Changer le port dans le [.env](artifactory-oss-7.49.8/.env) à 8002
 + Modifier le docker-compose.yaml avec le [modèle](artifactory-oss-7.49.8/docker-compose.yaml) dans le dossier
   artifactory
-    + Map le port 8081 vers 8003
-    + Ajoute artifactory au réseau jenkins_default
-+ Ensuite lancer le docker-compose.yaml :
+  + Map le port 8081 vers 8003
+  + Ajoute artifactory au réseau jenkins_default
 
-```shell
-screen -S artifactory
-docker compose up
-```
+[//]: # (+ Ensuite lancer le docker-compose.yaml :)
 
-+ Ctrl+A d
+[//]: # ()
+
+[//]: # (```shell)
+
+[//]: # (screen -S artifactory)
+
+[//]: # (docker compose up)
+
+[//]: # (```)
+
+[//]: # ()
+
+[//]: # (+ Ctrl+A d)
 
 ## TroubleShooting
 
