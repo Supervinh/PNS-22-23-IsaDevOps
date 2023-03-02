@@ -20,9 +20,9 @@ public class CatalogCommands {
     @Autowired
     private CliContext cliContext;
 
-    @ShellMethod("Shows avaible catalog to the customer(availableCatalog CUSTOMER_NAME)")
-    public CliCatalog availableCatalog(String name) {
-        return restTemplate.getForObject(getUriForCustomer(name) + "/availableCatalog", CliCatalog.class);
+    @ShellMethod("Shows avaible catalog to the customer(availableCatalog CUSTOMERNAME)")
+    public CliCatalog availableCatalog() {
+        return restTemplate.getForObject(getUriForCustomer() + "/availableCatalog", CliCatalog.class);
     }
 
     @ShellMethod("Shows subset of the catalog matching the corresponding search filter(exploreCatalog CUSTOMER_NAME SEARCH_QUERY)")
@@ -51,6 +51,8 @@ public class CatalogCommands {
 
     private String getUriForCustomer(String name) {
         return BASE_URI + "/" + cliContext.getCustomers().get(name).getId() + "/cat";
+    private String getUriForCustomer() {
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId() + "/cat";
     }
 
     private String getUriForStoreOwner(String name) {
