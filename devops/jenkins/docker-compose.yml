@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    container_name: jenkins
+    ports:
+      - "8000:8080"
+      - "50000:50000"
+    volumes:
+      - /home/teamb/jenkins/jenkins_configuration:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+  agent:
+    image: teamb/jenkins-agent-packed:1.0
+    container_name: agent
+    user: root
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    expose:
+      - 22
+    environment:
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChMHjev1H6a3JFpM6tTYpyQ/WLhLui59Fn6tPouM9R4zQeXpqNTfnsQdhoR4htNHsyjA4B10F7wIYl8Cevz+Xh3rT37eeaQIg8ONeXlm4c/W2bpZo163LNaQTSDHSFLTK8Ai8SgB9JfE/4699mJFgnYb4lj76rYxjMTVS0C5kItY1YhwnxLq2QtCsZB2oL20EeRxn4K7k7lZYZTxxeTp3L1RHbdXAtEXTNKqqwA/akjviI9AiJUxOdDq7nT7OJeh4HHvXuP4eMrBBUw+MgBFUmMottAb9ig5Fywunor8DrP9+A8oA23DPQOaiSrPjaubR0pbWs1VuCMg0FAu1MVRGJqwPWneztj8zS9Asq3k86d64P39iAnXnusIr/KpTTJzvWNWnQ17anJtHj4jNvY0Sb+VJAiejcdV6pO+CCkIuSNZxa2dRPx/WFsoUEkxo2tOV0fRoVX0qIMN+LYFh/eOhu9BX+ETO9Ms18PNU9VaVn4WNQhYSAkaju4W2Md2v564E= teamb@vmpx02
+  sonarqube:
+    image: sonarqube:latest
+    ports:
+      - "8001:9000"
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_bundled-plugins:

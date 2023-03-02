@@ -1,41 +1,66 @@
-# ISA
+TeamB-2023 - Carte Multi Fidélité
+===
 
-### Git Branching :
+## Introduction
 
-#### Main
+Ce projet a pour but de mettre en place un système de carte multi-fidélité dans le cadre du cours d'ISA/DevOps avancé.
+Ce projet inclut une chaine DevOps incluant Jenkins pour automatiser les tests, ainsi que Sonarqube et Jenkins.
+Les details sur le fonctionnement sont dans le dossier [devops](devops/README.md).
 
-* Versions stables uniquement, ne lance que des tests end-2-ends
+Projet développé par :
 
-#### Dev
++ [Bevan Tom](https://github.com/TomBevanIUT)
++ [Bourdeau Quentin](https://github.com/QuentinBourdeau)
++ [Correia Ambre](https://github.com/AmbreCorreia)
++ [Faucher Vinh](https://github.com/Supervinh)
++ [Jeannes Théo](https://github.com/JeannesTheo)
 
-* Versions instables, lance des TI (Cucumber)
+## Git Branching
 
-#### Feature
+### Main
 
-* Branches pour développer une feature spécifique, doit comporter des tests unitaires pour valider le fonctionnement
-  métier
+* Version stable uniquement, ne lance que les tests end-2-ends
 
-#### Bonnes Pratiques à respecter
+### Dev
 
-* Toujours faire une PR, à valider par au moins deux personnes sur 5 avant de merge
+* Versions instables, lance des tests d'intégration avec Cucumber
+
+### Feature
+
+* Branches pour développer une fonctionnalité spécifique, doit comporter des tests unitaires pour valider le
+  fonctionnement métier
+
+## Bonnes Pratiques à respecter
+
+* Toujours faire une PR, à valider par au moins deux personnes (non incluant l'auteur) sur cinq avant de merge
 * Pas de merge si les tests ne passent pas ou ne sont pas fait
-* Pensez à utiliser [SonarQube]() pour vous assurer de la qualité de votre code
+* Pensez à utiliser [SonarQube](http://vmpx02.polytech.unice.fr:8001/) pour vous assurer de la qualité de votre code
 * Pour tout les DTO & Cli, utilisez un constructeur vide, créez les setters correspondants et créez au besoin une
   fonction init() dans l'objet avec les arguments nécessaires pour redefiner les attributs souhaités
 * Pour les codes d'erreur, referez-vous
   à [REST API Design](https://drive.google.com/file/d/1Vv8m1Sub5WFFe2O1NEZPyP88C0muBpUY/view)
 * Liez vos commits à des issues au maximum, normalement les seuls commits non liés sont ceux d'un merge
-* Créez des issues si nécessaires et placer les dans les milestones associés (à creer au besoin)
+* Créez des issues si nécessaires et placer les dans les milestones associés (à créer au besoin)
 * Commentez le code produit, l'intérêt étant d'expliquer pourquoi vous faites ça, et comment si la logique est
-  particulierement complexe
-* Évitez au maximum de sur complexifier les méthodes, préférez créer des fonctions intermediares ou des helpers
+  particulièrement complexe
+* Évitez au maximum de-sur complexifier les méthodes, préférez créer des fonctions intermédiaires ou des helpers
 * ChatGPT et Copilot sont à utiliser avec parcimonie, et en les relisant
 
-#### A savoir
+### A savoir
 
-* Sur les finder, pas d'exceptions → si mauvais credentials ou compte non existant, Optional.empty
-* Chaque ville a un commerce pour pouvoir délivrer les recompenses liées a la commune (e.g Reduction Bus)
+* Sur les finder, pas d'exceptions. En cas d'informations de connexions erronées, ou si le compte n'existe pas, il faut
+  renvoyer Optional.empty
+* Chaque ville a un commerce pour pouvoir délivrer les recompenses liées à la commune (e.g Reduction Bus)
 * Chaque commerce a un owner, un owner peut avoir plusieurs commerces
+* Une seule personne est connectée à la fois dans la CLI
+* La connexion n'est pas automatique après l'inscription
+
+### Liens Utiles
+
++ Jenkins : http://vmpx02.polytech.unice.fr:8000
++ SonarQube : http://vmpx02.polytech.unice.fr:8001
++ Artifactory : http://vmpx02.polytech.unice.fr:8002
++ Kanban : https://github.com/orgs/pns-isa-devops/projects/10/
 
 ## Scenarios
 
@@ -69,50 +94,3 @@
     Magasin se connecte
     Admin se connecte
     Le client se connecte
-
-# Devops
-
-### Jenkins :
-
-Utiliser JGit dans la config globale  
-ssh-keygen -t rsa -f jenkins_agent  
-changer volume / clé ssh  
-agent name should be identical to docker compose name (
-container name)
-
-sudo ./launch.sh
-
-### Webhooks : dans le repository Jenkins
-
-sudo apt install npm  
-sudo npm install --global smee-client  
-screen -S smee  
-smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
-
-### Screen :
-
-screen -r smee  
-screen -ls  
-Ctrl+A d pour détacher  
-Ctrl+A k pour tuer
-
-### Artifactory :
-
-docker compose up (apres avoir lancer docker)
-
-### Divers :
-
-Jenkins : 8000
-SonarQube : 8001
-Artifactory : 8002
-Artifactory-config:8003
-L'image de l'agent embarque maven, docker et docker compose. Il faut partager le socket docker avec le container
-Jenkins.
-
-chmod 666 /var/run/docker.sock est probablement une mauvaise pratique, a changer
-chmod 660 pour remettre à l'état d'origine
-
-https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose   
-s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids
-
-mvn deploy -U -s ../settings.xml -Dsonar.login=
