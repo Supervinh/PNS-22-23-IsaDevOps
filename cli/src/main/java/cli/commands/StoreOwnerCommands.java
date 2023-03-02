@@ -20,12 +20,12 @@ public class StoreOwnerCommands {
     private CliContext cliContext;
 
     @ShellMethod("Login a store owner in the CoD backend (loginOwner OWNER_MAIL OWNER_PASSWORD)")
-    public CliCustomer loginOwner(String mail, String password) {
+    public CliStoreOwner loginOwner(String mail, String password) {
         if (cliContext.getLoggedInUser() != null) {
             System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
             return null;
         }
-        CliCustomer res = restTemplate.postForObject(BASE_URI + "/loginOwner", new CliStoreOwner(mail, password), CliCustomer.class);
+        CliStoreOwner res = restTemplate.postForObject(BASE_URI + "/loginOwner", new CliStoreOwner(mail, password), CliStoreOwner.class);
         cliContext.setLoggedInUser(res);
         return res;
     }

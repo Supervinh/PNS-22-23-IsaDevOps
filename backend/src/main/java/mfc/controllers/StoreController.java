@@ -65,5 +65,4 @@ public class StoreController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
-    //TODO: add modifier and explorer for Customer
 }

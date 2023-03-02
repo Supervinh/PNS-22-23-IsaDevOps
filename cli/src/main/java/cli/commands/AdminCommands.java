@@ -26,18 +26,18 @@ public class AdminCommands {
     }
 
     @ShellMethod("Login an admin in the CoD backend (loginAdmin ADMIN_MAIL ADMIN_PASSWORD)")
-    public CliCustomer loginAdmin(String mail, String password) {
+    public CliAdmin loginAdmin(String mail, String password) {
         if (cliContext.getLoggedInUser() != null) {
             System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
             return null;
         }
-        CliCustomer res = restTemplate.postForObject(BASE_URI + "/loginAdmin", new CliAdmin(mail, password), CliCustomer.class);
+        CliAdmin res = restTemplate.postForObject(BASE_URI + "/loginAdmin", new CliAdmin(mail, password), CliAdmin.class);
         cliContext.setLoggedInUser(res);
         return res;
     }
 
     @ShellMethod("Register a store owner in the CoD backend (registerOwner OWNER_NAME OWNER_MAIL OWNER_PWD AUTH_MAIL, AUTH_PWD)")
     public CliStoreOwner registerOwner(String name, String mail, String password) {
-        return restTemplate.postForObject(BASE_URI + "/registerOwner", new CliStoreOwner(name, mail, password), CliStoreOwner.class);
+        return restTemplate.postForObject("/owner" + "/registerOwner", new CliStoreOwner(name, mail, password), CliStoreOwner.class);
     }
 }

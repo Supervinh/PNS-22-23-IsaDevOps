@@ -33,9 +33,6 @@ public class AdminController {
     @Autowired
     private AdminRegistration adminReg;
 
-    @Autowired
-    private StoreOwnerRegistration ownerReg;
-
 
     @Autowired
     private AdminFinder adminFind;
@@ -51,19 +48,6 @@ public class AdminController {
         errorDTO.setError("Cannot process admin registration");
         errorDTO.setDetails(e.getMessage());
         return errorDTO;
-    }
-
-    @PostMapping(path = "registerOwner", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<StoreOwnerDTO> registerOwner(@RequestBody @Valid StoreOwnerDTO storeOwnerDTO) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(
-                            convertOwnerToDto(ownerReg.registerStoreOwner(storeOwnerDTO.getName(), storeOwnerDTO.getMail(), storeOwnerDTO.getPassword()))
-                    );
-
-        } catch (AlreadyExistingAccountException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
     }
 
     @PostMapping(path = "registerAdmin", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
@@ -84,7 +68,7 @@ public class AdminController {
         // Note that there is no validation at all on the CustomerDto mapped
         Optional<Admin> admin = adminFind.findAdminByMail(adminto.getMail());
         if (admin.isEmpty()) {
-            // If no customer is found, we return a 404 (Not Found) status code
+            // If no admin is found, we return a 404 (Not Found) status code
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         if (!admin.get().getPassword().equals(adminto.getPassword())) {

@@ -1,10 +1,14 @@
 package cli.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 
 public class CliStoreOwner extends CliAccount{
 
-    public CliStoreOwner(String name, String mail, String password) {
+    @JsonCreator
+    public CliStoreOwner(@JsonProperty("name") String name, @JsonProperty("mail") String mail, @JsonProperty("password") String password) {
         super(name, mail, password);
     }
 

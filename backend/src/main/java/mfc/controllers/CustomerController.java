@@ -55,7 +55,7 @@ public class CustomerController {
         return errorDTO;
     }
 
-    @PostMapping(path = "register", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
+    @PostMapping(path = "registerCustomer", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) {
         // Note that there is no validation at all on the CustomerDto mapped
         String creditCard = cusdto.getCreditCard();
@@ -73,7 +73,7 @@ public class CustomerController {
         }
     }
 
-    @PostMapping(path = "login", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "loginCustomer", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> login(@RequestBody @Valid CustomerDTO cusdto) {
         // Note that there is no validation at all on the CustomerDto mapped
         Optional<Customer> customer = finder.findCustomerByMail(cusdto.getMail());

@@ -26,7 +26,7 @@ public class CliContext {
                 '}';
     }
 
-    public void setLoggedInUser(CliCustomer user) {
+    public void setLoggedInUser(CliAccount user) {
         this.loggedInUser = user;
     }
 }

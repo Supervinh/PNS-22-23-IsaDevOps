@@ -19,19 +19,19 @@ public class CustomerCommands {
     @Autowired
     private CliContext cliContext;
 
-    @ShellMethod("Register a customer in the CoD backend (register CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
-    public CliCustomer register(String name, String mail, String password, @ShellOption(defaultValue = "") String creditCard) {
-        return restTemplate.postForObject(BASE_URI + "/register", new CliCustomer(name, mail, password, creditCard,"null"), CliCustomer.class);
+    @ShellMethod("Register a customer in the CoD backend (registerCustomer CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
+    public CliCustomer registerCustomer(String name, String mail, String password, @ShellOption(defaultValue = "") String creditCard) {
+        return restTemplate.postForObject(BASE_URI + "/registerCustomer", new CliCustomer(name, mail, password, creditCard,"null"), CliCustomer.class);
     }
 
     // Always use a POST request for login and not a GET request
     @ShellMethod("Login a customer in the CoD backend (login CUSTOMER_MAIL CUSTOMER_PASSWORD)")
-    public CliCustomer login(String mail, String password) {
+    public CliCustomer loginCustomer(String mail, String password) {
         if (cliContext.getLoggedInUser() != null) {
             System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
             return null;
         }
-        CliCustomer res = restTemplate.postForObject(BASE_URI + "/login", new CliCustomer(mail, password), CliCustomer.class);
+        CliCustomer res = restTemplate.postForObject(BASE_URI + "/loginCustomer", new CliCustomer(mail, password), CliCustomer.class);
         cliContext.setLoggedInUser(res);
         return res;
     }
