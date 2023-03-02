@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 
+import static mfc.controllers.dto.ConvertDTO.convertCustomerToDto;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -108,12 +109,6 @@ public class CustomerController {
                         modifier.recordMatriculation(
                         finder.findCustomerById(customerId).orElseThrow(), matriculation)));
 
-    }
-
-    private CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
-        CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard(), customer.getMatriculation());
-        dto.setBalance(customer.getBalance());
-        return dto;
     }
 }
 

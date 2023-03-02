@@ -3,11 +3,9 @@ package mfc.controllers;
 import mfc.POJO.Admin;
 import mfc.POJO.StoreOwner;
 import mfc.controllers.dto.AdminDTO;
-import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
-import mfc.exceptions.NotEnoughRightsException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.AdminRegistration;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static mfc.controllers.dto.ConvertDTO.convertAdminToDto;
+import static mfc.controllers.dto.ConvertDTO.convertOwnerToDto;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -28,10 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AdminController {
     public static final String BASE_URI = "/admin";
 
-    private final ConvertDTO convertDTO = new ConvertDTO();
-
-//    @Autowired
-//    private StoreOwnerRegistration ownerReg;
+    public static final String LOGGED_URI = "/{adminId}/";
 
     @Autowired
     private AdminRegistration adminReg;
@@ -39,8 +36,6 @@ public class AdminController {
     @Autowired
     private StoreOwnerRegistration ownerReg;
 
-    @Autowired
-    private StoreOwnerFinder ownerFind;
 
     @Autowired
     private AdminFinder adminFind;
@@ -61,23 +56,12 @@ public class AdminController {
     @PostMapping(path = "registerOwner", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<StoreOwnerDTO> registerOwner(@RequestBody @Valid StoreOwnerDTO storeOwnerDTO) {
         try {
-            Optional<Admin> authorization = adminFind.findAdminByMailAndPassword(storeOwnerDTO.getAuthorizationMail(), storeOwnerDTO.getAuthorizationPassword());
-
-            if (authorization.isPresent()) {
-                throw new NotEnoughRightsException();
-            }
-
-            StoreOwner owner = ownerReg.registerStoreOwner(storeOwnerDTO.getName(), storeOwnerDTO.getMail(), storeOwnerDTO.getPassword());
-
-            storeOwnerDTO.setId(owner.getId());
-            storeOwnerDTO.setMail(owner.getMail());
-            storeOwnerDTO.setPassword(owner.getPassword());
-            storeOwnerDTO.setName(owner.getName());
-
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(storeOwnerDTO);
-        } catch (Exception e) {
-            //TODO Handle exception
+                    .body(
+                            convertOwnerToDto(ownerReg.registerStoreOwner(storeOwnerDTO.getName(), storeOwnerDTO.getMail(), storeOwnerDTO.getPassword()))
+                    );
+
+        } catch (AlreadyExistingAccountException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
@@ -85,34 +69,32 @@ public class AdminController {
     @PostMapping(path = "registerAdmin", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<AdminDTO> registerAdmin(@RequestBody @Valid AdminDTO adminDTO) {
         try {
-            Optional<Admin> authorization = adminFind.findAdminByMailAndPassword(adminDTO.getAuthorizationMail(), adminDTO.getAuthorizationPassword());
-
-            //TODO
-//            if (authorization.isEmpty()) {
-//                throw new NotEnoughRightsException();
-//            }
-
-
-            Admin admin = adminReg.registerAdmin(adminDTO.getName(), adminDTO.getMail(), adminDTO.getPassword());
-
-            adminDTO.setId(admin.getId());
-            adminDTO.setMail(admin.getMail());
-            adminDTO.setPassword(admin.getPassword());
-            adminDTO.setName(admin.getName());
-
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(adminDTO);
+                    .body(
+                            convertAdminToDto(adminReg.registerAdmin(adminDTO.getName(), adminDTO.getMail(), adminDTO.getPassword()))
+                    );
+
         } catch (AlreadyExistingAccountException e) {
-            //TODO Handle exception (cf handlers)
-//            if (e instanceof NotEnoughRightsException){
-//                ErrorDTO err = new ErrorDTO();
-//                err.setError("Cannot create admin account");
-//                err.setDetails("Not enough rights");
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
-//            }
-            // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+    @PostMapping(path = "loginAdmin", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AdminDTO> login(@RequestBody @Valid AdminDTO adminto) {
+        // Note that there is no validation at all on the CustomerDto mapped
+        Optional<Admin> admin = adminFind.findAdminByMail(adminto.getMail());
+        if (admin.isEmpty()) {
+            // If no customer is found, we return a 404 (Not Found) status code
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        if (!admin.get().getPassword().equals(adminto.getPassword())) {
+            // If the password is wrong, we return a 401 (Unauthorized) status code
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } else {
+            // If the password is correct, we return a 200 (OK) status code
+            return ResponseEntity.status(HttpStatus.OK).body(convertAdminToDto(admin.get()));
+        }
+    }
+
 
 }

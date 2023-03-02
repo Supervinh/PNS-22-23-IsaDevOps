@@ -8,50 +8,37 @@ public class StoreOwnerDTO {
     private String mail;
     private String password;
 
-    private String authorizationMail;
-    private String authorizationPassword;
 
-    public StoreOwnerDTO() {
-    }
-
-    public String getAuthorizationMail() {
-        return authorizationMail;
-    }
-
-    public void setAuthorizationMail(String authorizationMail) {
-        this.authorizationMail = authorizationMail;
-    }
-
-    public String getAuthorizationPassword() {
-        return authorizationPassword;
-    }
-
-    public void setAuthorizationPassword(String authorizationPassword) {
-        this.authorizationPassword = authorizationPassword;
-    }
-
-    public void setId(UUID id) {
+    public StoreOwnerDTO(UUID id, String name, String mail, String password) {
+        this.name = name;
         this.id = id;
-    }
-
-    public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
+
     }
 
     public UUID getId() {
         return id;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public String getMail() {
         return mail;
     }
 
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
