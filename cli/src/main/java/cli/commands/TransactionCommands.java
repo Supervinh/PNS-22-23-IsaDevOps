@@ -20,10 +20,10 @@ public class TransactionCommands {
 
     @ShellMethod("Add balance to account (refill CUSTOMER_NAME AMOUNT)")
     public CliCustomer refill(String name, double amount) {
-        return restTemplate.postForObject(getUriForCustomer(name) + "/refill", amount, CliCustomer.class);
+        return restTemplate.postForObject(getUriForCustomer() + "/refill", amount, CliCustomer.class);
     }
 
-    private String getUriForCustomer(String name) {
-        return BASE_URI + "/" + cliContext.getCustomers().get(name).getId() + "/transactions";
+    private String getUriForCustomer() {
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId() + "/transactions";
     }
 }

@@ -29,8 +29,8 @@ public class StoreCommands {
             sch[i][0] = opening;
             sch[i][1] = closing;
         }
-        CliStore res = restTemplate.postForObject(BASE_URI + "/register", new CliStore(name, sch, ownerName), CliStore.class);
-        return res;
+        return restTemplate.postForObject(BASE_URI + "/register", new CliStore(name, sch, ownerName), CliStore.class);
+
     }
 
 }

@@ -1,20 +1,20 @@
-package mfc.controllers.dto;
+package cli.model;
 
 import java.util.UUID;
 
-public class StoreOwnerDTO {
-    private String name;
+public class CliAccount {
+
+
     private UUID id;
+    private String name;
     private String mail;
     private String password;
 
-
-    public StoreOwnerDTO(UUID id, String name, String mail, String password) {
+    protected CliAccount(String name, String mail, String password) {
         this.name = name;
-        this.id = id;
         this.mail = mail;
         this.password = password;
-
+        this.id = UUID.randomUUID();
     }
 
     public UUID getId() {
@@ -23,6 +23,14 @@ public class StoreOwnerDTO {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getMail() {
@@ -41,11 +49,5 @@ public class StoreOwnerDTO {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 }
