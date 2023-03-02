@@ -80,20 +80,39 @@ changer volume / clé ssh
 agent name should be identical to docker compose name (
 container name)
 
+sudo ./launch.sh
+
 ### Webhooks : dans le repository Jenkins
 
-sudo apt install npm sudo npm install --global smee-client screen -S smee smee --url https://smee.io/uTN3kiLqSU3wkZp
---path /github-webhook/ --port 8000
+sudo apt install npm  
+sudo npm install --global smee-client  
+screen -S smee  
+smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000
 
-#### Screen :
+### Screen :
 
 screen -r smee  
 screen -ls  
 Ctrl+A d pour détacher  
 Ctrl+A k pour tuer
 
-Pour lancer Maven :
--Installer Maven Integration Plugin → installer maven dans global tools -> specifier dans le Jenkins file le nom de mvn
+### Artifactory :
+
+docker compose up (apres avoir lancer docker)
+
+### Divers :
+
+Jenkins : 8000
+SonarQube : 8001
+Artifactory : 8002
+Artifactory-config:8003
+L'image de l'agent embarque maven, docker et docker compose. Il faut partager le socket docker avec le container
+Jenkins.
+
+chmod 666 /var/run/docker.sock est probablement une mauvaise pratique, a changer
+chmod 660 pour remettre à l'état d'origine
 
 https://www.cloudbees.com/blog/how-to-install-and-run-jenkins-with-docker-compose   
-http://vmpx02.polytech.unice.fr:8000/ (s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids)
+s'adresser à [JeannesTheo](https://github.com/JeannesTheo) pour avoir des ids
+
+mvn deploy -U -s ../settings.xml -Dsonar.login=
