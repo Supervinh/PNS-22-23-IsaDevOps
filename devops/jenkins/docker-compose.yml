@@ -26,6 +26,7 @@ services:
       - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChMHjev1H6a3JFpM6tTYpyQ/WLhLui59Fn6tPouM9R4zQeXpqNTfnsQdhoR4htNHsyjA4B10F7wIYl8Cevz+Xh3rT37eeaQIg8ONeXlm4c/W2bpZo163LNaQTSDHSFLTK8Ai8SgB9JfE/4699mJFgnYb4lj76rYxjMTVS0C5kItY1YhwnxLq2QtCsZB2oL20EeRxn4K7k7lZYZTxxeTp3L1RHbdXAtEXTNKqqwA/akjviI9AiJUxOdDq7nT7OJeh4HHvXuP4eMrBBUw+MgBFUmMottAb9ig5Fywunor8DrP9+A8oA23DPQOaiSrPjaubR0pbWs1VuCMg0FAu1MVRGJqwPWneztj8zS9Asq3k86d64P39iAnXnusIr/KpTTJzvWNWnQ17anJtHj4jNvY0Sb+VJAiejcdV6pO+CCkIuSNZxa2dRPx/WFsoUEkxo2tOV0fRoVX0qIMN+LYFh/eOhu9BX+ETO9Ms18PNU9VaVn4WNQhYSAkaju4W2Md2v564E= teamb@vmpx02
   sonarqube:
     image: sonarqube:latest
+    container_name: sonarqube
     ports:
       - "8001:9000"
     volumes:

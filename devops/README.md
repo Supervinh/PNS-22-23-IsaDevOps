@@ -28,54 +28,28 @@ Se connecter à la machine virtuelle :
 Une fois dans la vm, une commande :
 
 ```shell
-./launch-all.sh
+sudo ./launch-all.sh
 ```
 
-[//]: # (```shell)
+Ce script lance le docker compose dans un ecran uniquement accesible par root. Il faut donc utiliser sudo pour le voir
+et s'y rattacher
 
-[//]: # (screen -S smee)
+Si smee tourne toujours, et qu'il ne faut seulement changer l'un des conteneurs :
 
-[//]: # (smee --url https://smee.io/uTN3kiLqSU3wkZp --path /github-webhook/ --port 8000)
-
-[//]: # (```)
-
-[//]: # ()
-
-[//]: # (+ Ctrl+A d)
-
-[//]: # ()
-
-[//]: # (```shell)
-
-[//]: # (smee -S docker)
-
-[//]: # (./jenkins/launch.sh)
-
-[//]: # (```)
-
-[//]: # (+ Ctrl+A d)
-
-[//]: # ()
-
-[//]: # (```shell)
-
-[//]: # (smee -S artifactory)
-
-[//]: # (cd artifactory-oss-7.49.8/)
-
-[//]: # (docker compose up)
-
-[//]: # (```)
-
-[//]: # (+ Ctrl+A d)
+```shell
+./quick-start.sh
+```
 
 ## Installation
 
 Tous les fichiers de configuration nécessaires sont dans ce dossier. Il faut commencer par copier le dossier DevOps dans
-la machine virtuelle, s'ils ne sont pas présents. Il faut rendre le script principal executable :
+la machine virtuelle, s'ils ne sont pas présents. Une fois toutes les installations faites correctement, en se plaçant a
+la racine :
 
 ```shell
-  chmod +x config.sh
+chmod +x quick-start.sh
+chmod +x lauch-all.sh
+sudo ./launch-all.sh
 ```
 
 ### Jenkins et SonarQube
@@ -98,8 +72,8 @@ ssh-keygen -t rsa -f jenkins_agent
 + Pour construire l'agent :
 
 ```shell
-  chmod +x launch.sh
- ./launch.sh
+  chmod +x build.sh
+ ./build.sh
  ```
 
 ### Webhook
@@ -121,7 +95,7 @@ En se plaçant dans le dossier artifactory de la vm :
 
 ```shell
 chmod +x config.sh
-./config.sh
+sudo ./config.sh
 ```
 
 + Changer le port dans le [.env](artifactory-oss-7.49.8/.env) à 8002
@@ -129,22 +103,6 @@ chmod +x config.sh
   artifactory
   + Map le port 8081 vers 8003
   + Ajoute artifactory au réseau jenkins_default
-
-[//]: # (+ Ensuite lancer le docker-compose.yaml :)
-
-[//]: # ()
-
-[//]: # (```shell)
-
-[//]: # (screen -S artifactory)
-
-[//]: # (docker compose up)
-
-[//]: # (```)
-
-[//]: # ()
-
-[//]: # (+ Ctrl+A d)
 
 ## TroubleShooting
 
@@ -167,10 +125,7 @@ Format : PortExposé:PortInterne
 
 ### Docker Compose
 
-Tous les conteneurs i.e Jenkins, JenkinsAgent, SonarQube, Artifactory sont sur le réseau jenkins_default.
-Le [docker-compose.yml](jenkins/docker-compose.yml) dans ```jenkins/``` crée le réseau, mais
-pas [celui](artifactory-oss-7.49.8/docker-compose.yaml) dans ```artifactory/```.
-Il faut donc penser à lancer celui-ci en dernier, ou à créer le réseau manuellement.
+Tous les conteneurs i.e Jenkins, JenkinsAgent, SonarQube, Artifactory sont sur le même réseau.
 Pour y accéder, l'adresse depuis Jenkins e.g dans un JenkinsFile est : < nomDuContainer >:< PortInterne >
 
 ### Divers
