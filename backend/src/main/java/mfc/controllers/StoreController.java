@@ -1,10 +1,19 @@
 package mfc.controllers;
 
+import mfc.POJO.Customer;
+import mfc.POJO.Purchase;
+import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
+import mfc.components.TransactionHandler;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.ErrorDTO;
+import mfc.controllers.dto.PurchaseDTO;
 import mfc.controllers.dto.StoreDTO;
 import mfc.exceptions.AlreadyExistingStoreException;
+import mfc.exceptions.CustomerNotFoundException;
+import mfc.exceptions.NegativeCostException;
+import mfc.exceptions.StoreNotFoundException;
+import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreRegistration;
@@ -34,7 +43,13 @@ public class StoreController {
     private StoreOwnerFinder ownerFinder;
 
     @Autowired
+    private CustomerFinder customerFinder;
+
+    @Autowired
     private StoreRegistration storeRegistration;
+
+    @Autowired
+    private TransactionHandler transactionHandler;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -52,7 +67,6 @@ public class StoreController {
     @PostMapping(path = "register", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
     public ResponseEntity<StoreDTO> register(@RequestBody @Valid StoreDTO storeDTO) {
         try {
-            System.out.println("tEST");
             // from DTO to POJO
             Optional<StoreOwner> owner = ownerFinder.findStoreOwnerByName(storeDTO.getOwner());
             if (owner.isEmpty()) {
@@ -63,6 +77,26 @@ public class StoreController {
         } catch (AlreadyExistingStoreException e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PostMapping(path = "addPurchase", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
+    public ResponseEntity<PurchaseDTO> addPurchase(@RequestBody @Valid PurchaseDTO purchaseDTO) {
+        try {
+            Customer customer = customerFinder.findCustomerByMail(purchaseDTO.getCustomerEmail()).orElseThrow(CustomerNotFoundException::new);
+            Store store = storeFinder.findStoreByName(purchaseDTO.getStoreName()).orElseThrow(StoreNotFoundException::new);
+            Purchase p;
+            if (purchaseDTO.getCost() < 0) {
+                throw new NegativeCostException();
+            }
+            if (purchaseDTO.isInternalAccount()) {
+                p = transactionHandler.purchaseFidelityCardBalance(customer, purchaseDTO.getCost(), store);
+            } else {
+                p = transactionHandler.purchase(customer, purchaseDTO.getCost(), store);
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(convertDTO.convertPurchaseToDto(p));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }

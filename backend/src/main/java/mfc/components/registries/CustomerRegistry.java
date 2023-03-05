@@ -1,4 +1,4 @@
-package mfc.components;
+package mfc.components.registries;
 
 import mfc.POJO.Customer;
 import mfc.POJO.Store;

@@ -27,11 +27,9 @@ public class ConvertDTO {
 
     }
 
-/*
     public PurchaseDTO convertPurchaseToDto(Purchase purchase) {
-        return new PurchaseDTO(purchase.getId(), convertCustomerToDto(purchase.getCustomer()), purchase.getCost(), convertStoreToDto(purchase.getStore()));
+        return new PurchaseDTO(purchase.getId(), purchase.getCustomer().getMail(), purchase.getCost(), purchase.getStore().getName(), false);
     }
-*/
 
     public CatalogDTO convertCatalogToDTO(Set<PayOff> payOffSet) {
         return new CatalogDTO(payOffSet.stream().map(this::convertPayoffToDTO).collect(Collectors.toSet()));

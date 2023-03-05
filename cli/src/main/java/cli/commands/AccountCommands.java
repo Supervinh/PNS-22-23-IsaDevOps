@@ -14,7 +14,7 @@ public class AccountCommands {
     @Autowired
     private CliContext cliContext;
 
-    @ShellMethod("Logout a customer in the CoD backend (logout)")
+    @ShellMethod("Logout a account in the CoD backend (logout)")
     public void logout() {
         cliContext.setLoggedInUser(null);
     }
