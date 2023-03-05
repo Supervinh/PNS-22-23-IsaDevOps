@@ -1,7 +1,7 @@
 package mfc.controllers;
 
 import mfc.POJO.Customer;
-import mfc.POJO.PayOff;
+import mfc.POJO.Payoff;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.controllers.dto.CatalogDTO;
@@ -108,7 +108,7 @@ public class CatalogController {
     public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Optional<StoreOwner> storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID);
-            PayOff payOff = new PayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), null/*, payoffDTO.getStore()*/);
+            Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), null/*, payoffDTO.getStore()*/);
             if (storeOwner.isPresent()) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(convertDTO.convertPayoffToDTO(catalogModifier.deletePayoff(payOff)));
             } else throw new StoreOwnerNotFoundException();
@@ -122,7 +122,7 @@ public class CatalogController {
     public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
-            PayOff payOff = new PayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store);
+            Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store);
             Optional<Double> cost = payOff.getCost() == 0 ? Optional.empty() : Optional.of(payOff.getCost());
             Optional<Integer> pointCost = payOff.getPointCost() == 0 ? Optional.empty() : Optional.of(payOff.getPointCost());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertDTO.convertPayoffToDTO(catalogModifier.editPayOff(payOff, cost, pointCost)));

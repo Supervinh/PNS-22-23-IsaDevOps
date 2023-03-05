@@ -31,11 +31,15 @@ public class ConvertDTO {
         return new PurchaseDTO(purchase.getId(), purchase.getCustomer().getMail(), purchase.getCost(), purchase.getStore().getName(), false);
     }
 
-    public CatalogDTO convertCatalogToDTO(Set<PayOff> payOffSet) {
-        return new CatalogDTO(payOffSet.stream().map(this::convertPayoffToDTO).collect(Collectors.toSet()));
+    public CatalogDTO convertCatalogToDTO(Set<Payoff> payoffSet) {
+        return new CatalogDTO(payoffSet.stream().map(this::convertPayoffToDTO).collect(Collectors.toSet()));
     }
 
-    public PayoffDTO convertPayoffToDTO(PayOff payOff) {
+    public PayoffDTO convertPayoffToDTO(Payoff payOff) {
         return new PayoffDTO(payOff.getId(), payOff.getName(), payOff.getCost(), payOff.getPointCost(), payOff.getStore().getName());
+    }
+
+    public PayoffPurchaseDTO convertPayoffPurchaseToDTO(PayoffPurchase payoffPurchase) {
+        return new PayoffPurchaseDTO(payoffPurchase.getId(), payoffPurchase.getName(), payoffPurchase.getCost(), payoffPurchase.getPointCost(), payoffPurchase.getStoreName(), payoffPurchase.getCustomerEmail());
     }
 }
