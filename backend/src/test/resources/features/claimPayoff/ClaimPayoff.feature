@@ -1,4 +1,6 @@
-Feature: Claim a Payoff
+Feature: Claim Payoff
+
+  This feature supports the way that points are gained by the customer
 
   Background:
     Given a customer named "John Doe" with "john@doe.com" as mail address and "123456789" as password

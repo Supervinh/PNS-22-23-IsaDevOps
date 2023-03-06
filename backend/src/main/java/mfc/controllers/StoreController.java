@@ -5,7 +5,6 @@ import mfc.POJO.Purchase;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.components.TransactionHandler;
-import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.PurchaseDTO;
 import mfc.controllers.dto.StoreDTO;
@@ -26,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static mfc.controllers.dto.ConvertDTO.convertPurchaseToDto;
+import static mfc.controllers.dto.ConvertDTO.convertStoreToDto;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -33,8 +34,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class StoreController {
 
     public static final String BASE_URI = "/store";
-
-    private final ConvertDTO convertDTO = new ConvertDTO();
 
     @Autowired
     private StoreFinder storeFinder;
@@ -73,7 +72,7 @@ public class StoreController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertDTO.convertStoreToDto(storeRegistration.register(storeDTO.getName(), storeDTO.getSchedule(), owner.get())));
+                    .body(convertStoreToDto(storeRegistration.register(storeDTO.getName(), storeDTO.getSchedule(), owner.get())));
         } catch (AlreadyExistingStoreException e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -94,7 +93,7 @@ public class StoreController {
             } else {
                 p = transactionHandler.purchase(customer, purchaseDTO.getCost(), store);
             }
-            return ResponseEntity.status(HttpStatus.CREATED).body(convertDTO.convertPurchaseToDto(p));
+            return ResponseEntity.status(HttpStatus.CREATED).body(convertPurchaseToDto(p));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

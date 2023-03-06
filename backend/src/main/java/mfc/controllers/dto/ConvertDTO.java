@@ -7,13 +7,16 @@ import java.util.stream.Collectors;
 
 public class ConvertDTO {
 
+    private ConvertDTO() {
+    }
+
     public static CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
         CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard(), customer.getMatriculation());
         dto.setBalance(customer.getBalance());
         return dto;
     }
 
-    public StoreDTO convertStoreToDto(Store store) {
+    public static StoreDTO convertStoreToDto(Store store) {
         return new StoreDTO(store.getId(), store.getName(), store.getSchedule(), store.getOwner().getName());
     }
 
@@ -27,19 +30,19 @@ public class ConvertDTO {
 
     }
 
-    public PurchaseDTO convertPurchaseToDto(Purchase purchase) {
+    public static PurchaseDTO convertPurchaseToDto(Purchase purchase) {
         return new PurchaseDTO(purchase.getId(), purchase.getCustomer().getMail(), purchase.getCost(), purchase.getStore().getName(), false);
     }
 
-    public CatalogDTO convertCatalogToDTO(Set<Payoff> payoffSet) {
-        return new CatalogDTO(payoffSet.stream().map(this::convertPayoffToDTO).collect(Collectors.toSet()));
+    public static CatalogDTO convertCatalogToDTO(Set<Payoff> payoffSet) {
+        return new CatalogDTO(payoffSet.stream().map(ConvertDTO::convertPayoffToDTO).collect(Collectors.toSet()));
     }
 
-    public PayoffDTO convertPayoffToDTO(Payoff payOff) {
+    public static PayoffDTO convertPayoffToDTO(Payoff payOff) {
         return new PayoffDTO(payOff.getId(), payOff.getName(), payOff.getCost(), payOff.getPointCost(), payOff.getStore().getName());
     }
 
-    public PayoffPurchaseDTO convertPayoffPurchaseToDTO(PayoffPurchase payoffPurchase) {
+    public static PayoffPurchaseDTO convertPayoffPurchaseToDTO(PayoffPurchase payoffPurchase) {
         return new PayoffPurchaseDTO(payoffPurchase.getId(), payoffPurchase.getName(), payoffPurchase.getCost(), payoffPurchase.getPointCost(), payoffPurchase.getStoreName(), payoffPurchase.getCustomerEmail());
     }
 }

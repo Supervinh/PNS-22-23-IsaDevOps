@@ -26,8 +26,6 @@ public class PayoffController {
     public static final String BASE_URI = "/payoff";
     public static final String LOGGED_URI = "/{customerId}/";
 
-    private final ConvertDTO convertDTO = new ConvertDTO();
-
     @Autowired
     CatalogExplorer catalogExplorer;
 
@@ -42,7 +40,7 @@ public class PayoffController {
         try {
             Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
             Payoff payoff = catalogExplorer.findPayoff(payoffIndentifierDTO.getPayOffName(), payoffIndentifierDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
-            return ResponseEntity.ok(convertDTO.convertPayoffPurchaseToDTO(payOffHandler.claimPayoff(customer, payoff)));
+            return ResponseEntity.ok(ConvertDTO.convertPayoffPurchaseToDTO(payOffHandler.claimPayoff(customer, payoff)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
