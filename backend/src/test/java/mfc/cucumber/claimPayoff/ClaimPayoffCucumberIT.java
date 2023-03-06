@@ -1,4 +1,4 @@
-package mfc.cucumber.purchase;
+package mfc.cucumber.claimPayoff;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
@@ -10,8 +10,8 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features/purchase")
+@SelectClasspathResource("features/claimPayoff")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "mfc.cucumber.purchase")
-public class PurchaseCucumberRunnerTest { // IT suffix on test classes make them "Integration Test" run by "verify" goal in maven (see pom.xml)
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "mfc.cucumber.claimPayoff")
+public class ClaimPayoffCucumberIT {
 }

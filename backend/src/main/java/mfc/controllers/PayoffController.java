@@ -2,7 +2,7 @@ package mfc.controllers;
 
 import mfc.POJO.Customer;
 import mfc.POJO.Payoff;
-import mfc.components.PayOffHandler;
+import mfc.components.PayoffHandler;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.PayoffIndentifierDTO;
 import mfc.controllers.dto.PayoffPurchaseDTO;
@@ -35,7 +35,7 @@ public class PayoffController {
     CustomerFinder customerFinder;
 
     @Autowired
-    PayOffHandler payOffHandler;
+    PayoffHandler payOffHandler;
 
     @PostMapping(path = LOGGED_URI + "claimPayoff", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") UUID customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) {
