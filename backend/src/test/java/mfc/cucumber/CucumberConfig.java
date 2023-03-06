@@ -1,9 +1,9 @@
-package mfc.cucumber.claimPayoff;
+package mfc.cucumber;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @CucumberContextConfiguration
 @SpringBootTest
-public class ClaimPayoffCucumberConfig {
+public class CucumberConfig {
 }
