@@ -1,27 +1,27 @@
 package mfc.POJO;
 
+import javax.persistence.*;
 import java.util.UUID;
 
 public abstract class Account {
 
-    private UUID id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String name;
     private String mail;
     private String password;
+
+    protected Account(){}
 
     protected Account(String name, String mail, String password) {
         this.name = name;
         this.mail = mail;
         this.password = password;
-        this.id = UUID.randomUUID();
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {

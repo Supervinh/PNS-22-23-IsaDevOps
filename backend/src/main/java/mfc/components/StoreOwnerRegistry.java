@@ -21,31 +21,31 @@ public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistrat
 
     @Override
     public Optional<StoreOwner> findStoreOwnerByMail(String mail) {
-        return ownerRepository.findByMail(mail);
+        return ownerRepository.findStoreOwnerByMail(mail);
     }
 
     @Override
     public Optional<StoreOwner> findStoreOwnerByMailAndPassword(String mail, String password) {
-        return ownerRepository.findByMailAndPassword(mail, password);
+        return ownerRepository.findStoreOwnerByMailAndPassword(mail, password);
     }
 
     @Override
-    public Optional<StoreOwner> findStoreOwnerById(UUID id) {
+    public Optional<StoreOwner> findStoreOwnerById(Long id) {
         return ownerRepository.findById(id);
     }
 
     @Override
     public Optional<StoreOwner> findStoreOwnerByName(String name) {
-        return ownerRepository.findByName(name);
+        return ownerRepository.findStoreOwnerByName(name);
     }
 
 
     @Override
     public StoreOwner registerStoreOwner(String name, String mail, String password) throws AlreadyExistingAccountException {
-        Optional<StoreOwner> owner = ownerRepository.findByMail(mail);
+        Optional<StoreOwner> owner = ownerRepository.findStoreOwnerByMail(mail);
         if (owner.isEmpty()) {
             StoreOwner newOwner = new StoreOwner(name, mail, password);
-            ownerRepository.save(newOwner, newOwner.getId());
+            ownerRepository.save(newOwner);
             return newOwner;
         }
         throw new AlreadyExistingAccountException();

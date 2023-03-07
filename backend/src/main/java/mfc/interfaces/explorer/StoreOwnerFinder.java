@@ -10,7 +10,7 @@ public interface StoreOwnerFinder {
 
     Optional<StoreOwner> findStoreOwnerByMailAndPassword(String mail, String password);
 
-    Optional<StoreOwner> findStoreOwnerById(UUID id);
+    Optional<StoreOwner> findStoreOwnerById(Long id);
 
     Optional<StoreOwner> findStoreOwnerByName(String name);
 }

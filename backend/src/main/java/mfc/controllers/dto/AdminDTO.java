@@ -4,14 +4,14 @@ import java.util.UUID;
 
 public class AdminDTO {
     private String name;
-    private UUID id;
+    private Long id;
     private String mail;
     private String password;
 
     private String authorizationMail;
     private String authorizationPassword;
 
-    public AdminDTO(String name, UUID id, String mail, String password, String authorizationMail, String authorizationPassword) {
+    public AdminDTO(String name, Long id, String mail, String password, String authorizationMail, String authorizationPassword) {
         this.name = name;
         this.id = id;
         this.mail = mail;
@@ -20,7 +20,7 @@ public class AdminDTO {
         this.authorizationPassword = authorizationPassword;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,7 +40,7 @@ public class AdminDTO {
         return authorizationPassword;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

@@ -57,7 +57,7 @@ class CustomerRegistryTest {
 
     @Test
     public void unknownCustomer() {
-        assertFalse(customerRepository.findByMail(mail).isPresent());
+        assertFalse(customerRepository.findCustomerByMail(mail).isPresent());
     }
 
     @Test

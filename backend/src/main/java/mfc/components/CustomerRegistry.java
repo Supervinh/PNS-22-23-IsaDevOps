@@ -30,7 +30,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     public Customer register(String name, String mail, String password) throws AlreadyExistingAccountException {
         if (findCustomerByName(name).isPresent()) throw new AlreadyExistingAccountException();
         Customer newcustomer = new Customer(name, mail, password);
-        customerRepository.save(newcustomer, newcustomer.getId());
+        customerRepository.save(newcustomer);
         return newcustomer;
     }
 
@@ -38,7 +38,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     public Customer register(String name, String mail, String password, String creditCard) throws AlreadyExistingAccountException {
         if (findCustomerByName(name).isPresent()) throw new AlreadyExistingAccountException();
         Customer newcustomer = new Customer(name, mail, password, creditCard);
-        customerRepository.save(newcustomer, newcustomer.getId());
+        customerRepository.save(newcustomer);
         return newcustomer;
     }
 
@@ -49,9 +49,8 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     }
 
     @Override
-    public Optional<Customer> findCustomerById(UUID id) {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
-                .filter(cust -> id.equals(cust.getId())).findAny();
+    public Optional<Customer> findCustomerById(Long id) {
+        return customerRepository.findCustomerById(id);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
             customerUpdatedBalance.get().setBalance(customerUpdatedBalance.get().getBalance() + balanceChange);
             if (customerUpdatedBalance.get().getBalance() < 0)
                 throw new InsufficientBalanceException();
-            customerRepository.save(customerUpdatedBalance.get(), customerUpdatedBalance.get().getId());
+            customerRepository.save(customerUpdatedBalance.get());
             return customerUpdatedBalance.get();
         }
         throw new CustomerNotFoundException();
@@ -80,7 +79,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
             customerUpdatedFidelityPoints.get().setFidelityPoints(customerUpdatedFidelityPoints.get().getFidelityPoints() + fidelityPointsBalanceChange);
             if (customerUpdatedFidelityPoints.get().getFidelityPoints() < 0)
                 throw new NegativePointCostException();
-            customerRepository.save(customerUpdatedFidelityPoints.get(), customerUpdatedFidelityPoints.get().getId());
+            customerRepository.save(customerUpdatedFidelityPoints.get());
             return customerUpdatedFidelityPoints.get();
         }
         throw new CustomerNotFoundException();
@@ -91,7 +90,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         Optional<Customer> customerUpdatedMatriculation = customerRepository.findById(customer.getId());
         if (customerUpdatedMatriculation.isPresent()) {
             customerUpdatedMatriculation.get().setMatriculation(matriculation);
-            customerRepository.save(customerUpdatedMatriculation.get(), customerUpdatedMatriculation.get().getId());
+            customerRepository.save(customerUpdatedMatriculation.get());
             return customerUpdatedMatriculation.get();
         }
         throw new CustomerNotFoundException();
@@ -102,7 +101,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         Optional<Customer> customerUpdatedCreditCard = customerRepository.findById(customer.getId());
         if (customerUpdatedCreditCard.isPresent()) {
             customerUpdatedCreditCard.get().setCreditCard(creditCard);
-            customerRepository.save(customerUpdatedCreditCard.get(), customerUpdatedCreditCard.get().getId());
+            customerRepository.save(customerUpdatedCreditCard.get());
             return customerUpdatedCreditCard.get();
         }
         throw new CustomerNotFoundException();
@@ -116,7 +115,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
             Optional<Store> storeToBeAdded = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(s -> s.getId().equals(store.getId())).findAny();
             if (storeToBeAdded.isEmpty()) {
                 customerUpdatedFavoriteStore.get().getFavoriteStores().add(store);
-                customerRepository.save(customerUpdatedFavoriteStore.get(), customerUpdatedFavoriteStore.get().getId());
+                customerRepository.save(customerUpdatedFavoriteStore.get());
                 return customerUpdatedFavoriteStore.get();
             }
             throw new StoreAlreadyRegisteredException();
@@ -132,7 +131,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
             Optional<Store> storeToBeRemoved = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(s -> s.getId().equals(store.getId())).findAny();
             if (storeToBeRemoved.isPresent()) {
                 customerUpdatedFavoriteStore.get().getFavoriteStores().remove(storeToBeRemoved.get());
-                customerRepository.save(customerUpdatedFavoriteStore.get(), customerUpdatedFavoriteStore.get().getId());
+                customerRepository.save(customerUpdatedFavoriteStore.get());
                 return customerUpdatedFavoriteStore.get();
             }
             throw new StoreNotFoundException();
@@ -151,7 +150,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 //                customerUpdatedFavoriteStore.get().getFavoriteStores().add(s);
                 recordNewFavoriteStore(customerUpdatedFavoriteStore.get(), s);
             }
-            customerRepository.save(customerUpdatedFavoriteStore.get(), customerUpdatedFavoriteStore.get().getId());
+            customerRepository.save(customerUpdatedFavoriteStore.get());
             return customerUpdatedFavoriteStore.get();
         }
         throw new CustomerNotFoundException();
@@ -166,7 +165,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
                 Optional<Store> storeToBeRemoved = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(st -> st.getId().equals(s.getId())).findAny();
                 storeToBeRemoved.ifPresent(value -> customerUpdatedFavoriteStore.get().getFavoriteStores().remove(value));
             }
-            customerRepository.save(customerUpdatedFavoriteStore.get(), customerUpdatedFavoriteStore.get().getId());
+            customerRepository.save(customerUpdatedFavoriteStore.get());
             return customerUpdatedFavoriteStore.get();
         }
         throw new CustomerNotFoundException();

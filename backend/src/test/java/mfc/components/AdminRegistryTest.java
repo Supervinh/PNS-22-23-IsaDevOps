@@ -43,7 +43,7 @@ class AdminRegistryTest {
 
     @Test
     public void unknownadmin() {
-        assertFalse(adminRepository.findByMail(mail).isPresent());
+        assertFalse(adminRepository.findAdminByMail(mail).isPresent());
     }
 
     @Test

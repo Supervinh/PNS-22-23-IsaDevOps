@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -66,7 +65,7 @@ public class CatalogController {
 
     @GetMapping(path = LOGGED_URI + "availableCatalog")
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
+    public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
             CatalogDTO c = convertDTO.convertCatalogToDTO(catalogExplorer.availablePayoffs((customer.get())));
@@ -76,7 +75,7 @@ public class CatalogController {
     }
 
     @PostMapping(path = LOGGED_URI + "exploreCatalog")
-    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
+    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
             System.out.println(string);
@@ -86,7 +85,7 @@ public class CatalogController {
 
     @PostMapping(path = STORE_OWNER_URI + "addPayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> addPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<PayoffDTO> addPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
             return ResponseEntity.status(HttpStatus.CREATED).body(convertDTO.convertPayoffToDTO(
@@ -98,14 +97,14 @@ public class CatalogController {
         }
     }
 
-    private Store getStore(PayoffDTO payoffDTO, UUID storeOwnerID) throws StoreOwnerNotFoundException, StoreNotFoundException {
+    private Store getStore(PayoffDTO payoffDTO, Long storeOwnerID) throws StoreOwnerNotFoundException, StoreNotFoundException {
         storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(StoreOwnerNotFoundException::new); // Only for authentication, no point in saving the storeOwner
         return storeFinder.findStoreByName(payoffDTO.getStoreName()).orElseThrow(StoreNotFoundException::new);
     }
 
     @PostMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Optional<StoreOwner> storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID);
             PayOff payOff = new PayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), null/*, payoffDTO.getStore()*/);
@@ -119,7 +118,7 @@ public class CatalogController {
     }
 
     @PostMapping(path = STORE_OWNER_URI + "editPayoff", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
             PayOff payOff = new PayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store);

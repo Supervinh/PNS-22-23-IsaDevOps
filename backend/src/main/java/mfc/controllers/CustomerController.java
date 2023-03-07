@@ -17,7 +17,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -71,7 +70,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") UUID customerId) throws NoCreditCardException, PaymentException, NegativeRefillException {
+    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") Long customerId) throws NoCreditCardException, PaymentException, NegativeRefillException {
         Customer res = payment.refillBalance(finder.findCustomerById(customerId).orElseThrow(), amount); //TODO: check if customer exists
         return ResponseEntity.ok().body(/*"Refill of " + res +" is validated"*/convertCustomerToDto(res));
     }

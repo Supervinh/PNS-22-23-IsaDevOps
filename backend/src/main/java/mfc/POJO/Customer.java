@@ -14,9 +14,14 @@ public class Customer extends Account {
     private LocalDate vfp;
     private String creditCard;
 
+    public Customer() {
+
+    }
     public Customer(String name, String creditCard) {
         this(name, "", "", creditCard);
     }
+
+
 
     public Customer(String name, String mail, String password) {
         super(name, mail, password);

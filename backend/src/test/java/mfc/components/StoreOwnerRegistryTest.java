@@ -44,7 +44,7 @@ class StoreOwnerRegistryTest {
 
     @Test
     public void unknownowner() {
-        assertFalse(ownerRepository.findByMail(mail).isPresent());
+        assertFalse(ownerRepository.findStoreOwnerByMail(mail).isPresent());
     }
 
     @Test

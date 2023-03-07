@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class StoreOwnerDTO {
     private String name;
-    private UUID id;
+    private Long id;
     private String mail;
     private String password;
 
@@ -30,7 +30,7 @@ public class StoreOwnerDTO {
         this.authorizationPassword = authorizationPassword;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,7 +42,7 @@ public class StoreOwnerDTO {
         this.password = password;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

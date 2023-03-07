@@ -63,7 +63,7 @@ public class Purchase {
             scheduleList[i][0] = "7h00";
             scheduleList[i][1] = "19h30";
         }
-        storeRegistration.register(storeName ,scheduleList ,storeOwnerRepository.findByMail(ownerMail).get());
+        storeRegistration.register(storeName ,scheduleList ,storeOwnerRepository.findStoreOwnerByMail(ownerMail).get());
     }
 
     @Given("{string} has {int} points")

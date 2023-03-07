@@ -21,29 +21,29 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
         this.adminRepository = adminRepository;
         //create a basic Admin by default
         Admin admin = new Admin("a","a@a","a");
-        adminRepository.save(admin, admin.getId());
+        adminRepository.save(admin);
     }
 
     @Override
     public Optional<Admin> findAdminByMail(String mail) {
-        return adminRepository.findByMail(mail);
+        return adminRepository.findAdminByMail(mail);
     }
 
     public Optional<Admin> findAdminByMailAndPassword(String mail, String password) {
-        return adminRepository.findByMailAndPassword(mail, password);
+        return adminRepository.findAdminByMailAndPassword(mail, password);
     }
 
     @Override
-    public Optional<Admin> findAdminById(UUID id) {
+    public Optional<Admin> findAdminById(Long id) {
         return adminRepository.findById(id);
     }
 
     @Override
     public Admin registerAdmin(String name, String mail, String password) throws AlreadyExistingAccountException {
-        Optional<Admin> admin = adminRepository.findByMail(mail);
+        Optional<Admin> admin = adminRepository.findAdminByMail(mail);
         if (admin.isEmpty()) {
             Admin newAdmin = new Admin(name, mail, password);
-            adminRepository.save(newAdmin, newAdmin.getId());
+            adminRepository.save(newAdmin);
             return newAdmin;
         }
         throw new AlreadyExistingAccountException();
