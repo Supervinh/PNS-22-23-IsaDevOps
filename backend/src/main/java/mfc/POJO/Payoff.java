@@ -2,7 +2,7 @@ package mfc.POJO;
 
 import java.util.UUID;
 
-public class PayOff {
+public class Payoff {
 
     private UUID id;
     private String name;
@@ -10,7 +10,7 @@ public class PayOff {
     private int pointCost;
     private Store store;
 
-    public PayOff(String name, double cost, int pointCost, Store store) {
+    public Payoff(String name, double cost, int pointCost, Store store) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;

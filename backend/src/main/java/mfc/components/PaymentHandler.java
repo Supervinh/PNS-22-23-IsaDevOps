@@ -19,17 +19,18 @@ public class PaymentHandler implements Payment {
 
     @Override
     public Customer refillBalance(Customer user, double amount) throws NoCreditCardException, NegativeRefillException, PaymentException {
-        Customer res = null;
         if (amount <= 0)
             throw new NegativeRefillException();
-        boolean status = bank.pay(user, amount); //TODO Register refill in user
+        boolean status = bank.pay(user, amount);
         if (!status)
             throw new PaymentException();
+        if (user.getCreditCard().equals(""))
+            throw new NoCreditCardException();
         try {
-            res = customerBalancesModifier.editBalance(user, amount);
+            user = customerBalancesModifier.editBalance(user, amount);
         } catch (CustomerNotFoundException | InsufficientBalanceException e) {
             e.printStackTrace();
         }
-        return res;
+        return user;
     }
 }

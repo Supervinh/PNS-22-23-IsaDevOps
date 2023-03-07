@@ -5,6 +5,7 @@ import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.CustomerNotFoundException;
+import mfc.exceptions.NegativeCostException;
 import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerProfileModifier;
@@ -107,8 +108,21 @@ public class CustomerController {
         return ResponseEntity.ok().body(
                 convertCustomerToDto(
                         modifier.recordMatriculation(
-                        finder.findCustomerById(customerId).orElseThrow(), matriculation)));
+                                finder.findCustomerById(customerId).orElseThrow(), matriculation)));
+    }
 
+    @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") UUID customerId) {
+        try {
+            Customer customer = finder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
+            if (amount < 0) {
+                throw new NegativeCostException();
+            }
+            return ResponseEntity.ok().body(convertCustomerToDto(payment.refillBalance(customer, amount)));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
