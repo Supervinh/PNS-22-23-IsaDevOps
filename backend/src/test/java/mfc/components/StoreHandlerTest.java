@@ -3,6 +3,7 @@ package mfc.components;
 import mfc.POJO.Store;
 import mfc.POJO.StoreOwner;
 import mfc.exceptions.CredentialsException;
+import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,15 +28,24 @@ public class StoreHandlerTest {
     @Autowired
     private StoreHandler storeHandler;
 
+    @Autowired
+    private StoreOwnerRepository ownerRepository;
+
     @BeforeEach
     void setUp() {
         storeRepository.deleteAll();
+        ownerRepository.deleteAll();
         List<String> setupList = new ArrayList<>();
         for(int i = 0; i <= 6; i++){
             setupList.add("8h00");
             setupList.add("20h00");
         }
-        storeRepository.save(new Store("Leclerc",setupList,new StoreOwner("Philippe", "p@gmail.com", "pwd")));
+        StoreOwner philippe = new StoreOwner("Philippe", "p@gmail.com", "pwd");
+        ownerRepository.save(philippe);
+        System.out.println(philippe.getId());
+        philippe = ownerRepository.findStoreOwnerByMail(philippe.getMail()).get();
+        System.out.println(philippe.getId());
+        storeRepository.save(new Store("Leclerc",setupList,philippe));
     }
 
 

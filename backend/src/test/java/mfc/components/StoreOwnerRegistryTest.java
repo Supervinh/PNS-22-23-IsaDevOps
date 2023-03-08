@@ -7,6 +7,7 @@ import mfc.exceptions.*;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.StoreOwnerRepository;
+import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class StoreOwnerRegistryTest {
     private StoreOwnerRegistration ownerRegistration;
 
     @Autowired
+    private StoreRepository storeRepository;
+
+    @Autowired
     private StoreOwnerFinder ownerFinder;
 
     private final String mail = "Owner@pns.fr";
@@ -39,6 +43,7 @@ class StoreOwnerRegistryTest {
 
     @BeforeEach
     void setUp() {
+        storeRepository.deleteAll();
         ownerRepository.deleteAll();
     }
 

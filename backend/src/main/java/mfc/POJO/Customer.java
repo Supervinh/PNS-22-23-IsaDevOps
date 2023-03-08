@@ -100,7 +100,6 @@ public class Customer extends Account {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Customer customer)) return false;
-        if (!getId().equals(customer.getId())) return false;
         if (!getName().equals(customer.getName())) return false;
         return getCreditCard().equals(customer.getCreditCard());
     }

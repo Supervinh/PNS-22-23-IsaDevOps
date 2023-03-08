@@ -31,7 +31,7 @@ public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistrat
 
     @Override
     public Optional<StoreOwner> findStoreOwnerById(Long id) {
-        return ownerRepository.findById(id);
+        return ownerRepository.findStoreOwnerById(id);
     }
 
     @Override

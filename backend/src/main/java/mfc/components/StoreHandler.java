@@ -53,6 +53,8 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     public boolean updateOpeningHours(Store store, List<String> schedule, StoreOwner storeOwner) throws CredentialsException {
         Optional<Store> storeToUpdate = findStoreById(store.getId());
         if (storeToUpdate.isPresent()) {
+            System.out.println(storeToUpdate.get().getOwner().getName());
+            System.out.println(storeOwner.getName());
             if (storeToUpdate.get().getOwner().equals(storeOwner)) {
                 storeToUpdate.get().setSchedule(schedule);
                 storeRepository.save(storeToUpdate.get());

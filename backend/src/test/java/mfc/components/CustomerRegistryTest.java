@@ -9,6 +9,7 @@ import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
 import mfc.repositories.CustomerRepository;
+import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,10 @@ class CustomerRegistryTest {
     private CustomerFinder customerFinder;
     @Autowired
     private CustomerBalancesModifier customerBalancesModifier;
+    @Autowired
+    private CustomerProfileModifier customerProfileModifier;
+    @Autowired
+    private StoreRepository customerProfileModifier;
     @Autowired
     private CustomerProfileModifier customerProfileModifier;
 
@@ -132,7 +137,7 @@ class CustomerRegistryTest {
     @Test
     public void canEditFidelityPoints() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
-        customerBalancesModifier.editFidelityPoints(customer, 100);
+        customer = customerBalancesModifier.editFidelityPoints(customer, 100);
         assertEquals(100, customer.getFidelityPoints());
     }
 
