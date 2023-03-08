@@ -34,35 +34,28 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     }
 
     @Override
-    public Optional<Store> findStoreById(UUID id) {
-        return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
-                .filter(store -> id.equals(store.getId())).findAny();
+    public Optional<Store> findStoreById(Long id) {
+        return storeRepository.findStoreById(id);
     }
 
     @Override
-    public Optional<String[][]> findStoreOpeningHours(Store store) {
-        return StreamSupport.stream(storeRepository.findAll().spliterator(), false)
-                .filter(store::equals).findAny().map(Store::getSchedule);
-    }
-
-    @Override
-    public Store register(String name, String[][] schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException {
+    public Store register(String name, List<String> schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException {
         Optional<Store> store = findStoreByName(name);
         if (store.isEmpty()) {
             Store newStore = new Store(name, schedule, storeOwner);
-            storeRepository.save(newStore, newStore.getId());
+            storeRepository.save(newStore);
             return newStore;
         }
         throw new AlreadyExistingStoreException();
     }
 
     @Override
-    public boolean updateOpeningHours(Store store, String[][] schedule, StoreOwner storeOwner) throws CredentialsException {
+    public boolean updateOpeningHours(Store store, List<String> schedule, StoreOwner storeOwner) throws CredentialsException {
         Optional<Store> storeToUpdate = findStoreById(store.getId());
         if (storeToUpdate.isPresent()) {
             if (storeToUpdate.get().getOwner().equals(storeOwner)) {
                 storeToUpdate.get().setSchedule(schedule);
-                storeRepository.save(storeToUpdate.get(), storeToUpdate.get().getId());
+                storeRepository.save(storeToUpdate.get());
                 return true;
             }
             throw new CredentialsException();

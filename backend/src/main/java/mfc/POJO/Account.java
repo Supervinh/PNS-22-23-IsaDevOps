@@ -3,11 +3,14 @@ package mfc.POJO;
 import javax.persistence.*;
 import java.util.UUID;
 
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Account {
 
     @Id
     @GeneratedValue
     private Long id;
+
     private String name;
     private String mail;
     private String password;

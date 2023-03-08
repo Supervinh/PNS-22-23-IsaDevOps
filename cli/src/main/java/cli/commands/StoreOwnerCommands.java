@@ -27,6 +27,7 @@ public class StoreOwnerCommands {
 //        owner.setName(name);
         CliStoreOwner res = restTemplate.postForObject(BASE_URI + "/registerOwner", new CliStoreOwner(name, mail, password, authMail, authPassword), CliStoreOwner.class);
         cliContext.getOwners().put(res.getName(), res);
+        System.out.println(res + "isok");
         return res;
     }
 }

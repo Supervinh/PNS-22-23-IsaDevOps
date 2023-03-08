@@ -1,31 +1,51 @@
 package mfc.POJO;
 
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
 public class Store {
 
-    private UUID id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String name;
-    private String[][] schedule ;
+    @ElementCollection
+    private List<String> schedule ;
 
+    @OneToOne
     private StoreOwner owner;
 
-    public Store(String name, String[][] schedule,StoreOwner owner) {
+    public Store(String name,StoreOwner owner) {
         this.name = name;
-        this.schedule = new String[7][2];
+        String starting = "7h00";
+        String ending = "19h00";
+        this.schedule = new ArrayList<String>(List.of(starting,ending,starting,ending,starting,ending,starting,ending,starting,ending,starting,ending));
         this.owner = owner;
-        this.id = UUID.randomUUID();
     }
 
-    public UUID getId() {
+    public Store(String name, List<String> schedule,StoreOwner owner) {
+        this.name = name;
+        this.schedule = schedule;
+        this.owner = owner;
+    }
+
+    public Store() {
+
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,11 +57,11 @@ public class Store {
         this.name = name;
     }
 
-    public String[][] getSchedule() {
+    public List<String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(String[][] schedule) {
+    public void setSchedule(List<String> schedule) {
         this.schedule = schedule;
     }
 

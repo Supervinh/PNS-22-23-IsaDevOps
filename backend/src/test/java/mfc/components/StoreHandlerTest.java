@@ -30,28 +30,28 @@ public class StoreHandlerTest {
     @BeforeEach
     void setUp() {
         storeRepository.deleteAll();
-        String[][] setupList = new String[7][2];
+        List<String> setupList = new ArrayList<>();
         for(int i = 0; i <= 6; i++){
-            setupList[i][0] = "8h00";
-            setupList[i][1] = "20h00";
+            setupList.add("8h00");
+            setupList.add("20h00");
         }
-        storeRepository.save(new Store("Leclerc",setupList,new StoreOwner("Philippe", "p@gmail.com", "pwd")), UUID.randomUUID());
+        storeRepository.save(new Store("Leclerc",setupList,new StoreOwner("Philippe", "p@gmail.com", "pwd")));
     }
 
 
     @Test
     public void UpdateStoreSchedule() throws CredentialsException {
-        String[][] update = new String[7][2];
+        List<String> update = new ArrayList<>();
         for(int i = 0; i <= 6; i++){
-            update[i][0] = "7h00";
-            update[i][1] = "19h30";
+            update.add("7h30");
+            update.add("19h30");
         }
-        Optional<Store> carrouf = storeRepository.findByName("Leclerc");
-        String[][] tocompare = carrouf.get().getSchedule();
+        Optional<Store> carrouf = storeRepository.findStoreByName("Leclerc");
+        List<String> tocompare = carrouf.get().getSchedule();
         StoreOwner own = carrouf.get().getOwner();
         storeHandler.updateOpeningHours(carrouf.get(), update, own);
 
-        Optional<Store> carroufReloaded = storeRepository.findByName("Leclerc");
+        Optional<Store> carroufReloaded = storeRepository.findStoreByName("Leclerc");
 
         assertNotEquals(tocompare,carroufReloaded.get().getSchedule());
 

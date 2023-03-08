@@ -7,5 +7,5 @@ import mfc.exceptions.CredentialsException;
 import java.util.List;
 
 public interface StoreModifier {
-    boolean updateOpeningHours(Store store, String[][] schedule, StoreOwner storeOwner) throws CredentialsException;
+    boolean updateOpeningHours(Store store, List<String> schedule, StoreOwner storeOwner) throws CredentialsException;
 }

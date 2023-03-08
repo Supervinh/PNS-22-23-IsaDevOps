@@ -28,7 +28,7 @@ class CustomerRegistryTest {
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
-    private String[][] schedule = new String[7][2];
+    private List<String> schedule = new ArrayList<>();
     private static boolean setUpIsDone = false;
     @Autowired
     private CustomerRepository customerRepository;
@@ -45,10 +45,10 @@ class CustomerRegistryTest {
     @BeforeEach
     void setUp() {
         if(setUpIsDone){
-            String[][] setupList = new String[7][2];
+            List<String> setupList = new ArrayList<>();
             for(int i = 0; i <= 6; i++){
-                setupList[i][0] = "7h00";
-                setupList[i][1] = "19h30";
+                setupList.add("7h00");
+                setupList.add("19h30");
             }
             schedule = setupList;
         }

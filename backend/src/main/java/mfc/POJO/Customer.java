@@ -1,22 +1,26 @@
 package mfc.POJO;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Customer extends Account {
     private String matriculation;
     private int fidelityPoints;
     private double balance;
+    @OneToMany
     private List<Store> favoriteStores;
     private LocalDate vfp;
     private String creditCard;
 
     public Customer() {
-
     }
+
     public Customer(String name, String creditCard) {
         this(name, "", "", creditCard);
     }
