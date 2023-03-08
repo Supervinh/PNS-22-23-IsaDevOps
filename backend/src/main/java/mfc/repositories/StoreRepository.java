@@ -14,8 +14,6 @@ import java.util.stream.StreamSupport;
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findStoreByName(String name);
-    Optional<Store> findStoreByMail(String mail);
-    Optional<Store> findStoreByMailAndPassword(String mail, String password);
     Optional<Store> findStoreById(Long id);
 
 }

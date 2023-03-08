@@ -20,7 +20,7 @@ public class Store {
     @ElementCollection
     private List<String> schedule ;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private StoreOwner owner;
 
     public Store(String name,StoreOwner owner) {
