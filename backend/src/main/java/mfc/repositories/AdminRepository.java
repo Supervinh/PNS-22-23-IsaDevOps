@@ -5,8 +5,6 @@ import mfc.POJO.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.StreamSupport;

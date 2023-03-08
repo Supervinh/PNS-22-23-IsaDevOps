@@ -4,23 +4,19 @@ import java.util.UUID;
 
 public class AdminDTO {
     private String name;
-    private Long id;
+    private UUID id;
     private String mail;
     private String password;
 
-    private String authorizationMail;
-    private String authorizationPassword;
 
-    public AdminDTO(String name, Long id, String mail, String password, String authorizationMail, String authorizationPassword) {
+    public AdminDTO(UUID id, String name, String mail, String password) {
         this.name = name;
         this.id = id;
         this.mail = mail;
         this.password = password;
-        this.authorizationMail = authorizationMail;
-        this.authorizationPassword = authorizationPassword;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -32,15 +28,8 @@ public class AdminDTO {
         this.password = password;
     }
 
-    public String getAuthorizationMail() {
-        return authorizationMail;
-    }
 
-    public String getAuthorizationPassword() {
-        return authorizationPassword;
-    }
-
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

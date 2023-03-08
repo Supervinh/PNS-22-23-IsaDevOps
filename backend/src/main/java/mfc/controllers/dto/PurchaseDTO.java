@@ -5,27 +5,40 @@ import java.util.UUID;
 public class PurchaseDTO {
 
     private UUID id;
-    private CustomerDTO customerDTO;
+    private String customerEmail;
     private double cost;
-    private StoreDTO storeDTO;
+    private String storeName;
+    private boolean internalAccount; // Is the purchase using the internal account or already paid?
 
-    public PurchaseDTO(UUID id, CustomerDTO customerDTO, double cost, StoreDTO storeDTO) {
+    public PurchaseDTO() {
+    }
+
+    public PurchaseDTO(UUID id, String customerEmail, double cost, String storeName, boolean internalAccount) {
         this.id = id;
-        this.customerDTO = customerDTO;
+        this.customerEmail = customerEmail;
         this.cost = cost;
-        this.storeDTO = storeDTO;
+        this.storeName = storeName;
+        this.internalAccount = internalAccount;
+    }
+
+    public boolean isInternalAccount() {
+        return internalAccount;
+    }
+
+    public void setInternalAccount(boolean internalAccount) {
+        this.internalAccount = internalAccount;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public CustomerDTO getCustomerDTO() {
-        return customerDTO;
+    public String getCustomerEmail() {
+        return customerEmail;
     }
 
-    public void setCustomerDTO(CustomerDTO customerDTO) {
-        this.customerDTO = customerDTO;
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public double getCost() {
@@ -36,12 +49,11 @@ public class PurchaseDTO {
         this.cost = cost;
     }
 
-    public StoreDTO getStoreDTO() {
-        return storeDTO;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setStoreName(StoreDTO storeDTO) {
-        this.storeDTO = storeDTO;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
-
 }

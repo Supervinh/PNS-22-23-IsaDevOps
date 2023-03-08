@@ -1,10 +1,12 @@
 package cli.commands;
 
 import cli.CliContext;
+import cli.model.CliPurchase;
 import cli.model.CliStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.RestTemplate;
 
 @ShellComponent
@@ -29,8 +31,13 @@ public class StoreCommands {
             sch[i][0] = opening;
             sch[i][1] = closing;
         }
-        CliStore res = restTemplate.postForObject(BASE_URI + "/register", new CliStore(name, sch, ownerName), CliStore.class);
-        return res;
+        return restTemplate.postForObject(BASE_URI + "/register", new CliStore(name, sch, ownerName), CliStore.class);
     }
+
+    @ShellMethod("Register a purchase from a customer(addPurchase STORE_NAME CUSTOMER_EMAIL COST INTERNAL_ACCOUNT)")
+    public CliPurchase addPurchase(String storeName, String customerEmail, int cost, @ShellOption(defaultValue = "false") boolean internalAccount) {
+        return restTemplate.postForObject(BASE_URI + "/addPurchase", new CliPurchase(customerEmail, cost, storeName, internalAccount), CliPurchase.class);
+    }
+
 
 }

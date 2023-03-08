@@ -4,12 +4,11 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class Purchase {
+    public Store store;
     private double cost;
     private LocalDate date;
     private Customer customer;
-    private UUID id;
-
-    public Store store;
+    private final UUID id;
 
     public Purchase(double c, Customer u, Store s) {
         cost = c;
