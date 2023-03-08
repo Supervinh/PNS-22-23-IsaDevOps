@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Component
@@ -61,7 +60,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer editBalance(Customer customer, double balanceChange) throws InsufficientBalanceException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedBalance = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedBalance = customerRepository.findCustomerByMail(customer.getMail());;
         if (customerUpdatedBalance.isPresent()) {
             customerUpdatedBalance.get().setBalance(customerUpdatedBalance.get().getBalance() + balanceChange);
             if (customerUpdatedBalance.get().getBalance() < 0)
@@ -74,7 +73,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer editFidelityPoints(Customer customer, int fidelityPointsBalanceChange) throws NegativePointCostException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFidelityPoints = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedFidelityPoints = customerRepository.findCustomerByMail(customer.getMail());;
         if (customerUpdatedFidelityPoints.isPresent()) {
             customerUpdatedFidelityPoints.get().setFidelityPoints(customerUpdatedFidelityPoints.get().getFidelityPoints() + fidelityPointsBalanceChange);
             if (customerUpdatedFidelityPoints.get().getFidelityPoints() < 0)
@@ -87,7 +86,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer recordMatriculation(Customer customer, String matriculation) throws CustomerNotFoundException {
-        Optional<Customer> customerUpdatedMatriculation = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedMatriculation = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedMatriculation.isPresent()) {
             customerUpdatedMatriculation.get().setMatriculation(matriculation);
             customerRepository.save(customerUpdatedMatriculation.get());
@@ -98,7 +97,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer recordCreditCard(Customer customer, String creditCard) throws CustomerNotFoundException {
-        Optional<Customer> customerUpdatedCreditCard = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedCreditCard = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedCreditCard.isPresent()) {
             customerUpdatedCreditCard.get().setCreditCard(creditCard);
             customerRepository.save(customerUpdatedCreditCard.get());
@@ -110,7 +109,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer recordNewFavoriteStore(Customer customer, Store store) throws CustomerNotFoundException, StoreAlreadyRegisteredException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
         if (customerUpdatedFavoriteStore.isPresent()) {
             Optional<Store> storeToBeAdded = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(s -> s.getId().equals(store.getId())).findAny();
             if (storeToBeAdded.isEmpty()) {
@@ -126,7 +125,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer removeFavoriteStore(Customer customer, Store store) throws StoreNotFoundException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
         if (customerUpdatedFavoriteStore.isPresent()) {
             Optional<Store> storeToBeRemoved = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(s -> s.getId().equals(store.getId())).findAny();
             if (storeToBeRemoved.isPresent()) {
@@ -141,7 +140,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer recordNewFavoriteStores(Customer customer, Set<Store> store) throws StoreAlreadyRegisteredException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
         if (customerUpdatedFavoriteStore.isPresent()) {
             for (Store s : store) {
 //                Optional<Store> storeToBeAdded = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(st -> st.getId().equals(s.getId())).findAny();
@@ -159,7 +158,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer removeAllFavoriteStores(Customer customer, Set<Store> store) throws CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findById(customer.getId());
+        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
         if (customerUpdatedFavoriteStore.isPresent()) {
             for (Store s : store) {
                 Optional<Store> storeToBeRemoved = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(st -> st.getId().equals(s.getId())).findAny();

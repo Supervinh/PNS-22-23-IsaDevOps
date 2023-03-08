@@ -1,6 +1,7 @@
 package mfc.POJO;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,7 +14,7 @@ public class Customer extends Account {
     private String matriculation;
     private int fidelityPoints;
     private double balance;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Store> favoriteStores;
     private LocalDate vfp;
     private String creditCard;
