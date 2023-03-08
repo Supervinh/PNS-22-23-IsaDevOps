@@ -17,6 +17,8 @@ build_dir "cli"
 
 build_dir "bank"
 
+build_dir "ISawWhereYouParkedLastSummer"
+
 echo "** Done all -> docker up"
 
 docker compose up
