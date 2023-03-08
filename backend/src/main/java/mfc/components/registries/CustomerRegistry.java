@@ -1,4 +1,4 @@
-package mfc.components;
+package mfc.components.registries;
 
 import mfc.POJO.Customer;
 import mfc.POJO.Store;
@@ -11,6 +11,7 @@ import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -58,6 +59,14 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     public Optional<Customer> findCustomerByName(String name) {
         return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
                 .filter(cust -> name.equals(cust.getName())).findAny();
+    }
+
+    @Override
+    public Customer editVFP(Customer customer, LocalDate localDate) throws CustomerNotFoundException {
+        Customer customerUpdatedVFP = customerRepository.findById(customer.getId()).orElseThrow(CustomerNotFoundException::new);
+        customerUpdatedVFP.setVfp(localDate);
+        customerRepository.save(customerUpdatedVFP, customerUpdatedVFP.getId());
+        return customerUpdatedVFP;
     }
 
     @Override
@@ -145,10 +154,6 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findById(customer.getId());
         if (customerUpdatedFavoriteStore.isPresent()) {
             for (Store s : store) {
-//                Optional<Store> storeToBeAdded = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(st -> st.getId().equals(s.getId())).findAny();
-//                if (storeToBeAdded.isPresent())
-//                    throw new StoreAlreadyRegisteredException();
-//                customerUpdatedFavoriteStore.get().getFavoriteStores().add(s);
                 recordNewFavoriteStore(customerUpdatedFavoriteStore.get(), s);
             }
             customerRepository.save(customerUpdatedFavoriteStore.get(), customerUpdatedFavoriteStore.get().getId());

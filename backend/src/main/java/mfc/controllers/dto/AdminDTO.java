@@ -8,16 +8,12 @@ public class AdminDTO {
     private String mail;
     private String password;
 
-    private String authorizationMail;
-    private String authorizationPassword;
 
-    public AdminDTO(String name, UUID id, String mail, String password, String authorizationMail, String authorizationPassword) {
+    public AdminDTO(UUID id, String name, String mail, String password) {
         this.name = name;
         this.id = id;
         this.mail = mail;
         this.password = password;
-        this.authorizationMail = authorizationMail;
-        this.authorizationPassword = authorizationPassword;
     }
 
     public void setId(UUID id) {
@@ -32,13 +28,6 @@ public class AdminDTO {
         this.password = password;
     }
 
-    public String getAuthorizationMail() {
-        return authorizationMail;
-    }
-
-    public String getAuthorizationPassword() {
-        return authorizationPassword;
-    }
 
     public UUID getId() {
         return id;

@@ -1,43 +1,48 @@
 package mfc.controllers.dto;
 
-import mfc.POJO.PayOff;
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
+import mfc.POJO.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ConvertDTO {
 
-//    public CustomerDTO convertCustomerToDto(Customer customer) {
-//        return new CustomerDTO(customer.getId(), customer.getMail(), customer.getFidelityPoints(), customer.getCreditCard());
-//    }
+    private ConvertDTO() {
+    }
 
-    public StoreDTO convertStoreToDto(Store store) {
+    public static CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
+        CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard(), customer.getMatriculation());
+        dto.setBalance(customer.getBalance());
+        return dto;
+    }
+
+    public static StoreDTO convertStoreToDto(Store store) {
         return new StoreDTO(store.getId(), store.getName(), store.getSchedule(), store.getOwner().getName());
     }
 
 
-    public StoreOwnerDTO convertStoreOwnerToDto(StoreOwner owner) {
-        StoreOwnerDTO ret = new StoreOwnerDTO();
-        ret.setName(owner.getName());
-        ret.setMail(owner.getMail());
-        ret.setPassword(owner.getPassword());
-        ret.setId(owner.getId());
-        return ret;
+    public static StoreOwnerDTO convertOwnerToDto(StoreOwner storeOwner) { // In more complex cases, we could use ModelMapper
+        return new StoreOwnerDTO(storeOwner.getId(), storeOwner.getName(), storeOwner.getMail(), storeOwner.getPassword());
     }
 
-/*
-    public PurchaseDTO convertPurchaseToDto(Purchase purchase) {
-        return new PurchaseDTO(purchase.getId(), convertCustomerToDto(purchase.getCustomer()), purchase.getCost(), convertStoreToDto(purchase.getStore()));
-    }
-*/
+    public static AdminDTO convertAdminToDto(Admin admin) { // In more complex cases, we could use ModelMapper
+        return new AdminDTO(admin.getId(), admin.getName(), admin.getMail(), admin.getPassword());
 
-    public CatalogDTO convertCatalogToDTO(Set<PayOff> payOffSet) {
-        return new CatalogDTO(payOffSet.stream().map(this::convertPayoffToDTO).collect(Collectors.toSet()));
     }
 
-    public PayoffDTO convertPayoffToDTO(PayOff payOff) {
+    public static PurchaseDTO convertPurchaseToDto(Purchase purchase) {
+        return new PurchaseDTO(purchase.getId(), purchase.getCustomer().getMail(), purchase.getCost(), purchase.getStore().getName(), false);
+    }
+
+    public static CatalogDTO convertCatalogToDTO(Set<Payoff> payoffSet) {
+        return new CatalogDTO(payoffSet.stream().map(ConvertDTO::convertPayoffToDTO).collect(Collectors.toSet()));
+    }
+
+    public static PayoffDTO convertPayoffToDTO(Payoff payOff) {
         return new PayoffDTO(payOff.getId(), payOff.getName(), payOff.getCost(), payOff.getPointCost(), payOff.getStore().getName());
+    }
+
+    public static PayoffPurchaseDTO convertPayoffPurchaseToDTO(PayoffPurchase payoffPurchase) {
+        return new PayoffPurchaseDTO(payoffPurchase.getId(), payoffPurchase.getName(), payoffPurchase.getCost(), payoffPurchase.getPointCost(), payoffPurchase.getStoreName(), payoffPurchase.getCustomerEmail());
     }
 }

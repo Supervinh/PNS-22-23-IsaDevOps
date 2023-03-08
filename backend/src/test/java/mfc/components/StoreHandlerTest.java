@@ -9,17 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
-public class StoreHandlerTest {
+class StoreHandlerTest {
 
     @Autowired
     private StoreRepository storeRepository;
@@ -40,9 +36,9 @@ public class StoreHandlerTest {
 
 
     @Test
-    public void UpdateStoreSchedule() throws CredentialsException {
+    void UpdateStoreSchedule() throws CredentialsException {
         String[][] update = new String[7][2];
-        for(int i = 0; i <= 6; i++){
+        for (int i = 0; i <= 6; i++) {
             update[i][0] = "7h00";
             update[i][1] = "19h30";
         }

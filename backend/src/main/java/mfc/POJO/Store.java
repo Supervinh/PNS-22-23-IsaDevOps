@@ -1,8 +1,5 @@
 package mfc.POJO;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,11 +7,11 @@ public class Store {
 
     private UUID id;
     private String name;
-    private String[][] schedule ;
+    private String[][] schedule;
 
     private StoreOwner owner;
 
-    public Store(String name, String[][] schedule,StoreOwner owner) {
+    public Store(String name, String[][] schedule, StoreOwner owner) {
         this.name = name;
         this.schedule = new String[7][2];
         this.owner = owner;
