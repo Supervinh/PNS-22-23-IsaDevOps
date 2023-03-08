@@ -1,6 +1,5 @@
 package mfc.POJO;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -21,7 +20,7 @@ public class Store {
     @ElementCollection
     private List<String> schedule ;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private StoreOwner owner;
 
     public Store(String name,StoreOwner owner) {

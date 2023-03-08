@@ -51,6 +51,7 @@ public class Purchase {
 
     @Given("a store owner named {string} with {string} as mail address and {string} as password")
     public void aStoreOwnerNamedWithAsMailAddressAndAsPassword(String name, String mail, String password) throws AlreadyExistingAccountException {
+        storeRepository.deleteAll();
         storeOwnerRepository.deleteAll();
         storeOwnerRegistration.registerStoreOwner(name, mail, password);
     }
@@ -70,6 +71,7 @@ public class Purchase {
     public void hasPoints(String name, int points) {
         Customer customer = customerFinder.findCustomerByName(name).get();
         customer.setFidelityPoints(points);
+        customerRepository.save(customer);
     }
 
 
@@ -90,6 +92,7 @@ public class Purchase {
     public void hasAFidelityCardWithABalanceOfEuros(String name, double balance) {
         Customer customer = customerFinder.findCustomerByName(name).get();
         customer.setBalance(balance);
+        customerRepository.save(customer);
     }
 
     @When("{string} makes a purchase of {int} euros with the fidelity card at the store {string}")
