@@ -6,9 +6,7 @@ import mfc.POJO.PayoffPurchase;
 import mfc.POJO.Store;
 import mfc.components.registries.CatalogRegistry;
 import mfc.components.registries.CustomerRegistry;
-import mfc.exceptions.CustomerNotFoundException;
-import mfc.exceptions.NegativePointCostException;
-import mfc.exceptions.VFPExpiredException;
+import mfc.exceptions.*;
 import mfc.repositories.PayoffPurchaseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,12 +58,12 @@ class PayoffHandlerTest {
     }
 
     @Test
-    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException {
+    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException {
         assertEquals(new PayoffPurchase("low", 10, 10, "StoreA", "a@a.fr"), payoffHandler.claimPayoff(customer, low));
     }
 
     @Test
-    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException {
+    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException {
         payoffHandler.claimPayoff(customer, low);
         Mockito.verify(customerRegistry, Mockito.times(1)).editFidelityPoints(customer, -10);
         Mockito.verify(customerRegistry, Mockito.times(1)).editVFP(customer, LocalDate.now().plusDays(2));

@@ -3,9 +3,7 @@ package mfc.components;
 import mfc.POJO.Customer;
 import mfc.POJO.Payoff;
 import mfc.POJO.PayoffPurchase;
-import mfc.exceptions.CustomerNotFoundException;
-import mfc.exceptions.NegativePointCostException;
-import mfc.exceptions.VFPExpiredException;
+import mfc.exceptions.*;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.repositories.PayoffPurchaseRepository;
@@ -23,10 +21,14 @@ public class PayoffHandler {
     PayoffPurchaseRepository payoffPurchaseRepository;
     @Autowired
     CustomerBalancesModifier customerBalancesModifier;
+    @Autowired
+    ParkingHandler parkingHandler;
 
-    public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws VFPExpiredException, CustomerNotFoundException, NegativePointCostException {
+    public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws VFPExpiredException, CustomerNotFoundException, NegativePointCostException, ParkingException, NoMatriculationException {
         if (!catalogExplorer.availablePayoffs(customer).contains(payoff)) {
             throw new VFPExpiredException();
+        } else if (payoff.getName().equals("Parking")) {
+            parkingHandler.useParkingPayOff(customer);
         }
         customer = customerBalancesModifier.editFidelityPoints(customer, -payoff.getPointCost());
         customer = customerBalancesModifier.editVFP(customer, LocalDate.now().plusDays(2));
