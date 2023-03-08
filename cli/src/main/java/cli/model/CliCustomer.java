@@ -3,8 +3,6 @@ package cli.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.UUID;
-
 // A cli side class being equivalent to the backend CustomerDTO, in terms of attributes
 // so that the automatic JSON (de-)/serialization will make the two compatible on each side
 public class CliCustomer extends CliAccount {

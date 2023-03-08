@@ -5,6 +5,7 @@ import mfc.POJO.Customer;
 import mfc.controllers.CustomerController;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.repositories.CustomerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,6 +32,11 @@ class CustomerControllerTest {
     private MockMvc mockMvc;
 
 
+    @BeforeEach
+    void setUp() {
+        customerRepository.deleteAll();
+    }
+
     @Test
     void registerCustomerWithoutCreditCard() throws Exception {
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
@@ -44,6 +50,7 @@ class CustomerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
+    //TODO comprendre pourquoi le test passe sur intellij mais pas avec le build all
     @Test
     void registerCustomerWithACreditCard() throws Exception{
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
@@ -57,8 +64,6 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
-
-
 
     @Test
     void registerCustomerAlreadyExists() throws Exception{
@@ -89,6 +94,38 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.password").value("pwd"))
                 .andExpect(jsonPath("$.mail").value("a@a"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void modifyCustomerSCreditCard() throws Exception{
+        Customer customer = new Customer("a", "a@a", "pwd");
+        customerRepository.save(customer, customer.getId());
+        mockMvc.perform(post(CustomerController.BASE_URI + "/"+customer.getId()+"/modifyCreditCard")
+                        .contentType(MediaType.ALL_VALUE)
+                        .content("0123456789"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("a"))
+                .andExpect(jsonPath("$.password").value("pwd"))
+                .andExpect(jsonPath("$.mail").value("a@a"))
+                .andExpect(jsonPath("$.creditCard").value("0123456789"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void modifyCustomerSMatriculation() throws Exception{
+        Customer customer = new Customer("a", "a@a", "pwd");
+        customerRepository.save(customer, customer.getId());
+        mockMvc.perform(post(CustomerController.BASE_URI + "/"+customer.getId()+"/modifyMatriculation")
+                        .contentType(MediaType.ALL_VALUE)
+                        .content("XX-XX-XX"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("a"))
+                .andExpect(jsonPath("$.password").value("pwd"))
+                .andExpect(jsonPath("$.mail").value("a@a"))
+                .andExpect(jsonPath("$.matriculation").value("XX-XX-XX"))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }

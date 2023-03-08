@@ -49,7 +49,7 @@ public class CustomerCommands {
         return res;
     }
 
-    @ShellMethod("Modify the credit card of the logged in user (modifyCreditCard CREDIT_CARD_NUMBER)")
+    @ShellMethod("Modify the credit card of the logged in user (modifyMatriculation MATRICULATION_NUMBER)")
     public CliCustomer modifyMatriculation(String matriculation) {
         if (cliContext.getLoggedInUser() == null) {
             System.out.println("You are not logged in");
