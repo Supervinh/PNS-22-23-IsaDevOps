@@ -3,7 +3,7 @@ package cli.model;
 import java.util.UUID;
 
 public class CliStoreOwner {
-    private UUID id; //empty at register, not when returned by the server
+    private Long id; //empty at register, not when returned by the server
     private String name;
     private String mail;
     private String password;
@@ -35,7 +35,7 @@ public class CliStoreOwner {
         this.authorizationPassword = authorizationPassword;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,7 +47,7 @@ public class CliStoreOwner {
         this.password = password;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
