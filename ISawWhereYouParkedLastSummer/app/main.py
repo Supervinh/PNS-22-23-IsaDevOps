@@ -7,7 +7,6 @@ from fastapi_utils.tasks import repeat_every
 numberplates = {}
 app = FastAPI()
 
-
 @app.post("/parking/{numberplate}", status_code=201)
 async def park(numberplate: str):
     if (numberplate in numberplates):

@@ -1,6 +1,7 @@
 package mfc.connectors;
 
 import mfc.connectors.externaldto.externaldto.NotificationDTO;
+import mfc.controllers.PayoffController;
 import mfc.exceptions.ParkingException;
 import mfc.interfaces.Parking;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,8 +39,10 @@ public class ParkingProxy implements Parking {
     }
 
     @PostMapping(path = "/notify")
-    public ResponseEntity<NotificationDTO> dtoResponseEntity(@RequestBody NotificationDTO notificationDTO) {
-        //TODO: add static method to controler
-        return ResponseEntity.ok(notificationDTO);
+    public ResponseEntity<String> dtoResponseEntity(@RequestBody NotificationDTO notificationDTO) {
+        if (PayoffController.addNotification(notificationDTO).equals(notificationDTO)) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
     }
 }
