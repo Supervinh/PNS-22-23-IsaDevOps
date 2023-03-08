@@ -6,7 +6,7 @@ import java.util.UUID;
 // so that the automatic JSON (de-)/serialization will make the two compatible on each side
 public class CliCustomer {
 
-    private UUID id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
+    private Long id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
     private String name;
     private String mail;
     private String password;
@@ -20,11 +20,11 @@ public class CliCustomer {
         this.password = password;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
