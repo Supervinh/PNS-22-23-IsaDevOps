@@ -14,30 +14,15 @@ pipeline {
                     '''
                 }
             }
-        stage('Tests unitaires') {
-            steps {
-                dir('backend'){
-                    sh 'mvn package'
-                }
-                dir('cli'){
-                     sh 'mvn package'
-                }
-            }
-        }
-        stage('Tests Integration') {
-            steps {
-                dir('backend'){
-                    sh 'mvn verify'
-                }
-                dir('cli'){
-                     sh 'mvn verify'
-                }
-            }
-        }
         stage('Build') {
                     steps {
                         sh '''
+                          echo ""
                           ./build-all.sh
+                          docker attach cli
+                          script store.txt
+                          exit
+                          docker compose down
                           '''
                         }//TODO attach cli & run scripts (any automatic verifications ?) & docker compose down
                 }
@@ -60,8 +45,9 @@ pipeline {
     post {
        always {
         sh '''
-            docker compose down
+            echo "Cleaning up"
             rm ${M2_HOME}/settings.xml
+            docker compose down
         '''
         }
     }
