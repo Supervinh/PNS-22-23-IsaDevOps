@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class CliStore {
-    private UUID id;
+    private Long id;
     private String name;
     private String[][] schedule;
     private String owner;
@@ -16,11 +16,11 @@ public class CliStore {
         this.owner = owner;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
