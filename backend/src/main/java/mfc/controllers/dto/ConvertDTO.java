@@ -12,14 +12,6 @@ public class ConvertDTO {
     }
 
     public static CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
-        if(!customer.getCreditCard().equals("")) {
-            //vérifier si la carte comporte 10 chiffres
-            String regex = "\\d{10}+";
-            Pattern pattern = Pattern.compile(regex);
-            if(!pattern.matcher(customer.getCreditCard()).matches()) {
-                customer.setCreditCard("");
-            }
-        }
         CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard(), customer.getMatriculation());
         dto.setBalance(customer.getBalance());
         return dto;

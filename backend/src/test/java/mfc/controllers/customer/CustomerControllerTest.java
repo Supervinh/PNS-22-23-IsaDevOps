@@ -50,7 +50,6 @@ class CustomerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
-    //TODO comprendre pourquoi le test passe sur intellij mais pas avec le build all
     @Test
     void registerCustomerWithACreditCard() throws Exception{
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
@@ -75,13 +74,21 @@ class CustomerControllerTest {
                 .andExpect(status().isConflict());
     }
 
-    //TODO : chercher comment tester des champs annotés NotBlank
-    //@Test
+    //TODO : Possiblement changer le constructeur de CustomerDTO pour obliger à passer une carte de crédit valide ou vide
+    @Test
     void registerCustomerWithoutName() throws Exception{
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, null, "a@a", "pwd", "", ""))))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void registerCustomerWithNameEmptyString() throws Exception{
+        mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CustomerDTO(null, "", "a@a", "pwd", "", ""))))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
