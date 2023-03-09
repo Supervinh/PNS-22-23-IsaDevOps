@@ -22,6 +22,7 @@ public class StoreOwner {
 
     @Given("a store owner named {string} with {string} as mail address and {string} as password")
     public void aStoreOwnerNamedWithAsMailAddressAndAsPassword(String name, String mail, String password) throws AlreadyExistingAccountException {
+        //TODO comprendre pourquoi le storeOwnerRepository.deleteAll() ne delete pas le storeRepository
         storeRepository.deleteAll();
         storeOwnerRepository.deleteAll();
         storeOwnerRegistration.registerStoreOwner(name, mail, password);
