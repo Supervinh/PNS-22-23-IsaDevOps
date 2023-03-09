@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -36,7 +35,7 @@ public class PayoffController {
     PayoffHandler payOffHandler;
 
     @PostMapping(path = LOGGED_URI + "claimPayoff", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") UUID customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) {
+    public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") Long customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) {
         try {
             Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
             Payoff payoff = catalogExplorer.findPayoff(payoffIndentifierDTO.getPayOffName(), payoffIndentifierDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);

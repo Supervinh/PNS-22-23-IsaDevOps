@@ -4,19 +4,19 @@ import java.util.UUID;
 
 public class AdminDTO {
     private String name;
-    private UUID id;
+    private Long id;
     private String mail;
     private String password;
 
 
-    public AdminDTO(UUID id, String name, String mail, String password) {
+    public AdminDTO(Long id, String name, String mail, String password) {
         this.name = name;
         this.id = id;
         this.mail = mail;
         this.password = password;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -29,7 +29,7 @@ public class AdminDTO {
     }
 
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

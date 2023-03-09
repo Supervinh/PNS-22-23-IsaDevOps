@@ -61,6 +61,9 @@ class PayoffHandlerTest {
 
     @Test
     void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException {
+        System.out.println(customer.getId());
+        System.out.println(customer.getName());
+        System.out.println(payoffHandler.claimPayoff(customer, low).toString());
         assertEquals(new PayoffPurchase("low", 10, 10, "StoreA", "a@a.fr"), payoffHandler.claimPayoff(customer, low));
     }
 

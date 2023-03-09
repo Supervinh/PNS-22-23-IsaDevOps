@@ -8,26 +8,14 @@ public class StoreOwnerDTO {
     private String mail;
     private String password;
 
-    private String authorizationMail;
-    private String authorizationPassword;
+    public StoreOwnerDTO(Long id,String name, String mail, String password) {
+        this.name = name;
+        this.id = id;
+        this.mail = mail;
+        this.password = password;
+    }
 
     public StoreOwnerDTO() {
-    }
-
-    public String getAuthorizationMail() {
-        return authorizationMail;
-    }
-
-    public void setAuthorizationMail(String authorizationMail) {
-        this.authorizationMail = authorizationMail;
-    }
-
-    public String getAuthorizationPassword() {
-        return authorizationPassword;
-    }
-
-    public void setAuthorizationPassword(String authorizationPassword) {
-        this.authorizationPassword = authorizationPassword;
     }
 
     public void setId(Long id) {

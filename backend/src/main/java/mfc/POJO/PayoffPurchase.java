@@ -1,10 +1,16 @@
 package mfc.POJO;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
 public class PayoffPurchase {
-    private UUID id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String name;
     private double cost;
     private int pointCost;
@@ -12,7 +18,6 @@ public class PayoffPurchase {
     private String customerEmail;
 
     public PayoffPurchase(String name, double cost, int pointCost, String storeName, String customerEmail) {
-        this.id = UUID.randomUUID();
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
@@ -21,7 +26,6 @@ public class PayoffPurchase {
     }
 
     public PayoffPurchase(Payoff payoff, Customer customer) {
-        id = UUID.randomUUID();
         this.name = payoff.getName();
         this.cost = payoff.getCost();
         this.pointCost = payoff.getPointCost();
@@ -29,7 +33,11 @@ public class PayoffPurchase {
         this.customerEmail = customer.getMail();
     }
 
-    public UUID getId() {
+    public PayoffPurchase() {
+
+    }
+
+    public Long getId() {
         return id;
     }
 

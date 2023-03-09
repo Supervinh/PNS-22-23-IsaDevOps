@@ -45,8 +45,8 @@ class PaymentHandlerTest {
             String passwordD = "apassword";
             String creditCardD = "0786610925";
             denied = new Customer(nameD, mailD, passwordD, creditCardD);
-            customerRepository.save(allowed, allowed.getId());
-            customerRepository.save(denied, denied.getId());
+            customerRepository.save(allowed);
+            customerRepository.save(denied);
         } catch (Exception e) {
             e.printStackTrace();
         }

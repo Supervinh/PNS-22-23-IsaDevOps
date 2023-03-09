@@ -12,9 +12,11 @@ import mfc.repositories.PayoffPurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 
 @Component
+@Transactional
 public class PayoffHandler {
 
     @Autowired
@@ -26,12 +28,12 @@ public class PayoffHandler {
 
     public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws VFPExpiredException, CustomerNotFoundException, NegativePointCostException {
         if (!catalogExplorer.availablePayoffs(customer).contains(payoff)) {
-            throw new VFPExpiredException();
+            throw new VFPExpiredException();//TODO correct errors
         }
         customer = customerBalancesModifier.editFidelityPoints(customer, -payoff.getPointCost());
         customer = customerBalancesModifier.editVFP(customer, LocalDate.now().plusDays(2));
         PayoffPurchase payoffPurchase = new PayoffPurchase(payoff, customer);
-        payoffPurchaseRepository.save(payoffPurchase, payoffPurchase.getId());
+        payoffPurchaseRepository.save(payoffPurchase);
         return payoffPurchase;
     }
 }

@@ -7,10 +7,12 @@ import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.StoreOwnerRepository;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@Transactional
 public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistration {
 
     private final StoreOwnerRepository ownerRepository;

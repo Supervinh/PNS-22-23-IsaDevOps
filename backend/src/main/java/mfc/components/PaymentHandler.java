@@ -1,5 +1,4 @@
 package mfc.components;
-
 import mfc.POJO.Customer;
 import mfc.exceptions.*;
 import mfc.interfaces.Bank;
@@ -8,12 +7,13 @@ import mfc.interfaces.modifier.CustomerBalancesModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class PaymentHandler implements Payment {
+import javax.transaction.Transactional;
 
+@Component
+@Transactional
+public class PaymentHandler implements Payment {
     @Autowired
     private Bank bank;
-
     @Autowired
     private CustomerBalancesModifier customerBalancesModifier;
 

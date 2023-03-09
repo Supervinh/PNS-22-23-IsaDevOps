@@ -11,12 +11,14 @@ import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
 @Component
+@Transactional
 public class CustomerRegistry implements CustomerRegistration, CustomerFinder, CustomerProfileModifier, CustomerBalancesModifier {
 
     private final CustomerRepository customerRepository;
@@ -63,7 +65,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     public Customer editVFP(Customer customer, LocalDate localDate) throws CustomerNotFoundException {
         Customer customerUpdatedVFP = customerRepository.findById(customer.getId()).orElseThrow(CustomerNotFoundException::new);
         customerUpdatedVFP.setVfp(localDate);
-        customerRepository.save(customerUpdatedVFP, customerUpdatedVFP.getId());
+        customerRepository.save(customerUpdatedVFP);
         return customerUpdatedVFP;
     }
 
