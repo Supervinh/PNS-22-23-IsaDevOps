@@ -27,4 +27,11 @@ public class CliNotification {
     public void setNumberplate(String numberplate) {
         this.numberplate = numberplate;
     }
+
+    @Override
+    public String toString() {
+        return "Vous avez une nouvelle notification:" +
+                "message='" + message + '\'' +
+                ", numberplate='" + numberplate + '\'';
+    }
 }

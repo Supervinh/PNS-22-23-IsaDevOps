@@ -24,6 +24,6 @@ def check_parked_cars():
             httpx.post("http://localhost:8080/notify",
                        data={"numberplate": numberplate, "message": "Your free time has expired"})
             numberplates.pop(numberplate)
-        elif (duration.minutes == 25):
+        elif (duration.minutes == 1):
             httpx.post("http://localhost:8080/notify",
                        data={"numberplate": numberplate, "duration": "Only five minutes left"})

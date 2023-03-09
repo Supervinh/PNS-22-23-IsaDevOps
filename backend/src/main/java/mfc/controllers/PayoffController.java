@@ -58,7 +58,10 @@ public class PayoffController {
     public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") UUID customerId) {
         try {
             Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-            return ResponseEntity.ok(notifications.get(customer.getMatriculation()));
+            if (!(notifications.get(customer.getMatriculation()) == null)) {
+                return ResponseEntity.ok(notifications.get(customer.getMatriculation()));
+            }
+            throw new RuntimeException("No notification found");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
