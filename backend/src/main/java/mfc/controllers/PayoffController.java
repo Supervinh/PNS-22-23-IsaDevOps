@@ -12,6 +12,7 @@ import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,12 +59,13 @@ public class PayoffController {
     public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") UUID customerId) {
         try {
             Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-            if (!(notifications.get(customer.getMatriculation()) == null)) {
+            if ((notifications.get(customer.getMatriculation()) != null)) {
                 return ResponseEntity.ok(notifications.get(customer.getMatriculation()));
             }
-            throw new RuntimeException("No notification found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//            throw new RuntimeException("No notification found");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.TOO_EARLY).body(null);
         }
     }
 }

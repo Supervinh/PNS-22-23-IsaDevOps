@@ -27,4 +27,12 @@ public class NotificationDTO {
     public void setNumberplate(String numberplate) {
         this.numberplate = numberplate;
     }
+
+    @Override
+    public String toString() {
+        return "NotificationDTO{" +
+                "message='" + message + '\'' +
+                ", numberplate='" + numberplate + '\'' +
+                '}';
+    }
 }

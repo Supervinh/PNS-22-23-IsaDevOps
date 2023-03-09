@@ -18,4 +18,4 @@ RUN chown -R dockeruser:dockergroup /opt/app && chmod a+x ./wait-for-it.sh
 EXPOSE 8080
 # Starting the service (shell form of ENTRYPOINT used for substitution)
 USER dockeruser
-ENTRYPOINT java -jar /opt/app/app.jar --bank.host.baseurl=$BANK_URL
+ENTRYPOINT java -jar /opt/app/app.jar --bank.host.baseurl=$BANK_URL --parking.host.baseurl=$PARKING_URL

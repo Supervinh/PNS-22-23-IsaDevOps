@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ParkingProxy implements Parking {
 
-    @Value("http:localhost:9191")
+    @Value("${parking.host.baseurl}")
     private String parkingHostandPort;
 
     private RestTemplate restTemplate = new RestTemplate();
@@ -40,6 +40,7 @@ public class ParkingProxy implements Parking {
 
     @PostMapping(path = "/notify")
     public ResponseEntity<String> dtoResponseEntity(@RequestBody NotificationDTO notificationDTO) {
+        System.out.println("Notification received: " + notificationDTO);
         if (PayoffController.addNotification(notificationDTO).equals(notificationDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).body("");
         }
