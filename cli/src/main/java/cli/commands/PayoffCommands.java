@@ -12,6 +12,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.web.client.RestTemplate;
 
+import static java.util.Objects.isNull;
+
 @Configuration
 @EnableScheduling
 @ShellComponent
@@ -27,13 +29,18 @@ public class PayoffCommands {
 
     @ShellMethod("Add balance to account (claimPayoff STORE_NAME PAY_OFF)")
     public CliPayoffPurchase claimPayoff(String storeName, String payOff) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
         return restTemplate.postForObject(getUriForCustomer() + "/claimPayoff", new CliPayoffIdentifier(storeName, payOff), CliPayoffPurchase.class);
     }
 
     @ShellMethod("Get notifications for customer (getNotifications)")
     @Scheduled(fixedRate = 30000)
     public void getNotifications() {
-        restTemplate.getForObject(getUriForCustomer() + "/getNotification", CliNotification.class);
+        if (!isNull(cliContext.getLoggedInUser()))
+            restTemplate.getForObject(getUriForCustomer() + "/getNotification", CliNotification.class);
     }
 
     private String getUriForCustomer() {
