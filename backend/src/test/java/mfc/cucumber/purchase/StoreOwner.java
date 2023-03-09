@@ -4,6 +4,7 @@ import io.cucumber.java.en.Given;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.StoreOwnerRepository;
+import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,9 +16,13 @@ public class StoreOwner {
     @Autowired
     private StoreOwnerRepository storeOwnerRepository;
 
+    @Autowired
+    private StoreRepository storeRepository;
+
 
     @Given("a store owner named {string} with {string} as mail address and {string} as password")
     public void aStoreOwnerNamedWithAsMailAddressAndAsPassword(String name, String mail, String password) throws AlreadyExistingAccountException {
+        storeRepository.deleteAll();
         storeOwnerRepository.deleteAll();
         storeOwnerRegistration.registerStoreOwner(name, mail, password);
     }

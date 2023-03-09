@@ -1,9 +1,9 @@
 package mfc.POJO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -11,10 +11,12 @@ import java.util.UUID;
 @Entity
 public class Purchase {
     @ManyToOne
-    public Store store;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Store store;
     private double cost;
     private LocalDate date;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Customer customer;
     @Id
     @GeneratedValue

@@ -44,7 +44,7 @@ public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistrat
 
     @Override
     public StoreOwner registerStoreOwner(String name, String mail, String password) throws AlreadyExistingAccountException {
-        Optional<StoreOwner> owner = ownerRepository.findStoreOwnerByMail(mail);
+        Optional<StoreOwner> owner = findStoreOwnerByMail(mail);
         if (owner.isEmpty()) {
             StoreOwner newOwner = new StoreOwner(name, mail, password);
             ownerRepository.save(newOwner);

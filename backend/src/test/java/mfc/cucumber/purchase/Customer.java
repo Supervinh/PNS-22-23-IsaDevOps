@@ -30,6 +30,7 @@ public class Customer {
     public void hasPoints(String name, int points) {
         mfc.POJO.Customer customer = customerFinder.findCustomerByName(name).get();
         customer.setFidelityPoints(points);
+        customerRepository.save(customer);
     }
 
     @Then("{string} should have {int} points")
@@ -42,5 +43,6 @@ public class Customer {
     public void hasAFidelityCardWithABalanceOfEuros(String name, double balance) {
         mfc.POJO.Customer customer = customerFinder.findCustomerByName(name).get();
         customer.setBalance(balance);
+        customerRepository.save(customer);
     }
 }

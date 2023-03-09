@@ -1,11 +1,13 @@
 package mfc.POJO;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class Payoff {
@@ -16,6 +18,7 @@ public class Payoff {
     private double cost;
     private int pointCost;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Store store;
 
     public Payoff(String name, double cost, int pointCost, Store store) {

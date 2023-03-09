@@ -1,5 +1,7 @@
 package mfc.POJO;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -20,7 +22,8 @@ public class Store {
     @ElementCollection
     private List<String> schedule ;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private StoreOwner owner;
 
     public Store(String name,StoreOwner owner) {
