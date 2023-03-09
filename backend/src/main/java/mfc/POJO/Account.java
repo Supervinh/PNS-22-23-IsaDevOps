@@ -2,7 +2,6 @@ package mfc.POJO;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -52,5 +51,16 @@ public abstract class Account {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(name, account.name) && Objects.equals(mail, account.mail) && Objects.equals(password, account.password);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, mail, password);
+    }
 }

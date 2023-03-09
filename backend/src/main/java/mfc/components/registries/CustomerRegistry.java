@@ -71,7 +71,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer editBalance(Customer customer, double balanceChange) throws InsufficientBalanceException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedBalance = customerRepository.findCustomerByMail(customer.getMail());;
+        Optional<Customer> customerUpdatedBalance = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedBalance.isPresent()) {
             customerUpdatedBalance.get().setBalance(customerUpdatedBalance.get().getBalance() + balanceChange);
             if (customerUpdatedBalance.get().getBalance() < 0)
@@ -84,7 +84,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer editFidelityPoints(Customer customer, int fidelityPointsBalanceChange) throws NegativePointCostException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFidelityPoints = customerRepository.findCustomerByMail(customer.getMail());;
+        Optional<Customer> customerUpdatedFidelityPoints = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedFidelityPoints.isPresent()) {
             customerUpdatedFidelityPoints.get().setFidelityPoints(customerUpdatedFidelityPoints.get().getFidelityPoints() + fidelityPointsBalanceChange);
             if (customerUpdatedFidelityPoints.get().getFidelityPoints() < 0)
@@ -176,4 +176,6 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         }
         throw new CustomerNotFoundException();
     }
+
+    //TODO delete Customer --> delete les purchases liés au customer avant de delete le customer (acces aux 2 repositories)
 }
