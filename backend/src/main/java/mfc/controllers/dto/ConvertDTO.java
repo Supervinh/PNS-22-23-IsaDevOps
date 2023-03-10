@@ -43,6 +43,6 @@ public class ConvertDTO {
     }
 
     public static PayoffPurchaseDTO convertPayoffPurchaseToDTO(PayoffPurchase payoffPurchase) {
-        return new PayoffPurchaseDTO(payoffPurchase.getId(), payoffPurchase.getName(), payoffPurchase.getCost(), payoffPurchase.getPointCost(), payoffPurchase.getStoreName(), payoffPurchase.getCustomerEmail());
+        return new PayoffPurchaseDTO(payoffPurchase.getId(), payoffPurchase.getName(), payoffPurchase.getCost(), payoffPurchase.getPointCost(), payoffPurchase.getStore().getName(), payoffPurchase.getCustomer().getMail());
     }
 }

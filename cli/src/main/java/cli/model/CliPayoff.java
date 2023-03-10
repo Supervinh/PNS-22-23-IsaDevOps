@@ -1,27 +1,25 @@
 package cli.model;
 
-import java.util.UUID;
 
 public class CliPayoff {
-    private UUID id;
+    private Long id;
     private String name;
     private double cost;
     private int pointCost;
     private String storeName;
 
     public CliPayoff(String name, double cost, int pointCost, String storeName) {
-        this.id = UUID.randomUUID();
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
         this.storeName = storeName;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

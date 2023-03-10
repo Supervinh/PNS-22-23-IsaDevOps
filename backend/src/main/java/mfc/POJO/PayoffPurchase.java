@@ -1,10 +1,10 @@
 package mfc.POJO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class PayoffPurchase {
@@ -14,23 +14,27 @@ public class PayoffPurchase {
     private String name;
     private double cost;
     private int pointCost;
-    private String storeName;
-    private String customerEmail;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Store store;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Customer customer;
 
-    public PayoffPurchase(String name, double cost, int pointCost, String storeName, String customerEmail) {
+    public PayoffPurchase(String name, double cost, int pointCost, Store store, Customer customer) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
-        this.storeName = storeName;
-        this.customerEmail = customerEmail;
+        this.store = store;
+        this.customer = customer;
     }
 
     public PayoffPurchase(Payoff payoff, Customer customer) {
         this.name = payoff.getName();
         this.cost = payoff.getCost();
         this.pointCost = payoff.getPointCost();
-        this.storeName = payoff.getStore().getName();
-        this.customerEmail = customer.getMail();
+        this.store = payoff.getStore();
+        this.customer = customer;
     }
 
     public PayoffPurchase() {
@@ -53,24 +57,24 @@ public class PayoffPurchase {
         return pointCost;
     }
 
-    public String getStoreName() {
-        return storeName;
+    public Store getStore() {
+        return store;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public Customer getCustomer() {
+        return customer;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PayoffPurchase that)) return false;
-        return Double.compare(that.cost, cost) == 0 && pointCost == that.pointCost /*&& Objects.equals(id, that.id)*/ && Objects.equals(name, that.name) && Objects.equals(storeName, that.storeName) && Objects.equals(customerEmail, that.customerEmail);
+        return Double.compare(that.cost, cost) == 0 && pointCost == that.pointCost /*&& Objects.equals(id, that.id)*/ && Objects.equals(name, that.name) && Objects.equals(store, that.store) && Objects.equals(customer, that.customer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cost, pointCost, storeName, customerEmail);
+        return Objects.hash(id, name, cost, pointCost, store, customer);
     }
 
     @Override
@@ -80,8 +84,8 @@ public class PayoffPurchase {
                 ", name='" + name + '\'' +
                 ", cost=" + cost +
                 ", pointCost=" + pointCost +
-                ", storeName='" + storeName + '\'' +
-                ", customerEmail='" + customerEmail + '\'' +
+                ", storeName='" + store.getName() + '\'' +
+                ", customerEmail='" + customer.getMail() + '\'' +
                 '}';
     }
 }

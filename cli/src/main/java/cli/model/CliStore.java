@@ -1,16 +1,15 @@
 package cli.model;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class CliStore {
     private Long id;
     private String name;
-    private String[][] schedule;
+    private List<String> schedule;
     private String owner;
 
-    public CliStore(String name, String[][] schedule, String owner) {
+    public CliStore(String name, List<String> schedule, String owner) {
         this.name = name;
         this.schedule = schedule;
         this.owner = owner;
@@ -32,11 +31,11 @@ public class CliStore {
         this.name = name;
     }
 
-    public String[][] getSchedule() {
+    public List<String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(String[][] schedule) {
+    public void setSchedule(List<String> schedule) {
         this.schedule = schedule;
     }
 
@@ -66,7 +65,7 @@ public class CliStore {
         return "CliStore{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", schedule=" + Arrays.toString(schedule) +
+                ", schedule=" + schedule.toString() +
                 ", owner='" + owner + '\'' +
                 '}';
     }
