@@ -18,4 +18,3 @@ logout
 login-customer a@a abc
 claim-payoff abcdaire dico
 claim-payoff abcdaire parking
-logout

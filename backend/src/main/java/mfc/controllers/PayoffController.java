@@ -29,7 +29,7 @@ public class PayoffController {
 
     public static final String BASE_URI = "/payoff";
     public static final String LOGGED_URI = "/{customerId}/";
-    private static Map<String, NotificationDTO> notifications = new HashMap<>();
+    private static final Map<String, NotificationDTO> notifications = new HashMap<>();
 
     @Autowired
     CatalogExplorer catalogExplorer;
@@ -68,4 +68,17 @@ public class PayoffController {
             return ResponseEntity.status(HttpStatus.TOO_EARLY).body(null);
         }
     }
+
+    @GetMapping(path = "notify")
+    public ResponseEntity<String> storeNotif() {
+        System.out.println("notify: ");
+        return ResponseEntity.ok("OK");
+    }
+
+//    @PostMapping(path = "notify",consumes = APPLICATION_JSON_VALUE)
+//    public ResponseEntity<String> storeNotif(@RequestBody@Valid NotificationDTO notificationDTO) {
+//        System.out.println("notify: ");
+//        addNotification(notificationDTO);
+//        return ResponseEntity.ok("OK");
+//    }
 }
