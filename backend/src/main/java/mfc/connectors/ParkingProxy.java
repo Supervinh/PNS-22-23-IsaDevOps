@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ParkingProxy implements Parking {
 
-    @Value("http://localhost:9191")
+    @Value("http://parking:9191")
     private String parkingHostandPort;
 
     private RestTemplate restTemplate = new RestTemplate();
@@ -21,12 +21,14 @@ public class ParkingProxy implements Parking {
     public boolean park(String matriculation) throws ParkingException {
         try {
             ResponseEntity<String> result = restTemplate.postForEntity(
-                    parkingHostandPort + "/" + matriculation,
+                    parkingHostandPort + "/parking/" + matriculation,
                     null,
                     String.class
             );
+            System.out.println("notify: 1 " + result.getBody() + " " + result);
             return (result.getStatusCode().equals(HttpStatus.CREATED));
         } catch (HttpClientErrorException errorException) {
+            System.out.println("notify: 2");
             if (errorException.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 return (errorException.getStatusCode().equals(HttpStatus.BAD_REQUEST));
             }

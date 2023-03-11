@@ -5,9 +5,9 @@ RUN mkdir -p /app
 WORKDIR /app
 
 COPY requirements.txt /
-RUN pip install --requirement /requirements.txt
-
+RUN pip install --no-cache-dir --upgrade --requirement /requirements.txt
+RUN pip install 'httpx[cli]'
 COPY ./app /app
 
 EXPOSE 9191
-CMD ["uvicorn", "main:app", "--host=0.0.0.0" , "--port", "9191"]
+ENTRYPOINT ["uvicorn","main:app","--host=0.0.0.0" , "--port", "9191"]

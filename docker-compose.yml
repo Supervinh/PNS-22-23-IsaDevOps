@@ -35,6 +35,8 @@ services:
   parking-service:
     image: teamb/mfc-parking-service
     container_name: parking
+    environment:
+      - PYTHONUNBUFFERED=1
 
   # the postgres DB to be connected to the backend (watch out: no volume specified, everything can be lost)
   postgres:

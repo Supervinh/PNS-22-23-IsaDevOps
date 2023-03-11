@@ -62,23 +62,23 @@ public class PayoffController {
             if ((notifications.get(customer.getMatriculation()) != null)) {
                 return ResponseEntity.ok(notifications.get(customer.getMatriculation()));
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.ok(null);
 //            throw new RuntimeException("No notification found");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.TOO_EARLY).body(null);
         }
     }
 
-    @GetMapping(path = "notify")
-    public ResponseEntity<String> storeNotif() {
-        System.out.println("notify: ");
-        return ResponseEntity.ok("OK");
-    }
-
-//    @PostMapping(path = "notify",consumes = APPLICATION_JSON_VALUE)
-//    public ResponseEntity<String> storeNotif(@RequestBody@Valid NotificationDTO notificationDTO) {
+//    @GetMapping(path = "notify")
+//    public ResponseEntity<String> storeNotif() {
 //        System.out.println("notify: ");
-//        addNotification(notificationDTO);
 //        return ResponseEntity.ok("OK");
 //    }
+
+    @PostMapping(path = "notify", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> storeNotif(@RequestBody @Valid NotificationDTO notificationDTO) {
+        System.out.println("notify: ");
+        addNotification(notificationDTO);
+        return ResponseEntity.ok("OK");
+    }
 }
