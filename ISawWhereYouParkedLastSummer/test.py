@@ -1,22 +1,29 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from time import sleep
 
-numberplates = []
+numberplates = {}
 numberplate = "AGC"
-numberplates.append({"mat": numberplate, "initialTime": datetime.now()})
+numberplates[numberplate] = datetime.now()
+numberplate = "XYZ"
+numberplates[numberplate] = datetime.now()
+# .append({"mat": numberplate, "initialTime": datetime.now()})
 
 print("post", numberplates)
 boolA = True
 while boolA:
     sleep(1)
-    for numberplate in numberplates:
-        delay = datetime.now() - numberplate["initialTime"]
-        print(f"\tDuration for {numberplate['mat']} is {delay}")
-        if 20 <= delay.seconds <= 360:
-            numberplates.remove(numberplate)
+    remove = []
+    for numberplate, initTime in numberplates.items():
+        print(numberplate, initTime)
+        delay = datetime.now() - initTime
+        print(f"\tDuration for {numberplate} is {delay}")
+        if 5 <= delay.seconds <= 360:
+            remove.append(numberplate)
         if 600 <= delay.seconds:
             print("You're done")
             boolA = False
+    for i in remove:
+        numberplates.pop(i)
 
 # from datetime import datetime
 #

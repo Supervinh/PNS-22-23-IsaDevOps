@@ -69,7 +69,6 @@ public class CatalogController {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
             CatalogDTO c = convertCatalogToDTO(catalogExplorer.availablePayoffs((customer.get())));
-            System.out.println(c);
             return ResponseEntity.status(HttpStatus.CREATED).body(c);
         } else throw new CustomerNotFoundException();
     }
@@ -78,7 +77,6 @@ public class CatalogController {
     public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
-            System.out.println(string);
             return ResponseEntity.status(HttpStatus.CREATED).body(convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
         } else throw new CustomerNotFoundException();
     }

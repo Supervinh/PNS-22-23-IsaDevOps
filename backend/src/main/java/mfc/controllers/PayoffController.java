@@ -12,7 +12,6 @@ import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -51,33 +51,22 @@ public class PayoffController {
         }
     }
 
-    public static NotificationDTO addNotification(NotificationDTO notificationDTO) {
-        return notifications.put(notificationDTO.getNumberplate(), notificationDTO);
+    public static void addNotification(NotificationDTO notificationDTO) {
+        notifications.put(notificationDTO.getNumberplate(), notificationDTO);
     }
 
     @GetMapping(path = LOGGED_URI + "getNotification")
-    public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") UUID customerId) {
-        try {
-            Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-            if ((notifications.get(customer.getMatriculation()) != null)) {
-                return ResponseEntity.ok(notifications.get(customer.getMatriculation()));
-            }
-            return ResponseEntity.ok(null);
-//            throw new RuntimeException("No notification found");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.TOO_EARLY).body(null);
+    public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") UUID customerId) throws CustomerNotFoundException {
+        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
+        NotificationDTO notificationDTO = notifications.get(customer.getMatriculation());
+        if (!isNull(notificationDTO)) {
+            notifications.remove(notificationDTO.getNumberplate());
         }
+        return ResponseEntity.ok(notificationDTO);
     }
-
-//    @GetMapping(path = "notify")
-//    public ResponseEntity<String> storeNotif() {
-//        System.out.println("notify: ");
-//        return ResponseEntity.ok("OK");
-//    }
 
     @PostMapping(path = "notify", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeNotif(@RequestBody @Valid NotificationDTO notificationDTO) {
-        System.out.println("notify: ");
         addNotification(notificationDTO);
         return ResponseEntity.ok("OK");
     }

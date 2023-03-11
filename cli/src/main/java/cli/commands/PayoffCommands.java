@@ -36,13 +36,8 @@ public class PayoffCommands {
         return restTemplate.postForObject(getUriForCustomer() + "/claimPayoff", new CliPayoffIdentifier(storeName, payOff), CliPayoffPurchase.class);
     }
 
-//    @ShellMethod("Get notifications for customer (parkingNotification)")
-//    public void notif() {
-//        restTemplate.getForObject("payoff/parkingNotification", String.class);
-//    }
-
     @ShellMethod("Get notifications for customer (getNotifications)")
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 10000)
     public void getNotifications() {
         CliNotification cliNotification = null;
         if (!isNull(cliContext.getLoggedInUser()))
