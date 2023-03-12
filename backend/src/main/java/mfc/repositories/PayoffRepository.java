@@ -55,5 +55,5 @@ public interface PayoffRepository extends JpaRepository<Payoff, Long> {
                 .collect(Collectors.toSet());
     }
 
-    Optional<Payoff> findPayoffByNameAndStore(String name, String store);
+    Optional<Payoff> findPayoffByNameAndStore_Name(String name, String store);
 }

@@ -21,6 +21,10 @@ public class PayoffCommands {
 
     @ShellMethod("Add balance to account (claimPayoff STORE_NAME PAY_OFF)")
     public CliPayoffPurchase claimPayoff(String storeName, String payOff) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
         return restTemplate.postForObject(getUriForCustomer() + "/claimPayoff", new CliPayoffIdentifier(storeName, payOff), CliPayoffPurchase.class);
     }
 

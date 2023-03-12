@@ -39,7 +39,7 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
 
     @Override
     public Optional<Payoff> findPayoff(String payoffName, String storeName) throws PayoffNotFoundException {
-        return payoffRepository.findPayoffByNameAndStore(payoffName, storeName);
+        return payoffRepository.findPayoffByNameAndStore_Name(payoffName, storeName);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
 
     @Override
     public Payoff editPayOff(Payoff payOff, Optional<Double> cost, Optional<Integer> pointCost) throws NegativeCostException, NegativePointCostException, PayoffNotFoundException {
-        Payoff payoff = payoffRepository.findPayoffByNameAndStore(payOff.getName(), payOff.getStore().getName()).orElseThrow(PayoffNotFoundException::new);
+        Payoff payoff = payoffRepository.findPayoffByNameAndStore_Name(payOff.getName(), payOff.getStore().getName()).orElseThrow(PayoffNotFoundException::new);
         if (cost.isPresent()) {
             if (cost.get() < 0) throw new NegativeCostException();
             payoff.setCost(cost.get());
