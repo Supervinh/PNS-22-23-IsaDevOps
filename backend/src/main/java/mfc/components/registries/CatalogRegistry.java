@@ -1,14 +1,14 @@
 package mfc.components.registries;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
-import mfc.POJO.Store;
 import mfc.exceptions.AlreadyExistingPayoffException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CatalogModifier;
+import mfc.pojo.Customer;
+import mfc.pojo.Payoff;
+import mfc.pojo.Store;
 import mfc.repositories.CatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

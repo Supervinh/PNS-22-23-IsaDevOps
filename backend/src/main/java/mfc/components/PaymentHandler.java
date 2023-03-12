@@ -1,10 +1,10 @@
 package mfc.components;
 
-import mfc.POJO.Customer;
 import mfc.exceptions.*;
 import mfc.interfaces.Bank;
 import mfc.interfaces.Payment;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
+import mfc.pojo.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package mfc.repositories;
 
-import mfc.POJO.PayoffPurchase;
+import mfc.pojo.PayoffPurchase;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;

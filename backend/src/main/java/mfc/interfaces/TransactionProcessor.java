@@ -1,9 +1,9 @@
 package mfc.interfaces;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Purchase;
-import mfc.POJO.Store;
 import mfc.exceptions.InsufficientBalanceException;
+import mfc.pojo.Customer;
+import mfc.pojo.Purchase;
+import mfc.pojo.Store;
 
 public interface TransactionProcessor {
     //transaction paid without the application, register the transaction and add points

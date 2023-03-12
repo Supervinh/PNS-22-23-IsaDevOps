@@ -1,9 +1,9 @@
 package mfc.components;
 
-import mfc.POJO.StoreOwner;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
+import mfc.pojo.StoreOwner;
 import mfc.repositories.StoreOwnerRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

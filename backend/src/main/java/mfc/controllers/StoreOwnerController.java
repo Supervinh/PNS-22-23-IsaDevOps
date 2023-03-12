@@ -1,11 +1,11 @@
 package mfc.controllers;
 
-import mfc.POJO.StoreOwner;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
+import mfc.pojo.StoreOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package mfc.POJO;
+package mfc.pojo;
 
 public class Admin extends Account {
     public Admin(String name, String mail, String password) {

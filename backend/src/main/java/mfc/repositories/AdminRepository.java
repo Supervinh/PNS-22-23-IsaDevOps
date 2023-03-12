@@ -1,6 +1,6 @@
 package mfc.repositories;
 
-import mfc.POJO.Admin;
+import mfc.pojo.Admin;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

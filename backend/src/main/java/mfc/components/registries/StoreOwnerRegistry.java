@@ -1,9 +1,9 @@
 package mfc.components.registries;
 
-import mfc.POJO.StoreOwner;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
+import mfc.pojo.StoreOwner;
 import mfc.repositories.StoreOwnerRepository;
 import org.springframework.stereotype.Component;
 

@@ -1,12 +1,12 @@
 package mfc.components;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
-import mfc.POJO.PayoffPurchase;
-import mfc.POJO.Store;
 import mfc.components.registries.CatalogRegistry;
 import mfc.components.registries.CustomerRegistry;
 import mfc.exceptions.*;
+import mfc.pojo.Customer;
+import mfc.pojo.Payoff;
+import mfc.pojo.PayoffPurchase;
+import mfc.pojo.Store;
 import mfc.repositories.PayoffPurchaseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

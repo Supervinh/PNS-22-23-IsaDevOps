@@ -1,11 +1,11 @@
 package mfc.components;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
-import mfc.POJO.PayoffPurchase;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
+import mfc.pojo.Customer;
+import mfc.pojo.Payoff;
+import mfc.pojo.PayoffPurchase;
 import mfc.repositories.PayoffPurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

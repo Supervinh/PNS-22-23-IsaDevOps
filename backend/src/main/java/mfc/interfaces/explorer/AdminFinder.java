@@ -1,6 +1,6 @@
 package mfc.interfaces.explorer;
 
-import mfc.POJO.Admin;
+import mfc.pojo.Admin;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -1,7 +1,5 @@
 package mfc.controllers;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
 import mfc.components.PayoffHandler;
 import mfc.connectors.externaldto.externaldto.NotificationDTO;
 import mfc.controllers.dto.ConvertDTO;
@@ -11,6 +9,8 @@ import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
+import mfc.pojo.Customer;
+import mfc.pojo.Payoff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package mfc.controllers.dto;
 
-import mfc.POJO.*;
+import mfc.pojo.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;

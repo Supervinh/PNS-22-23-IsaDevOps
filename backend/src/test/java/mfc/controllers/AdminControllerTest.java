@@ -1,11 +1,11 @@
 package mfc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.POJO.Admin;
 import mfc.controllers.dto.AdminDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
+import mfc.pojo.Admin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

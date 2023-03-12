@@ -1,6 +1,6 @@
 package mfc.repositories;
 
-import mfc.POJO.StoreOwner;
+import mfc.pojo.StoreOwner;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

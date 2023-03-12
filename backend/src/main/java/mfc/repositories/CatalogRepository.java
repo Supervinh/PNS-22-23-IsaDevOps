@@ -1,7 +1,7 @@
 package mfc.repositories;
 
 
-import mfc.POJO.Payoff;
+import mfc.pojo.Payoff;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

@@ -1,15 +1,11 @@
 package mfc.controllers;
 
-import mfc.POJO.Admin;
-import mfc.POJO.StoreOwner;
 import mfc.controllers.dto.AdminDTO;
 import mfc.controllers.dto.ErrorDTO;
-import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
-import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.interfaces.modifier.StoreOwnerRegistration;
+import mfc.pojo.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +16,6 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 import static mfc.controllers.dto.ConvertDTO.convertAdminToDto;
-import static mfc.controllers.dto.ConvertDTO.convertOwnerToDto;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController

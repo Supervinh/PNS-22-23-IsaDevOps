@@ -1,8 +1,8 @@
 package mfc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.POJO.Admin;
 import mfc.controllers.dto.AdminDTO;
+import mfc.pojo.Admin;
 import mfc.repositories.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

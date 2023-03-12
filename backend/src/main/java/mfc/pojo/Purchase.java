@@ -1,4 +1,4 @@
-package mfc.POJO;
+package mfc.pojo;
 
 import java.time.LocalDate;
 import java.util.UUID;

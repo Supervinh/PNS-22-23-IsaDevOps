@@ -1,8 +1,8 @@
 package mfc.components;
 
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
 import mfc.exceptions.CredentialsException;
+import mfc.pojo.Store;
+import mfc.pojo.StoreOwner;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

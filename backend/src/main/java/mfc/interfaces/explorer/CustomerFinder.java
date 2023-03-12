@@ -1,6 +1,6 @@
 package mfc.interfaces.explorer;
 
-import mfc.POJO.Customer;
+import mfc.pojo.Customer;
 
 import java.util.Optional;
 import java.util.UUID;

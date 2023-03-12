@@ -1,10 +1,10 @@
 package mfc.components;
 
-import mfc.POJO.Customer;
 import mfc.exceptions.NoMatriculationException;
 import mfc.exceptions.ParkingException;
 import mfc.interfaces.Parking;
 import mfc.interfaces.ParkingProcessor;
+import mfc.pojo.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

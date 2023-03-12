@@ -1,8 +1,8 @@
 package mfc.connectors;
 
-import mfc.POJO.Customer;
 import mfc.connectors.externaldto.externaldto.PaymentDTO;
 import mfc.interfaces.Bank;
+import mfc.pojo.Customer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
