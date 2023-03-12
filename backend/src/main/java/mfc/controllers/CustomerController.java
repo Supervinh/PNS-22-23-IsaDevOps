@@ -92,7 +92,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "modifyCreditCard", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String creditCard) throws CustomerNotFoundException {
+    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") Long customerId, @RequestBody @Valid String creditCard) throws CustomerNotFoundException {
         if (!creditCard.matches("\\d{10}+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -104,7 +104,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "modifyMatriculation", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> modifyMatriculation(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String matriculation) throws CustomerNotFoundException {
+    public ResponseEntity<CustomerDTO> modifyMatriculation(@PathVariable("customerId") Long customerId, @RequestBody @Valid String matriculation) throws CustomerNotFoundException {
         return ResponseEntity.ok().body(
                 convertCustomerToDto(
                         modifier.recordMatriculation(
@@ -112,7 +112,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") UUID customerId) {
+    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") Long customerId) {
         try {
             Customer customer = finder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
             if (amount < 0) {

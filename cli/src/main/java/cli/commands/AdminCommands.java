@@ -35,8 +35,8 @@ public class AdminCommands {
         return res;
     }
 
-    @ShellMethod("Register a store owner in the CoD backend (registerOwner OWNER_NAME OWNER_MAIL OWNER_PWD AUTH_MAIL, AUTH_PWD)")
+    @ShellMethod("Register a store owner in the CoD backend (registerOwner OWNER_NAME OWNER_MAIL OWNER_PWD)")
     public CliStoreOwner registerOwner(String name, String mail, String password) {
-        return restTemplate.postForObject("/owner" + "/registerOwner", new CliStoreOwner(name, mail, password), CliStoreOwner.class);
+        return restTemplate.postForObject("/owner/registerOwner", new CliStoreOwner(name, mail, password), CliStoreOwner.class);
     }
 }

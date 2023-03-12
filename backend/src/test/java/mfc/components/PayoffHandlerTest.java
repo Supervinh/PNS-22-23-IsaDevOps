@@ -9,7 +9,9 @@ import mfc.components.registries.CustomerRegistry;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.exceptions.VFPExpiredException;
+import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.repositories.PayoffPurchaseRepository;
+import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +30,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@Transactional
 class PayoffHandlerTest {
 
     @MockBean
@@ -40,9 +44,9 @@ class PayoffHandlerTest {
     @MockBean
     private CustomerRegistry customerRegistry;
     @Autowired
-    private PayoffPurchaseRepository payoffPurchaseRepository;
-    @Autowired
     private PayoffHandler payoffHandler;
+    @Autowired
+    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() throws NegativePointCostException, CustomerNotFoundException {
@@ -61,7 +65,7 @@ class PayoffHandlerTest {
 
     @Test
     void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException {
-        assertEquals(new PayoffPurchase("low", 10, 10, "StoreA", "a@a.fr"), payoffHandler.claimPayoff(customer, low));
+        assertEquals(new PayoffPurchase("low", 10, 10, low.getStore(), customer), payoffHandler.claimPayoff(customer, low));
     }
 
     @Test

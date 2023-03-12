@@ -68,7 +68,7 @@ class AdminControllerTest {
     @Test
     void registerAdmin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/registerAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "admin", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -82,7 +82,7 @@ class AdminControllerTest {
     @Test
     void registerAdminExists() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/registerAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "exist", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "exist", "admin", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isConflict());
@@ -91,7 +91,7 @@ class AdminControllerTest {
     @Test
     void loginAdmin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L,"admin", "admin", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -105,7 +105,7 @@ class AdminControllerTest {
     @Test
     void wrongPasswordLogin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "password", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L,"admin", "password", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -114,7 +114,7 @@ class AdminControllerTest {
     @Test
     void notFoundLogin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "none", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "none", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());

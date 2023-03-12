@@ -12,7 +12,10 @@ import mfc.interfaces.modifier.PurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
+@Transactional
 public class TransactionHandler implements TransactionProcessor {
     CustomerBalancesModifier customerBalancesModifier;
     PurchaseRecording purchaseRecording;

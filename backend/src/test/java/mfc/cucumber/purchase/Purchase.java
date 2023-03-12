@@ -16,9 +16,9 @@ public class Purchase {
     private CustomerFinder customerFinder;
     @Autowired
     private TransactionProcessor transactionProcessor;
-
     @Autowired
     private StoreFinder storeFinder;
+
 
     @When("{string} makes a purchase of {int} euros at the store {string}")
     public void makesAPurchaseOfEuros(String name, int cost, String storeName) {

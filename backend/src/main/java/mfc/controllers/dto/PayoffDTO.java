@@ -3,7 +3,7 @@ package mfc.controllers.dto;
 import java.util.UUID;
 
 public class PayoffDTO {
-    private UUID id;
+    private Long id;
     private String name;
     private double cost;
     private int pointCost;
@@ -13,7 +13,7 @@ public class PayoffDTO {
     public PayoffDTO() {
     }
 
-    public PayoffDTO(UUID id, String name, double cost, int pointCost, String storeName) {
+    public PayoffDTO(Long id, String name, double cost, int pointCost, String storeName) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
@@ -21,7 +21,7 @@ public class PayoffDTO {
         this.id = id;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -49,7 +49,7 @@ public class PayoffDTO {
         this.pointCost = pointCost;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

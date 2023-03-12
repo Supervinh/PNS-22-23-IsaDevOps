@@ -1,23 +1,24 @@
 package mfc.controllers.dto;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 public class StoreDTO {
 
-    private UUID id;
+    private Long id;
     private String name;
-    private String[][] schedule;
+    private List<String> schedule;
     private String owner;
 
-    public StoreDTO(UUID id, String name, String[][] schedule, String owner) {
+    public StoreDTO(Long id, String name, List<String> schedule, String owner) {
         this.name = name;
         this.schedule = schedule;
         this.owner = owner;
         this.id = id;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -29,11 +30,11 @@ public class StoreDTO {
         this.name = name;
     }
 
-    public String[][] getSchedule() {
+    public List<String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(String[][] schedule) {
+    public void setSchedule(List<String> schedule) {
         this.schedule = schedule;
     }
 

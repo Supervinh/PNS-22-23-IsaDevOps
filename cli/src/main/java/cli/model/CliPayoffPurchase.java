@@ -3,7 +3,7 @@ package cli.model;
 import java.util.UUID;
 
 public class CliPayoffPurchase {
-    private UUID id;
+    private Long id;
     private String name;
     private double cost;
     private int pointCost;
@@ -11,7 +11,6 @@ public class CliPayoffPurchase {
     private String customerEmail;
 
     public CliPayoffPurchase(String name, double cost, int pointCost, String storeName, String customerEmail) {
-        this.id = UUID.randomUUID();
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
@@ -35,11 +34,11 @@ public class CliPayoffPurchase {
         this.customerEmail = customerEmail;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

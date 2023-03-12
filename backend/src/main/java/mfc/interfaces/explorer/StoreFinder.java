@@ -7,8 +7,5 @@ import java.util.UUID;
 
 public interface StoreFinder {
     Optional<Store> findStoreByName(String name);
-
-    Optional<Store> findStoreById(UUID id);
-
-    Optional<String[][]> findStoreOpeningHours(Store store);
+    Optional<Store> findStoreById(Long id);
 }

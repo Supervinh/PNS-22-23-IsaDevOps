@@ -9,50 +9,52 @@ import mfc.exceptions.NegativePointCostException;
 import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CatalogModifier;
-import mfc.repositories.CatalogRepository;
+import mfc.repositories.PayoffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 
 @Component
+@Transactional
 public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
-    private final CatalogRepository catalogRepository;
+    private final PayoffRepository payoffRepository;
 
     @Autowired
-    public CatalogRegistry(CatalogRepository catalogRepository) {
-        this.catalogRepository = catalogRepository;
+    public CatalogRegistry(PayoffRepository payoffRepository) {
+        this.payoffRepository = payoffRepository;
     }
 
     @Override
     public Set<Payoff> availablePayoffs(Customer customer) {
-        return catalogRepository.available(customer.getFidelityPoints());
+        return payoffRepository.available(customer.getFidelityPoints());
     }
 
     @Override
     public Set<Payoff> exploreCatalogue(Customer customer, String search) {
-        return catalogRepository.explore(search);
+        return payoffRepository.explore(search);
     }
 
     @Override
     public Optional<Payoff> findPayoff(String payoffName, String storeName) throws PayoffNotFoundException {
-        return catalogRepository.findPayoff(payoffName, storeName);
+        return payoffRepository.findPayoffByNameAndStore(payoffName, storeName);
     }
 
     @Override
     public Payoff addPayOff(String name, double cost, int pointCost, Store store) throws NegativeCostException, NegativePointCostException, AlreadyExistingPayoffException {
         if (cost <= 0) throw new NegativeCostException();
         if (pointCost <= 0) throw new NegativePointCostException();
-        if (!catalogRepository.explore(name).isEmpty()) throw new AlreadyExistingPayoffException();
+        if (!payoffRepository.explore(name).isEmpty()) throw new AlreadyExistingPayoffException();
         Payoff payOff = new Payoff(name, cost, pointCost, store);
-        catalogRepository.save(payOff, payOff.getId());
+        payoffRepository.save(payOff);
         return payOff;
     }
 
     @Override
     public Payoff editPayOff(Payoff payOff, Optional<Double> cost, Optional<Integer> pointCost) throws NegativeCostException, NegativePointCostException, PayoffNotFoundException {
-        Payoff payoff = catalogRepository.findPayoff(payOff.getName(), payOff.getStore().getName()).orElseThrow(PayoffNotFoundException::new);
+        Payoff payoff = payoffRepository.findPayoffByNameAndStore(payOff.getName(), payOff.getStore().getName()).orElseThrow(PayoffNotFoundException::new);
         if (cost.isPresent()) {
             if (cost.get() < 0) throw new NegativeCostException();
             payoff.setCost(cost.get());
@@ -61,14 +63,14 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
             if (pointCost.get() < 0) throw new NegativePointCostException();
             payoff.setPointCost(pointCost.get());
         }
-        catalogRepository.save(payoff, payoff.getId());
+        payoffRepository.save(payoff);
         return payoff;
     }
 
     @Override
     public Payoff deletePayoff(Payoff payOff) throws PayoffNotFoundException {
-        if (catalogRepository.existsById(payOff.getId())) {
-            catalogRepository.deleteById(payOff.getId());
+        if (payoffRepository.existsById(payOff.getId())) {
+            payoffRepository.deleteById(payOff.getId());
             return payOff;
         } else throw new PayoffNotFoundException();
     }

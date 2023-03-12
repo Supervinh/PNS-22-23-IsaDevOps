@@ -10,7 +10,7 @@ public interface AdminFinder {
 
     Optional<Admin> findAdminByMailAndPassword(String mail, String password);
 
-    Optional<Admin> findAdminById(UUID id);
+    Optional<Admin> findAdminById(Long id);
 
 }
 
