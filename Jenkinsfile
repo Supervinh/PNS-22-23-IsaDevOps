@@ -31,10 +31,10 @@ pipeline {
             steps {
             echo 'Deploy on artifactory(8002:8081) and SonarQube (8001:9000)..'
                 dir('backend'){
-                     sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip -Pcoverage'
+                     sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
                 }
                 dir('cli'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip -Pcoverage'
+                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
                 }
             }
         }
