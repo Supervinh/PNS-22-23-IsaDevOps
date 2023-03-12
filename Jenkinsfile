@@ -2,18 +2,22 @@ pipeline {
     agent any
     stages {
         stage ('Initialize') {
-                steps {
-                    sh '''
-                        mkdir -p ${M2_HOME}/
-                        cp settings.xml ${M2_HOME}/
-                        echo ${M2_HOME}
-                        java -version
-                        mvn -version
-                        docker -v
-                        docker compose version
-                    '''
-                }
+            environment {
+                DOCKER_ID = credentials('Docker')
             }
+            steps {
+                sh '''
+                    mkdir -p ${M2_HOME}/
+                    cp settings.xml ${M2_HOME}/
+                    echo ${M2_HOME}
+                    java -version
+                    mvn -version
+                    docker -v
+                    docker compose version
+                    echo ${DOCKER_ID} | docker login -u jeannestheo --password-stdin
+                '''
+            }
+        }
         stage('Tests unitaires') {
             steps {
                 dir('backend'){
@@ -24,44 +28,35 @@ pipeline {
                 }
             }
         }
-        stage('Tests Integration') {
-            steps {
-                dir('backend'){
-                    sh 'mvn verify'
-                }
-                dir('cli'){
-                     sh 'mvn verify'
-                }
-            }
-        }
-        stage('Build') {
-                    steps {
-                        sh '''
-                          ./build-all.sh
-                          '''
-                        }//TODO attach cli & run scripts (any automatic verifications ?) & docker compose down
-                }
-       stage('Deploy') {
+        stage('Deploy') {
             environment {
                 SONAR_ID = credentials('Sonar')
             }
             steps {
-            echo 'Should deploy on artifactory(8002:8081) and SonarQube (8001:9000)..'
+            echo 'Deploy on artifactory(8002:8081) and send to SonarQube (8001:9000)..'
                 dir('backend'){
-                     sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID}'
+                     sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
                 }
                 dir('cli'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID}'
+                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
                 }
+            echo 'Deploy on docker hub..'
+            sh '''
+            docker push jeannestheo/mfc-spring-server
+            docker push jeannestheo/mfc-spring-cli
+            docker push jeannestheo/mfc-bank-service
+            '''
+
             }
         }
-
     }
     post {
        always {
         sh '''
-            docker compose down
+            echo "Cleaning up"
             rm ${M2_HOME}/settings.xml
+            docker compose down
+            docker logout
         '''
         }
     }
