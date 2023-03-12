@@ -103,9 +103,4 @@ class AdminRegistryTest {
         assertFalse(adminFinder.findAdminByMailAndPassword(mail, password).isPresent());
     }
 
-    @Test
-    void test() {//TODO : remove this test
-        assertFalse(false);
-    }
-
 }

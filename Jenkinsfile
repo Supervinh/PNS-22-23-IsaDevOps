@@ -67,6 +67,7 @@
 node{
     try{
         stage('Initialize'){
+            git branch: "${env.BRANCH_NAME}", credentialsId: 'GlobalGitIds', url: 'https://github.com/pns-isa-devops/isa-devops-22-23-team-b-23.git'
             sh '''
                 echo ${M2_HOME}
                 java -version
@@ -74,18 +75,11 @@ node{
                 docker -v
                 docker compose version
             '''
-            withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
-                sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
-            }
-            try{
-                echo ${env.BRANCH_NAME}
-                echo ${env}
-                echo ${environment}
-                echo ${currentBuild}
-            }catch(Exception e){
-                echo 'Vars not found'
-            }
+            echo "${BRANCH_NAME}"
         }
+        withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
+                        sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
+                    }
         stage('Tests unitaires'){
             dir('backend'){
                 sh 'mvn package'
