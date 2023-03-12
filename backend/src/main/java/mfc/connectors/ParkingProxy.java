@@ -1,13 +1,16 @@
 package mfc.connectors;
 
+import mfc.connectors.externaldto.externaldto.NumberplateDTO;
 import mfc.exceptions.ParkingException;
 import mfc.interfaces.Parking;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class ParkingProxy implements Parking {
@@ -15,17 +18,26 @@ public class ParkingProxy implements Parking {
     @Value("${parking.host.baseurl}")
     private String parkingHostandPort;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public ParkingProxy() {
+        this.restTemplate = new RestTemplate();
+    }
+
+    public ParkingProxy(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public boolean park(String matriculation) throws ParkingException {
         try {
-            ResponseEntity<String> result = restTemplate.postForEntity(
-                    parkingHostandPort + "/parking/" + matriculation,
-                    null,
+            String result = restTemplate.postForObject(
+                    parkingHostandPort + "/parking/",
+                    new NumberplateDTO(matriculation),
                     String.class
             );
-            return (result.getStatusCode().equals(HttpStatus.CREATED));
+            return (!isNull(result) && !result.equals(""));
         } catch (HttpClientErrorException errorException) {
             if (errorException.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 return (errorException.getStatusCode().equals(HttpStatus.BAD_REQUEST));

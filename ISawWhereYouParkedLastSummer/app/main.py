@@ -1,19 +1,24 @@
 import httpx
 from datetime import datetime
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 from fastapi_utils.tasks import repeat_every
 
 numberplates = {}
 app = FastAPI()
 
+class Numberplate(BaseModel):
+    numberplate: str
 
-@app.post("/parking/{numberplate}", status_code=201)
-async def park(numberplate: str):
+
+@app.post("/parking/", status_code=201)
+async def park(numberplate: Numberplate):
+    numberplate = numberplate.numberplate
     if numberplate in numberplates:
         raise HTTPException(status_code=409)
     else:
         numberplates[numberplate] = datetime.now()
-        return "Received " + numberplate
+    return "Received " + numberplate
 
 
 @app.on_event("startup")

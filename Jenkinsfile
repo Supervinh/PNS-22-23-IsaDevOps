@@ -2,36 +2,34 @@ pipeline {
     agent any
     stages {
         stage ('Initialize') {
-                steps {
-                    sh '''
-                        mkdir -p ${M2_HOME}/
-                        cp settings.xml ${M2_HOME}/
-                        echo ${M2_HOME}
-                        java -version
-                        mvn -version
-                        docker -v
-                        docker compose version
-                    '''
+            steps {
+                sh '''
+                    mkdir -p ${M2_HOME}/
+                    cp settings.xml ${M2_HOME}/
+                    echo ${M2_HOME}
+                    java -version
+                    mvn -version
+                    docker -v
+                    docker compose version
+                '''
+            }
+        }
+        stage('Tests unitaires') {
+            steps {
+                dir('backend'){
+                    sh 'mvn package'
+                }
+                dir('cli'){
+                     sh 'mvn package'
                 }
             }
-        stage('Build') {
-                    steps {
-                        sh '''
-                          echo ""
-                          ./build-all.sh
-                          docker attach cli
-                          script store.txt
-                          exit
-                          docker compose down
-                          '''
-                        }//TODO attach cli & run scripts (any automatic verifications ?) & docker compose down
-                }
-       stage('Deploy') {
+        }
+        stage('Deploy') {
             environment {
                 SONAR_ID = credentials('Sonar')
             }
             steps {
-            echo 'Should deploy on artifactory(8002:8081) and SonarQube (8001:9000)..'
+            echo 'Deploy on artifactory(8002:8081) and SonarQube (8001:9000)..'
                 dir('backend'){
                      sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID}'
                 }
@@ -40,7 +38,6 @@ pipeline {
                 }
             }
         }
-
     }
     post {
        always {
