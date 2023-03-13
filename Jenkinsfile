@@ -69,6 +69,8 @@ node{
         stage('Initialize'){
             git branch: "${env.BRANCH_NAME}", credentialsId: 'GlobalGitIds', url: 'https://github.com/pns-isa-devops/isa-devops-22-23-team-b-23.git'
             sh '''
+                mkdir -p ${M2_HOME}/
+                cp settings.xml ${M2_HOME}/
                 echo ${M2_HOME}
                 java -version
                 mvn -version
