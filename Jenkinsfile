@@ -75,7 +75,7 @@ node {
             dir("endToEnd")
                 res = sh (script : "endToEnd.sh", returnStatus : true)
             }
-            if(res !=0 && behaviour="main"){
+            if(res !=0 && behaviour=="main"){
                 withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
                     discordSend description: "@everyone End to End tests failed", footer: 'Comment c\'est arrivé ça ?', link: env.CHANGE_URL, result: FAILURE,
                     title: "End-2-End tests failed", webhookURL: "$DISCORD_ID"
