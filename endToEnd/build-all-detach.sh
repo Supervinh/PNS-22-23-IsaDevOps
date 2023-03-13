@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ..
 
 function build_dir()  # $1 is the dir to get it
 {
