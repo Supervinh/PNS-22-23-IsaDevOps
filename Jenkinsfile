@@ -125,7 +125,7 @@ node {
     }finally{
         stage('Cleaning up'){
             sh '''
-            rm $ {M2_HOME}/ settings.xml
+            rm ${M2_HOME}/ settings.xml
             docker compose down
             docker logout
             '''
