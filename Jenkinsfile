@@ -75,11 +75,10 @@ node{
                 docker -v
                 docker compose version
             '''
-            echo "${BRANCH_NAME}"
+            withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
+                sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
+            }
         }
-        withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
-                        sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
-                    }
         stage('Tests unitaires'){
             dir('backend'){
                 sh 'mvn package'
@@ -100,11 +99,13 @@ node{
             }
         }
     }finally{
-        stage('Cleaning up')
-        sh '''
-            rm ${M2_HOME}/settings.xml
-            docker compose down
-            docker logout
-        '''
+        stage('Cleaning up'){
+            sh '''
+                rm ${M2_HOME}/settings.xml
+                docker compose down
+                docker logout
+            '''
+        }
+
     }
 }
