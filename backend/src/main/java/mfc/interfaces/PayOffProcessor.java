@@ -1,10 +1,10 @@
 package mfc.interfaces;
 
 import mfc.POJO.Customer;
-import mfc.POJO.PayOff;
+import mfc.POJO.Payoff;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.VFPExpiredException;
 
 public interface PayOffProcessor {
-    Customer claimPayOff(Customer user, PayOff payOff) throws InsufficientBalanceException, VFPExpiredException;
+    Customer claimPayOff(Customer user, Payoff payOff) throws InsufficientBalanceException, VFPExpiredException;
 }

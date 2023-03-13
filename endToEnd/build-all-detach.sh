@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ..
 
 function build_dir()  # $1 is the dir to get it
 {
@@ -19,4 +20,4 @@ build_dir "bank"
 
 echo "** Done all -> docker up"
 
-docker compose up
+docker compose up -d

@@ -29,12 +29,9 @@ public class TransactionHandler implements TransactionProcessor {
         try {
             customerBalancesModifier.editFidelityPoints(customer, (int) cost);
             return purchaseRecording.recordPurchase(customer, cost, store);
-        } catch (NegativePointCostException negativePointCostException) {
-            System.out.println(negativePointCostException.getMessage());
-        } catch (CustomerNotFoundException e) {
+        } catch (NegativePointCostException | CustomerNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Override
@@ -43,9 +40,8 @@ public class TransactionHandler implements TransactionProcessor {
             customerBalancesModifier.editBalance(user, -cost);
             return purchase(user, cost, store);
 
-        } catch (InsufficientBalanceException | CustomerNotFoundException insufficientBalanceException) {
-            System.out.println(insufficientBalanceException.getMessage());
+        } catch (InsufficientBalanceException | CustomerNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 }

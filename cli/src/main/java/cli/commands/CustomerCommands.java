@@ -21,7 +21,7 @@ public class CustomerCommands {
 
     @ShellMethod("Register a customer in the CoD backend (registerCustomer CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
     public CliCustomer registerCustomer(String name, String mail, String password, @ShellOption(defaultValue = "") String creditCard) {
-        return restTemplate.postForObject(BASE_URI + "/registerCustomer", new CliCustomer(name, mail, password, creditCard,"null"), CliCustomer.class);
+        return restTemplate.postForObject(BASE_URI + "/registerCustomer", new CliCustomer(name, mail, password, creditCard, "null"), CliCustomer.class);
     }
 
     // Always use a POST request for login and not a GET request
@@ -62,11 +62,12 @@ public class CustomerCommands {
         return res;
     }
 
+    @ShellMethod("Add balance to account (refill AMOUNT)")//TODO add credit card
+    public CliCustomer refill(double amount) {
+        return restTemplate.postForObject(getUriForCustomer() + "/refill", amount, CliCustomer.class);
+    }
 
     private String getUriForCustomer() {
         return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
     }
-    
-    
-
 }
