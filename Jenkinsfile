@@ -73,7 +73,7 @@ node {
         if(behaviour == 'main' || pr_behaviour == 'dev'){
             stage('Tests End-2-End'){
                 dir("endToEnd"){
-                    res = sh (script : "endToEnd.sh", returnStatus : true)
+                    res = sh returnStatus: true, script: './endToEnd.sh'
                 }
                 if(res !=0 && behaviour=="main"){
                     withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
