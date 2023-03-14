@@ -1,2 +1,4 @@
-register kadoc @ abc 5251896983
-refill kadoc 5
+register refill refill@abcc abc 5251896983
+login-customer refill@abcc abc
+refill 500
+logout

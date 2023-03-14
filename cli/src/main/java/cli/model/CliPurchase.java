@@ -1,8 +1,8 @@
-package mfc.controllers.dto;
+package cli.model;
 
 import java.util.UUID;
 
-public class PurchaseDTO {
+public class CliPurchase {
 
     private UUID id;
     private String customerEmail;
@@ -10,22 +10,11 @@ public class PurchaseDTO {
     private String storeName;
     private boolean internalAccount; // Is the purchase using the internal account or already paid?
 
-    public PurchaseDTO() {
-    }
-
-    public PurchaseDTO(UUID id, String customerEmail, double cost, String storeName, boolean internalAccount) {
-        this.id = id;
+    public CliPurchase(String customerEmail, double cost, String storeName, boolean internalAccount) {
+        this.id = UUID.randomUUID();
         this.customerEmail = customerEmail;
         this.cost = cost;
         this.storeName = storeName;
-        this.internalAccount = internalAccount;
-    }
-
-    public boolean isInternalAccount() {
-        return internalAccount;
-    }
-
-    public void setInternalAccount(boolean internalAccount) {
         this.internalAccount = internalAccount;
     }
 
@@ -55,5 +44,24 @@ public class PurchaseDTO {
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public boolean isInternalAccount() {
+        return internalAccount;
+    }
+
+    public void setInternalAccount(boolean internalAccount) {
+        this.internalAccount = internalAccount;
+    }
+
+    @Override
+    public String toString() {
+        return "CliPurchase{" +
+                "id=" + id +
+                ", customerEmail='" + customerEmail + '\'' +
+                ", cost=" + cost +
+                ", storeName='" + storeName + '\'' +
+                ", internalAccount=" + internalAccount +
+                '}';
     }
 }

@@ -33,7 +33,6 @@ public class StoreOwnerController {
     @Autowired
     private StoreOwnerFinder ownerFind;
 
-
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
     // (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is

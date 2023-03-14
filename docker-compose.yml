@@ -3,7 +3,7 @@ version: "3"
 services:
   # The Cookie Factory backend in SpringBoot
   mfc-server:
-    image: teamb/mfc-spring-server
+    image: jeannestheo/mfc-spring-server
     container_name: server
     environment:
       - BANK_WITH_PORT=bank-service:9090
@@ -13,7 +13,7 @@ services:
 
   # A simple java CLI
   mfc-cli:
-    image: teamb/mfc-spring-cli
+    image: jeannestheo/mfc-spring-cli
     container_name: cli
     environment:
       - SERVER_WITH_PORT=server:8080
@@ -26,5 +26,5 @@ services:
     tty: true
 
   bank-service:
-    image: teamb/mfc-bank-service
+    image: jeannestheo/mfc-bank-service
     container_name: bank

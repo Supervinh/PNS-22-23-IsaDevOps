@@ -1,0 +1,13 @@
+register-customer customer customer@abc abc 5251896983
+login-customer customer@abc abc
+refill 500
+logout
+
+register-admin admin admin@abc admin
+login-admin admin@abc admin
+register-owner to to@a owner
+logout
+
+login-owner to@a owner
+register-store abcdaire 22 15 08 20 to
+add-purchase abcdaire customer@abc 25
