@@ -1,6 +1,6 @@
 #!/bin/bash
 ./build-all-detach.sh
-sleep 10
+sleep 60
 # Récupère le nom du fichier d'entrée
 fichier="expected.txt"
 # Vérifie si le fichier existe

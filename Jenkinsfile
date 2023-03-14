@@ -72,22 +72,23 @@ node {
         def res = -1
         if(behaviour == 'main' || pr_behaviour == 'dev'){
             stage('Tests End-2-End'){
-            dir("endToEnd")
-                res = sh (script : "endToEnd.sh", returnStatus : true)
-            }
-            if(res !=0 && behaviour=="main"){
-                withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
-                    discordSend description: "@everyone End to End tests failed", footer: 'Comment c\'est arrivé ça ?', link: env.CHANGE_URL, result: FAILURE,
-                    title: "End-2-End tests failed", webhookURL: "$DISCORD_ID"
+                dir("endToEnd"){
+                    res = sh (script : "endToEnd.sh", returnStatus : true)
                 }
-                throw new Exception("End-2-End tests failed")
-            }
-            if(pr_behaviour=="dev" && res != 0){
-                throw new Exception("End-2-End tests failed")
+                if(res !=0 && behaviour=="main"){
+                    withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
+                        discordSend description: "@everyone End to End tests failed", footer: 'Comment c\'est arrivé ça ?', link: env.CHANGE_URL, result: FAILURE,
+                        title: "End-2-End tests failed", webhookURL: "$DISCORD_ID"
+                    }
+                    throw new Exception("End-2-End tests failed")
+                }
+                if(pr_behaviour=="dev" && res != 0){
+                    throw new Exception("End-2-End tests failed")
+                }
             }
         }
         if(behaviour == 'main' && res == 0){
-            stage('Deploy on DockerHub'){
+            stage('Publish on DockerHub'){
                 withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
                     sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
                 }
