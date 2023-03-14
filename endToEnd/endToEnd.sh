@@ -1,6 +1,6 @@
 #!/bin/bash
 ./build-all-detach.sh
-sleep 600
+sleep 60
 # Récupère le nom du fichier d'entrée
 fichier="expected.txt"
 # Vérifie si le fichier existe
@@ -20,6 +20,9 @@ do
   # Exécute la commande pour tester le fichier
   echo "script ${file}.txt" | socat EXEC:"docker attach cli",pty STDIO > res.txt
   # Récupère la dernière ligne du fichier de résultat
+  echo "---------------------------------------------------------------"
+  cat res.txt
+  echo "---------------------------------------------------------------"
   actual=$(tail -n 2 res.txt | head -n 1)
   # Vérifie si le résultat obtenu correspond au résultat attendu
   if [[ "$actual" =~ $expected ]]; then
@@ -31,7 +34,7 @@ do
         res=false
   fi
 done < "$fichier"
-rm res.txt
+#rm res.txt
 if [ "$res" = false ]
 then
   echo "Some tests are failing"
