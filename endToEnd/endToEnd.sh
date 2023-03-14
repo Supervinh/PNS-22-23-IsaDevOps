@@ -18,7 +18,7 @@ do
   # shellcheck disable=SC2086
   expected=$(echo $ligne | cut -d " " -f3-)
   # Exécute la commande pour tester le fichier
-  echo "script ${file}.txt" | socat EXEC:"docker attach cli",pty STDIO > res.txt
+  echo "script ${file}.txt" | socat -t10 EXEC:"docker attach cli",pty STDIO > res.txt
   # Récupère la dernière ligne du fichier de résultat
   echo "---------------------------------------------------------------"
   cat res.txt
