@@ -41,8 +41,8 @@ node {
                         userRemoteConfigs: [[credentialsId: 'GlobalGitIds', url: 'https://github.com/pns-isa-devops/isa-devops-22-23-team-b-23.git']])
             }
             sh '''
-                cp settings.xml ${M2_HOME}/
-                echo ${M2_HOME}
+                mkdir -p ${HOME}/.m2
+                cp settings.xml ${HOME}/.m2/
                 java -version
                 mvn -version
                 docker -v
@@ -126,7 +126,7 @@ node {
     }finally{
         stage('Cleaning up'){
             sh '''
-            rm ${M2_HOME}/settings.xml
+            rm ${HOME}/.m2/settings.xml
             docker compose down
             docker logout
             '''
