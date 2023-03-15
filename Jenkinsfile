@@ -103,16 +103,15 @@ node {
             echo 'Deploy on artifactory(8002:8081) and send to SonarQube (8001:9000)..'
             withCredentials([string(credentialsId: 'Sonar', variable: 'SONAR_ID')]) {
                 dir('backend'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
+                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
                 }
                 dir('cli'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
+                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
                 }
             }
         }
-        stage('Notify'){
-            echo 'Notify on Discord'
-            if(behaviour == 'PR'){
+        if(behaviour == 'PR'){
+            stage('Notify'){
                 withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
                     discordSend description: """
                     @everyone, new pull request on ${CHANGE_BRANCH}, you can review it by clicking on the title
