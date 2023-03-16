@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class CustomerDTO {
 
-    private UUID id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
+    private Long id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
 
     @NotBlank(message = "name should not be blank")
     private String name;
@@ -24,7 +24,7 @@ public class CustomerDTO {
     private double balance;
 
 
-    public CustomerDTO(UUID id, String name, String mail, String password, String creditCard, String matriculation) {
+    public CustomerDTO(Long id, String name, String mail, String password, String creditCard, String matriculation) {
         this.id = id;
         this.name = name;
         this.mail = mail;
@@ -35,7 +35,7 @@ public class CustomerDTO {
     }
 
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

@@ -1,4 +1,7 @@
-register kadoc @ abc 5251896983
-refill kadoc 50
-available-catalog kadoc
-explore-catalog kadoc test
+register-customer catalogCustomer catalog@customer pwd 5251896983
+login-customer catalog@customer pwd
+refill 50
+available-catalog
+explore-catalog test
+
+logout

@@ -5,7 +5,7 @@ import java.util.UUID;
 public class CliAccount {
 
 
-    private UUID id;
+    private Long id;
     private String name;
     private String mail;
     private String password;
@@ -14,14 +14,13 @@ public class CliAccount {
         this.name = name;
         this.mail = mail;
         this.password = password;
-        this.id = UUID.randomUUID();
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

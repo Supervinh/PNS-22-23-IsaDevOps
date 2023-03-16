@@ -1,9 +1,5 @@
 package mfc.controllers;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
 import mfc.controllers.dto.CatalogDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.PayoffDTO;
@@ -13,6 +9,10 @@ import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.CatalogModifier;
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
-import java.util.UUID;
 
 import static mfc.controllers.dto.ConvertDTO.convertCatalogToDTO;
 import static mfc.controllers.dto.ConvertDTO.convertPayoffToDTO;
@@ -65,27 +64,25 @@ public class CatalogController {
 
     @GetMapping(path = LOGGED_URI + "availableCatalog")
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
+    public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
             CatalogDTO c = convertCatalogToDTO(catalogExplorer.availablePayoffs((customer.get())));
-            System.out.println(c);
             return ResponseEntity.status(HttpStatus.CREATED).body(c);
         } else throw new CustomerNotFoundException();
     }
 
     @PostMapping(path = LOGGED_URI + "exploreCatalog")
-    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") UUID customerID) throws CustomerNotFoundException {
+    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
-            System.out.println(string);
             return ResponseEntity.status(HttpStatus.CREATED).body(convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
         } else throw new CustomerNotFoundException();
     }
 
     @PostMapping(path = STORE_OWNER_URI + "addPayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> addPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<PayoffDTO> addPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
             return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(
@@ -97,14 +94,14 @@ public class CatalogController {
         }
     }
 
-    private Store getStore(PayoffDTO payoffDTO, UUID storeOwnerID) throws StoreOwnerNotFoundException, StoreNotFoundException {
+    private Store getStore(PayoffDTO payoffDTO, Long storeOwnerID) throws StoreOwnerNotFoundException, StoreNotFoundException {
         storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(StoreOwnerNotFoundException::new); // Only for authentication, no point in saving the storeOwner
         return storeFinder.findStoreByName(payoffDTO.getStoreName()).orElseThrow(StoreNotFoundException::new);
     }
 
     @PostMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Optional<StoreOwner> storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID);
             Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), null/*, payoffDTO.getStore()*/);
@@ -118,7 +115,7 @@ public class CatalogController {
     }
 
     @PostMapping(path = STORE_OWNER_URI + "editPayoff", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") UUID storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
             Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store);

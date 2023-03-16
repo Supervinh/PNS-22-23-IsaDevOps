@@ -10,7 +10,7 @@
             <id>central</id>
             <name>b69cf9de1907-releases</name>
             <url>http://artifactory:8081/artifactory/libs-release-local</url>
-<!--            <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release-local</url>-->
+            <!--            <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release-local</url>-->
         </repository>
     </distributionManagement>
 
@@ -23,7 +23,7 @@
 
     <groupId>team-b</groupId>
     <artifactId>server</artifactId>
-    <version>0.1</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
     <name>server</name>
 
@@ -108,6 +108,24 @@
             <artifactId>junit-platform-suite</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId> <!-- JPA + hibernate-core default support -->
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.4</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -143,6 +161,29 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <formats>
+                                <format>XML</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -176,5 +217,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

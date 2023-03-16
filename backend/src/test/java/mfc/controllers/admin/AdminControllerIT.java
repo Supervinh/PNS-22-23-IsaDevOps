@@ -1,7 +1,8 @@
-package mfc.controllers;
+package mfc.controllers.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.POJO.Admin;
+import mfc.entities.Admin;
+import mfc.controllers.AdminController;
 import mfc.controllers.dto.AdminDTO;
 import mfc.repositories.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,10 +34,12 @@ class AdminControllerIT {
 
     Admin defaultAdmin;
 
+
     @BeforeEach
     void setUp() {
+        adminRepository.deleteAll();
         defaultAdmin = new Admin("admin", "admin", "admin");
-        adminRepository.save(defaultAdmin, defaultAdmin.getId());
+        adminRepository.save(defaultAdmin);
     }
 
     @Test
@@ -58,7 +59,7 @@ class AdminControllerIT {
     //    @Test
     void registerAdminNoMail() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/registerAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isForbidden());
@@ -78,7 +79,7 @@ class AdminControllerIT {
     @Test
     void loginAdmin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "admin", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -92,7 +93,7 @@ class AdminControllerIT {
     @Test
     void loginAdminNoUsername() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(1L, "", "admin", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -106,7 +107,7 @@ class AdminControllerIT {
     @Test
     void wrongPasswordLogin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "admin", "abc")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(2L, "admin", "admin", "abc")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -115,7 +116,7 @@ class AdminControllerIT {
     @Test
     void notFoundLogin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(UUID.randomUUID(), "admin", "none", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(3L, "admin", "none", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());

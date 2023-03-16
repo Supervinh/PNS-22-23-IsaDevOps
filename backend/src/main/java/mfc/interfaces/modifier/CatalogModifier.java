@@ -1,11 +1,11 @@
 package mfc.interfaces.modifier;
 
-import mfc.POJO.Payoff;
-import mfc.POJO.Store;
 import mfc.exceptions.AlreadyExistingPayoffException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.exceptions.PayoffNotFoundException;
+import mfc.entities.Payoff;
+import mfc.entities.Store;
 
 import java.util.Optional;
 

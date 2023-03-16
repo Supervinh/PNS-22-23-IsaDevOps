@@ -1,8 +1,6 @@
 package cli.commands;
 
 import cli.CliContext;
-import cli.model.CliAdmin;
-import cli.model.CliCustomer;
 import cli.model.CliStoreOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;

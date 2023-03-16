@@ -49,7 +49,7 @@ public class CustomerCommands {
         return res;
     }
 
-    @ShellMethod("Modify the credit card of the logged in user (modifyCreditCard CREDIT_CARD_NUMBER)")
+    @ShellMethod("Modify the matriculation of the logged user (modifyMatriculation MATRICULATION)")
     public CliCustomer modifyMatriculation(String matriculation) {
         if (cliContext.getLoggedInUser() == null) {
             System.out.println("You are not logged in");
@@ -64,6 +64,10 @@ public class CustomerCommands {
 
     @ShellMethod("Add balance to account (refill AMOUNT)")//TODO add credit card
     public CliCustomer refill(double amount) {
+        if(cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
         return restTemplate.postForObject(getUriForCustomer() + "/refill", amount, CliCustomer.class);
     }
 

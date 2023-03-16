@@ -1,16 +1,18 @@
 package mfc.components;
 
-import mfc.POJO.Customer;
 import mfc.connectors.BankProxy;
 import mfc.exceptions.NegativeRefillException;
 import mfc.exceptions.NoCreditCardException;
 import mfc.exceptions.PaymentException;
+import mfc.entities.Customer;
 import mfc.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,6 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@Transactional
 class PaymentHandlerTest {
 
     Customer allowed;
@@ -45,8 +48,8 @@ class PaymentHandlerTest {
             String passwordD = "apassword";
             String creditCardD = "0786610925";
             denied = new Customer(nameD, mailD, passwordD, creditCardD);
-            customerRepository.save(allowed, allowed.getId());
-            customerRepository.save(denied, denied.getId());
+            customerRepository.save(allowed);
+            customerRepository.save(denied);
         } catch (Exception e) {
             e.printStackTrace();
         }

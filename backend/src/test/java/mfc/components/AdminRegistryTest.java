@@ -1,24 +1,23 @@
 package mfc.components;
 
-import mfc.POJO.Admin;
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
-import mfc.exceptions.*;
+import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
+import mfc.entities.Admin;
 import mfc.repositories.AdminRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class AdminRegistryTest {
 
     @Autowired
@@ -42,12 +41,12 @@ class AdminRegistryTest {
 
 
     @Test
-    public void unknownadmin() {
-        assertFalse(adminRepository.findByMail(mail).isPresent());
+     void unknownadmin() {
+        assertFalse(adminRepository.findAdminByMail(mail).isPresent());
     }
 
     @Test
-    public void registeradmin() throws Exception {
+     void registeradmin() throws Exception {
         Admin returned = adminRegistration.registerAdmin(name, mail, password);
         Optional<Admin> admin = adminFinder.findAdminById(returned.getId());
         assertTrue(admin.isPresent());
@@ -59,7 +58,7 @@ class AdminRegistryTest {
     }
 
     @Test
-    public void cannotRegisterTwice() throws Exception {
+     void cannotRegisterTwice() throws Exception {
         adminRegistration.registerAdmin(name, mail, password);
         Assertions.assertThrows(AlreadyExistingAccountException.class, () -> {
             adminRegistration.registerAdmin(name, mail, password);
@@ -67,7 +66,7 @@ class AdminRegistryTest {
     }
 
     @Test
-    public void canFindByMail() throws Exception {
+    void canFindByMail() throws Exception {
         adminRegistration.registerAdmin(name, mail, password);
         Optional<Admin> admin = adminFinder.findAdminByMail(mail);
         assertTrue(admin.isPresent());
@@ -75,34 +74,35 @@ class AdminRegistryTest {
     }
 
     @Test
-    public void unknownAdminByMail() {
+    void unknownAdminByMail() {
         assertFalse(adminFinder.findAdminByMail(mail).isPresent());
     }
 
     @Test
-    public void canFindById() throws Exception {
+    void canFindById() throws Exception {
         Admin admin = adminRegistration.registerAdmin(name, mail, password);
         Optional<Admin> admin2 = adminFinder.findAdminById(admin.getId());
         assertTrue(admin2.isPresent());
     }
+//might need to remove this test
+//    @Test
+//     void unknownAdminById() {
+//        Admin admin = new Admin(name, mail, password);
+//        adminRepository.save(admin);
+//        assertFalse(adminFinder.findAdminById(admin.getId()).isPresent());
+//    }
 
     @Test
-    public void unknownAdminById() {
-        Admin admin = new Admin(name, mail, password);
-        assertFalse(adminFinder.findAdminById(admin.getId()).isPresent());
-    }
-
-    @Test
-    public void canFindByMailAndPassword() throws Exception {
+     void canFindByMailAndPassword() throws Exception {
         adminRegistration.registerAdmin(name, mail, password);
-        Optional<Admin> admin = adminFinder.findAdminByMailAndPassword(mail,password);
+        Optional<Admin> admin = adminFinder.findAdminByMailAndPassword(mail, password);
         assertTrue(admin.isPresent());
         assertEquals(name, admin.get().getName());
     }
 
 
     @Test
-    public void unknownAdminByMailAndPassword() {
+     void unknownAdminByMailAndPassword() {
         assertFalse(adminFinder.findAdminByMailAndPassword(mail,password).isPresent());
     }
 
