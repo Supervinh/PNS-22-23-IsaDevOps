@@ -1,2 +1,2 @@
 
-docker build -t teamb/mfc-parking-service .
+docker build -t jeannestheo/mfc-parking-service .

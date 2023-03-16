@@ -1,12 +1,12 @@
 package mfc.components.registries;
 
+import mfc.entities.Customer;
+import mfc.entities.Store;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
-import mfc.entities.Customer;
-import mfc.entities.Store;
 import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.StreamSupport;
 
 @Component
 @Transactional
@@ -46,7 +45,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Optional<Customer> findCustomerByMail(String mail) {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+        return customerRepository.findAll().stream()
                 .filter(cust -> mail.equals(cust.getMail())).findAny();
     }
 
@@ -57,7 +56,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Optional<Customer> findCustomerByName(String name) {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+        return customerRepository.findAll().stream()
                 .filter(cust -> name.equals(cust.getName())).findAny();
     }
 

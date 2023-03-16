@@ -1,5 +1,8 @@
 #!/bin/bash
-./build-all-detach.sh
+cd ..
+./build-all.sh -d
+cd endToEnd || exit
+ls
 sleep 60
 # Récupère le nom du fichier d'entrée
 fichier="expected.txt"

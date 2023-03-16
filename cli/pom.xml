@@ -4,12 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!--    <distributionManagement>-->
+    <!--        <repository>-->
+    <!--            <id>central</id>-->
+    <!--            <name>b69cf9de1907-releases</name>-->
+    <!--            <url>http://artifactory:8081/artifactory/libs-release-local</url>-->
+    <!--&lt;!&ndash;            <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release-local</url>&ndash;&gt;-->
+    <!--        </repository>-->
+    <!--    </distributionManagement>-->
     <distributionManagement>
         <repository>
             <id>central</id>
-            <name>b69cf9de1907-releases</name>
-            <url>http://artifactory:8081/artifactory/libs-release-local</url>
-            <!--            <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release-local</url>-->
+            <name>593868d0942d-releases</name>
+            <url>http://localhost:8081/artifactory/libs-release</url>
         </repository>
     </distributionManagement>
 
@@ -23,7 +30,7 @@
 
     <groupId>team-b</groupId>
     <artifactId>cli</artifactId>
-    <version>0.1</version>
+    <version>1.2-Dev</version>
     <name>cli</name>
 
     <properties>
