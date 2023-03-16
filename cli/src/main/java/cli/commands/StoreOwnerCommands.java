@@ -2,6 +2,7 @@ package cli.commands;
 
 import cli.CliContext;
 import cli.model.CliStoreOwner;
+import cli.model.DashboardDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -17,7 +18,7 @@ public class StoreOwnerCommands {
     @Autowired
     private CliContext cliContext;
 
-    @ShellMethod("Login a store owner in the CoD backend (loginOwner OWNER_MAIL OWNER_PASSWORD)")
+    @ShellMethod("Login a store owner in the backend (loginOwner OWNER_MAIL OWNER_PASSWORD)")
     public CliStoreOwner loginOwner(String mail, String password) {
         if (cliContext.getLoggedInUser() != null) {
             System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
@@ -26,5 +27,18 @@ public class StoreOwnerCommands {
         CliStoreOwner res = restTemplate.postForObject(BASE_URI + "/loginOwner", new CliStoreOwner(mail, password), CliStoreOwner.class);
         cliContext.setLoggedInUser(res);
         return res;
+    }
+
+    @ShellMethod("Ask indicators regarding the fidelity program (dashboard)")
+    public DashboardDto dashboard() {
+        if (cliContext.getLoggedInUser() != null) {
+            System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
+            return null;
+        }
+        return restTemplate.getForObject(getUri() + "/dashboard", DashboardDto.class);
+    }
+
+    private String getUri() {
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
     }
 }
