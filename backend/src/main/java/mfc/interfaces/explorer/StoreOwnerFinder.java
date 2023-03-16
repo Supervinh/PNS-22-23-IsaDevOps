@@ -1,9 +1,8 @@
 package mfc.interfaces.explorer;
 
-import mfc.pojo.StoreOwner;
+import mfc.entities.StoreOwner;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface StoreOwnerFinder {
     Optional<StoreOwner> findStoreOwnerByMail(String mail);

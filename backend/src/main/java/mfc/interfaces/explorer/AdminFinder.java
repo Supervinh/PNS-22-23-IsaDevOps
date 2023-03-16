@@ -1,9 +1,8 @@
 package mfc.interfaces.explorer;
 
-import mfc.pojo.Admin;
+import mfc.entities.Admin;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface AdminFinder {
     Optional<Admin> findAdminByMail(String mail);

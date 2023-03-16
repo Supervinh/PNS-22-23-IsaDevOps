@@ -9,8 +9,8 @@ import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.PayoffNotFoundException;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
-import mfc.pojo.Customer;
-import mfc.pojo.Payoff;
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +56,7 @@ public class PayoffController {
     }
 
     @GetMapping(path = LOGGED_URI + "getNotification")
-    public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") UUID customerId) throws CustomerNotFoundException {
+    public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") long customerId) throws CustomerNotFoundException {
         Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
         NotificationDTO notificationDTO = notifications.get(customer.getMatriculation());
         if (!isNull(notificationDTO)) {

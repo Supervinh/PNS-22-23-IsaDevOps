@@ -1,9 +1,8 @@
 package mfc.controllers.dto;
 
-import mfc.pojo.*;
+import mfc.entities.*;
 
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ConvertDTO {

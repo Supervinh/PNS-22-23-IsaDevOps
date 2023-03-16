@@ -1,10 +1,9 @@
 package mfc.components;
-import mfc.POJO.Customer;
+import mfc.entities.Customer;
 import mfc.exceptions.*;
 import mfc.interfaces.Bank;
 import mfc.interfaces.Payment;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
-import mfc.pojo.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +12,14 @@ import javax.transaction.Transactional;
 @Component
 @Transactional
 public class PaymentHandler implements Payment {
+    private final Bank bank;
+    private final CustomerBalancesModifier customerBalancesModifier;
+
     @Autowired
-    private Bank bank;
-    @Autowired
-    private CustomerBalancesModifier customerBalancesModifier;
+    public PaymentHandler(Bank bank, CustomerBalancesModifier customerBalancesModifier) {
+        this.bank = bank;
+        this.customerBalancesModifier = customerBalancesModifier;
+    }
 
     @Override
     public Customer refillBalance(Customer user, double amount) throws NoCreditCardException, NegativeRefillException, PaymentException {

@@ -4,8 +4,8 @@ import mfc.exceptions.AlreadyExistingPayoffException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.exceptions.PayoffNotFoundException;
-import mfc.pojo.Payoff;
-import mfc.pojo.Store;
+import mfc.entities.Payoff;
+import mfc.entities.Store;
 
 import java.util.Optional;
 

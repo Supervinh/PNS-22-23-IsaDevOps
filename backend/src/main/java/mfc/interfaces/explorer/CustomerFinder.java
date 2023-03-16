@@ -1,9 +1,8 @@
 package mfc.interfaces.explorer;
 
-import mfc.pojo.Customer;
+import mfc.entities.Customer;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface CustomerFinder {
     Optional<Customer> findCustomerByMail(String mail);

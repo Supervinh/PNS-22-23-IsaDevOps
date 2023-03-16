@@ -1,8 +1,8 @@
 package mfc.interfaces;
 
 import mfc.exceptions.CredentialsException;
-import mfc.pojo.Store;
-import mfc.pojo.StoreOwner;
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 
 import java.util.Map;
 

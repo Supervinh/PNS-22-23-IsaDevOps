@@ -3,7 +3,7 @@ package mfc.components;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.pojo.Admin;
+import mfc.entities.Admin;
 import mfc.repositories.AdminRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

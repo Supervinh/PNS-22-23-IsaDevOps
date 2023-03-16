@@ -1,4 +1,4 @@
-package mfc.pojo;
+package mfc.entities;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -6,7 +6,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 public class Purchase {

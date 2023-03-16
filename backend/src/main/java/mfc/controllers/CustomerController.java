@@ -9,7 +9,7 @@ import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
-import mfc.pojo.Customer;
+import mfc.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
-import java.util.UUID;
 
 import static mfc.controllers.dto.ConvertDTO.convertCustomerToDto;
 import static org.springframework.http.MediaType.ALL_VALUE;

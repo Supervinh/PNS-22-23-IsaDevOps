@@ -5,7 +5,7 @@ import mfc.exceptions.InsufficientBalanceException;
 import mfc.interfaces.TransactionProcessor;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
-import mfc.pojo.Customer;
+import mfc.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

@@ -1,7 +1,7 @@
 package mfc.controllers.customer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.POJO.Customer;
+import mfc.entities.Customer;
 import mfc.controllers.CustomerController;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.repositories.CustomerRepository;

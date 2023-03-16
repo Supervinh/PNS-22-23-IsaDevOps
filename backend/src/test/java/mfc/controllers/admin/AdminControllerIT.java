@@ -2,14 +2,12 @@ package mfc.controllers.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 <<<<<<< HEAD:backend/src/test/java/mfc/controllers/admin/AdminControllerIT.java
-import mfc.POJO.Admin;
+import mfc.entities.Admin;
 import mfc.controllers.AdminController;
 =======
 >>>>>>> ISawWhereYouParkedLastSummer:backend/src/test/java/mfc/controllers/AdminControllerIT.java
 import mfc.controllers.dto.AdminDTO;
-import mfc.pojo.Admin;
 import mfc.repositories.AdminRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

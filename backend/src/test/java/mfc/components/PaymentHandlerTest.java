@@ -4,7 +4,7 @@ import mfc.connectors.BankProxy;
 import mfc.exceptions.NegativeRefillException;
 import mfc.exceptions.NoCreditCardException;
 import mfc.exceptions.PaymentException;
-import mfc.pojo.Customer;
+import mfc.entities.Customer;
 import mfc.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

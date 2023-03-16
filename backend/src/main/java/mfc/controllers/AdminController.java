@@ -1,6 +1,6 @@
 package mfc.controllers;
 
-import mfc.POJO.Admin;
+import mfc.entities.Admin;
 import mfc.controllers.dto.AdminDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.exceptions.AlreadyExistingAccountException;

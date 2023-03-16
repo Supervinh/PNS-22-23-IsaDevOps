@@ -3,9 +3,9 @@ package mfc.components;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
-import mfc.pojo.Customer;
-import mfc.pojo.Payoff;
-import mfc.pojo.PayoffPurchase;
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
+import mfc.entities.PayoffPurchase;
 import mfc.repositories.PayoffPurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,14 +17,18 @@ import java.time.LocalDate;
 @Transactional
 public class PayoffHandler {
 
+    private final CatalogExplorer catalogExplorer;
+    private final PayoffPurchaseRepository payoffPurchaseRepository;
+    private final CustomerBalancesModifier customerBalancesModifier;
+    private final ParkingHandler parkingHandler;
+
     @Autowired
-    CatalogExplorer catalogExplorer;
-    @Autowired
-    PayoffPurchaseRepository payoffPurchaseRepository;
-    @Autowired
-    CustomerBalancesModifier customerBalancesModifier;
-    @Autowired
-    ParkingHandler parkingHandler;
+    public PayoffHandler(CatalogExplorer catalogExplorer, PayoffPurchaseRepository payoffPurchaseRepository, CustomerBalancesModifier customerBalancesModifier, ParkingHandler parkingHandler) {
+        this.catalogExplorer = catalogExplorer;
+        this.payoffPurchaseRepository = payoffPurchaseRepository;
+        this.customerBalancesModifier = customerBalancesModifier;
+        this.parkingHandler = parkingHandler;
+    }
 
     public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws VFPExpiredException, CustomerNotFoundException, NegativePointCostException, ParkingException, NoMatriculationException {
         if (!catalogExplorer.availablePayoffs(customer).contains(payoff)) {

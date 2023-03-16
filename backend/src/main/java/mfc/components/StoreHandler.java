@@ -5,8 +5,8 @@ import mfc.exceptions.CredentialsException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreRegistration;
-import mfc.pojo.Store;
-import mfc.pojo.StoreOwner;
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Component

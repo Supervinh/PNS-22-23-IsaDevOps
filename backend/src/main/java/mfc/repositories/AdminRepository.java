@@ -1,13 +1,10 @@
 package mfc.repositories;
 
-import mfc.POJO.Admin;
-import mfc.POJO.Customer;
+import mfc.entities.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 //@Repository
 //public class AdminRepository extends BasicRepositoryImpl<Admin, UUID> {

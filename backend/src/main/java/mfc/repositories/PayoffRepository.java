@@ -1,15 +1,12 @@
 package mfc.repositories;
 
 
-import mfc.POJO.Payoff;
-import mfc.POJO.PayoffPurchase;
-import mfc.POJO.StoreOwner;
+import mfc.entities.Payoff;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 

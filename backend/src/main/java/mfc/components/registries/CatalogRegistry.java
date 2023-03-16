@@ -1,5 +1,8 @@
 package mfc.components.registries;
 
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
+import mfc.entities.Store;
 import mfc.exceptions.AlreadyExistingPayoffException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.NegativePointCostException;

@@ -1,6 +1,6 @@
 package mfc.repositories;
 
-import mfc.POJO.Customer;
+import mfc.entities.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

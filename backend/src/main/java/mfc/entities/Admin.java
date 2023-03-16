@@ -1,4 +1,4 @@
-package mfc.pojo;
+package mfc.entities;
 
 import javax.persistence.Entity;
 import java.util.Objects;

@@ -1,14 +1,9 @@
 package mfc.components;
 
-import mfc.POJO.Admin;
-import mfc.POJO.StoreOwner;
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
+import mfc.entities.StoreOwner;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.StoreOwnerFinder;
-import mfc.interfaces.modifier.AdminRegistration;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
-import mfc.pojo.StoreOwner;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.Assertions;
@@ -18,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

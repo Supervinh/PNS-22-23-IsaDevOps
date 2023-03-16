@@ -3,7 +3,7 @@ package mfc.interfaces.modifier;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NegativePointCostException;
-import mfc.pojo.Customer;
+import mfc.entities.Customer;
 
 import java.time.LocalDate;
 
