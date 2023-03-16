@@ -28,19 +28,21 @@ public class Customer {
 
     @Given("{string} has {int} points")
     public void hasPoints(String name, int points) {
-        mfc.POJO.Customer customer = customerFinder.findCustomerByName(name).get();
+        mfc.entities.Customer customer = customerFinder.findCustomerByName(name).get();
         customer.setFidelityPoints(points);
+        customerRepository.save(customer);
     }
 
     @Then("{string} should have {int} points")
     public void shouldHavePoints(String name, int points) {
-        mfc.POJO.Customer customer = customerFinder.findCustomerByName(name).get();
+        mfc.entities.Customer customer = customerFinder.findCustomerByName(name).get();
         assert customer.getFidelityPoints() == points;
     }
 
     @And("{string} has a fidelity card with a balance of {double} euros")
     public void hasAFidelityCardWithABalanceOfEuros(String name, double balance) {
-        mfc.POJO.Customer customer = customerFinder.findCustomerByName(name).get();
+        mfc.entities.Customer customer = customerFinder.findCustomerByName(name).get();
         customer.setBalance(balance);
+        customerRepository.save(customer);
     }
 }

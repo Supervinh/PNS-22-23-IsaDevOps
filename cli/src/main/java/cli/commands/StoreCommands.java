@@ -9,6 +9,9 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ShellComponent
 public class StoreCommands {
 
@@ -26,10 +29,10 @@ public class StoreCommands {
     public CliStore registerStore(String name, int openingHour, int openingMinute, int closingHour, int closingminute, String ownerName) {
         String opening = openingHour + "h" + openingMinute + "m";
         String closing = closingHour + "h" + closingminute + "m";
-        String[][] sch = new String[7][2];
+        List<String> sch = new ArrayList<>(14);
         for (int i = 0; i < 7; i++) {
-            sch[i][0] = opening;
-            sch[i][1] = closing;
+            sch.add(opening);
+            sch.add(closing);
         }
         return restTemplate.postForObject(BASE_URI + "/register", new CliStore(name, sch, ownerName), CliStore.class);
     }

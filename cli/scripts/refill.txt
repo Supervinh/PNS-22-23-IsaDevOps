@@ -1,4 +1,4 @@
-register refill refill@abcc abc 5251896983
-login-customer refill@abcc abc
+register-customer refillCustomer refill@customer pwd 5251896983
+login-customer refill@customer pwd
 refill 500
 logout

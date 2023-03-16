@@ -9,8 +9,10 @@
             <id>central</id>
             <name>b69cf9de1907-releases</name>
             <url>http://artifactory:8081/artifactory/libs-release-local</url>
+            <!--            <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release-local</url>-->
         </repository>
     </distributionManagement>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -53,6 +55,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
                 <executions>
                     <execution>
                         <goals>
@@ -79,4 +82,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

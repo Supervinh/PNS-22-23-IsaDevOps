@@ -1,6 +1,6 @@
 package mfc.interfaces.notifier;
 
-import mfc.POJO.Customer;
+import mfc.entities.Customer;
 
 public interface ParkingNotifier {
     boolean notify(Customer target, int remainingTime);

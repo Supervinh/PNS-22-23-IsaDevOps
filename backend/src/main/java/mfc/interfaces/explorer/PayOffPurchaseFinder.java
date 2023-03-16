@@ -1,6 +1,6 @@
 package mfc.interfaces.explorer;
 
-import mfc.POJO.Store;
+import mfc.entities.Store;
 
 import java.util.Set;
 

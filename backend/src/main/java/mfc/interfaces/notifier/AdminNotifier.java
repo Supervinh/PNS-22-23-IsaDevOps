@@ -1,7 +1,7 @@
 package mfc.interfaces.notifier;
 
-import mfc.POJO.Admin;
-import mfc.POJO.Customer;
+import mfc.entities.Admin;
+import mfc.entities.Customer;
 
 import java.util.List;
 

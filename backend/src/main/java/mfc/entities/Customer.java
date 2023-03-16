@@ -1,22 +1,32 @@
-package mfc.POJO;
+package mfc.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Customer extends Account {
     private String matriculation;
     private int fidelityPoints;
     private double balance;
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Store> favoriteStores;
     private LocalDate vfp;
     private String creditCard;
 
+    public Customer() {
+    }
+
     public Customer(String name, String creditCard) {
         this(name, "", "", creditCard);
     }
+
+
 
     public Customer(String name, String mail, String password) {
         super(name, mail, password);
@@ -90,15 +100,26 @@ public class Customer extends Account {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Customer customer)) return false;
-        if (!getId().equals(customer.getId())) return false;
-        if (!getName().equals(customer.getName())) return false;
-        return getCreditCard().equals(customer.getCreditCard());
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Customer customer = (Customer) o;
+        return fidelityPoints == customer.fidelityPoints && Double.compare(customer.balance, balance) == 0 && Objects.equals(matriculation, customer.matriculation) && favoriteStores.equals(customer.favoriteStores) && Objects.equals(vfp, customer.vfp) && Objects.equals(creditCard, customer.creditCard);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), creditCard);
+        return Objects.hash(super.hashCode(), matriculation, fidelityPoints, balance, favoriteStores, vfp, creditCard);
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" + getName() + '\'' +
+                "matriculation='" + matriculation + '\'' +
+                ", fidelityPoints=" + fidelityPoints +
+                ", balance=" + balance +
+                ", favoriteStores=" + favoriteStores +
+                ", vfp=" + vfp +
+                ", creditCard='" + creditCard + '\'' +
+                '}';
+    }
 }

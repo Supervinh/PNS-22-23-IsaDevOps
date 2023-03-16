@@ -1,6 +1,5 @@
 package mfc.controllers;
 
-import mfc.POJO.Customer;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
@@ -10,6 +9,7 @@ import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
+import mfc.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
-import java.util.UUID;
 
 import static mfc.controllers.dto.ConvertDTO.convertCustomerToDto;
 import static org.springframework.http.MediaType.ALL_VALUE;
@@ -92,7 +91,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "modifyCreditCard", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String creditCard) throws CustomerNotFoundException {
+    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") Long customerId, @RequestBody @Valid String creditCard) throws CustomerNotFoundException {
         if (!creditCard.matches("\\d{10}+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -104,7 +103,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "modifyMatriculation", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> modifyMatriculation(@PathVariable("customerId") UUID customerId, @RequestBody @Valid String matriculation) throws CustomerNotFoundException {
+    public ResponseEntity<CustomerDTO> modifyMatriculation(@PathVariable("customerId") Long customerId, @RequestBody @Valid String matriculation) throws CustomerNotFoundException {
         return ResponseEntity.ok().body(
                 convertCustomerToDto(
                         modifier.recordMatriculation(
@@ -112,7 +111,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") UUID customerId) {
+    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") Long customerId) {
         try {
             Customer customer = finder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
             if (amount < 0) {

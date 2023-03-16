@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class PurchaseDTO {
 
-    private UUID id;
+    private Long id;
     private String customerEmail;
     private double cost;
     private String storeName;
@@ -13,7 +13,7 @@ public class PurchaseDTO {
     public PurchaseDTO() {
     }
 
-    public PurchaseDTO(UUID id, String customerEmail, double cost, String storeName, boolean internalAccount) {
+    public PurchaseDTO(Long id, String customerEmail, double cost, String storeName, boolean internalAccount) {
         this.id = id;
         this.customerEmail = customerEmail;
         this.cost = cost;
@@ -29,7 +29,7 @@ public class PurchaseDTO {
         this.internalAccount = internalAccount;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

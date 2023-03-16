@@ -7,9 +7,12 @@ services:
     container_name: server
     environment:
       - BANK_WITH_PORT=bank-service:9090
-    entrypoint: "bash -c '/opt/app/wait-for-it.sh $${BANK_WITH_PORT} -- java -jar /opt/app/app.jar --bank.host.baseurl=http://$${BANK_WITH_PORT}'"
+      - PARKING_WITH_PORT=parking:9191
+      - POSTGRES_HOST=postgres:5432
+    entrypoint: "bash -c '/opt/app/wait-for-it.sh $${POSTGRES_HOST} -- ./wait-for-it.sh $${BANK_WITH_PORT} -- ./wait-for-it.sh $${PARKING_WITH_PORT} -- java -jar /opt/app/app.jar --bank.host.baseurl=http://$${BANK_WITH_PORT} --parking.host.baseurl=http://$${PARKING_WITH_PORT}'"
     depends_on:
       - bank-service
+      - postgres
 
   # A simple java CLI
   mfc-cli:
@@ -28,3 +31,16 @@ services:
   bank-service:
     image: jeannestheo/mfc-bank-service
     container_name: bank
+
+  parking-service:
+    image: teamb/mfc-parking-service
+    container_name: parking
+
+  # the postgres DB to be connected to the backend (watch out: no volume specified, everything can be lost)
+  postgres:
+    image: postgres:15.2
+    container_name: db
+    environment:
+      - POSTGRES_PASSWORD=postgrespass
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_DB=tcf-db

@@ -1,20 +1,22 @@
 package mfc.components.registries;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Purchase;
-import mfc.POJO.Store;
 import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.PurchaseRecording;
+import mfc.entities.Customer;
+import mfc.entities.Purchase;
+import mfc.entities.Store;
 import mfc.repositories.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @Component
+@Transactional
 public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
     private final PurchaseRepository purchaseRepository;
 
@@ -26,7 +28,7 @@ public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
     @Override
     public Purchase recordPurchase(Customer customer, double cost, Store store) {
         Purchase newPurchase = new Purchase(cost, customer, store);
-        purchaseRepository.save(newPurchase, newPurchase.getId());
+        purchaseRepository.save(newPurchase);
         return newPurchase;
     }
 
