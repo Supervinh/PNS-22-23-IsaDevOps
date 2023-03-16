@@ -41,8 +41,8 @@ node {
                         userRemoteConfigs: [[credentialsId: 'GlobalGitIds', url: 'https://github.com/pns-isa-devops/isa-devops-22-23-team-b-23.git']])
             }
             sh '''
-                mkdir -p ${HOME}/.m2
-                cp settings.xml ${HOME}/.m2/
+                cp settings.xml ${M2_HOME}/
+                echo ${M2_HOME}
                 java -version
                 mvn -version
                 docker -v
@@ -72,23 +72,22 @@ node {
         def res = -1
         if(behaviour == 'main' || pr_behaviour == 'dev'){
             stage('Tests End-2-End'){
-                dir("endToEnd"){
-                    res = sh returnStatus: true, script: './endToEnd.sh'
+            dir("endToEnd")
+                res = sh (script : "endToEnd.sh", returnStatus : true)
+            }
+            if(res !=0 && behaviour=="main"){
+                withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
+                    discordSend description: "@everyone End to End tests failed", footer: 'Comment c\'est arrivé ça ?', link: env.CHANGE_URL, result: FAILURE,
+                    title: "End-2-End tests failed", webhookURL: "$DISCORD_ID"
                 }
-                if(res !=0 && behaviour=="main"){
-                    withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
-                        discordSend description: "@everyone End to End tests failed", footer: 'Comment c\'est arrivé ça ?', link: env.CHANGE_URL, result: FAILURE,
-                        title: "End-2-End tests failed", webhookURL: "$DISCORD_ID"
-                    }
-                    throw new Exception("End-2-End tests failed")
-                }
-                if(pr_behaviour=="dev" && res != 0){
-                    throw new Exception("End-2-End tests failed")
-                }
+                throw new Exception("End-2-End tests failed")
+            }
+            if(pr_behaviour=="dev" && res != 0){
+                throw new Exception("End-2-End tests failed")
             }
         }
         if(behaviour == 'main' && res == 0){
-            stage('Publish on DockerHub'){
+            stage('Deploy on DockerHub'){
                 withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
                     sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
                 }
@@ -103,15 +102,16 @@ node {
             echo 'Deploy on artifactory(8002:8081) and send to SonarQube (8001:9000)..'
             withCredentials([string(credentialsId: 'Sonar', variable: 'SONAR_ID')]) {
                 dir('backend'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
+                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
                 }
                 dir('cli'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
+                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -Dmaven.test.skip'
                 }
             }
         }
-        if(behaviour == 'PR'){
-            stage('Notify'){
+        stage('Notify'){
+            echo 'Notify on Discord'
+            if(behaviour == 'PR'){
                 withCredentials([string(credentialsId: 'DiscordHook', variable: 'DISCORD_ID')]) {
                     discordSend description: """
                     @everyone, new pull request on ${CHANGE_BRANCH}, you can review it by clicking on the title
@@ -125,7 +125,7 @@ node {
     }finally{
         stage('Cleaning up'){
             sh '''
-            rm ${HOME}/.m2/settings.xml
+            rm ${M2_HOME}/settings.xml
             docker compose down
             docker logout
             '''

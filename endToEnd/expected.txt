@@ -1,0 +1,4 @@
+buySomething : CliPurchase\{id=.*, customerEmail='a@a', cost=25.0, storeName='abcdaire', internalAccount=false\}
+catalog : a list of things to buy
+refill : to buy more of something
+store : a place to buy things
