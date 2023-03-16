@@ -8,6 +8,7 @@ import mfc.exceptions.*;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.AdminRegistration;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
+import mfc.pojo.StoreOwner;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.Assertions;

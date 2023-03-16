@@ -1,13 +1,13 @@
 package mfc.components;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
+import mfc.pojo.Customer;
+import mfc.pojo.Store;
+import mfc.pojo.StoreOwner;
 import mfc.repositories.CustomerRepository;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;

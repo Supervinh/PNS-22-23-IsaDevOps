@@ -1,4 +1,4 @@
-package mfc.POJO;
+package mfc.pojo;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

@@ -1,9 +1,5 @@
 package mfc.controllers;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Purchase;
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
 import mfc.components.TransactionHandler;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.PurchaseDTO;
@@ -16,6 +12,10 @@ import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreRegistration;
+import mfc.pojo.Customer;
+import mfc.pojo.Purchase;
+import mfc.pojo.Store;
+import mfc.pojo.StoreOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

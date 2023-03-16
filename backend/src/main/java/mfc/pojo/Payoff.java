@@ -1,4 +1,4 @@
-package mfc.POJO;
+package mfc.pojo;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;

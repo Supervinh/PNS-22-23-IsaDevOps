@@ -1,9 +1,9 @@
 package mfc.components.registries;
 
-import mfc.POJO.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
+import mfc.pojo.Admin;
 import mfc.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

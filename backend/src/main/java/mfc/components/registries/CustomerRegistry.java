@@ -1,12 +1,12 @@
 package mfc.components.registries;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Store;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
+import mfc.pojo.Customer;
+import mfc.pojo.Store;
 import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,13 +1,21 @@
 package cli.commands;
 
 import cli.CliContext;
+import cli.model.CliNotification;
 import cli.model.CliPayoffIdentifier;
 import cli.model.CliPayoffPurchase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.web.client.RestTemplate;
 
+import static java.util.Objects.isNull;
+
+@Configuration
+@EnableScheduling
 @ShellComponent
 public class PayoffCommands {
 
@@ -26,6 +34,16 @@ public class PayoffCommands {
             return null;
         }
         return restTemplate.postForObject(getUriForCustomer() + "/claimPayoff", new CliPayoffIdentifier(storeName, payOff), CliPayoffPurchase.class);
+    }
+
+    @ShellMethod("Get notifications for customer (getNotifications)")
+    @Scheduled(fixedRate = 10000)
+    public void getNotifications() {
+        CliNotification cliNotification = null;
+        if (!isNull(cliContext.getLoggedInUser()))
+            cliNotification = restTemplate.getForObject(getUriForCustomer() + "/getNotification", CliNotification.class);
+        if (!isNull(cliNotification))
+            System.out.println(cliNotification);
     }
 
     private String getUriForCustomer() {

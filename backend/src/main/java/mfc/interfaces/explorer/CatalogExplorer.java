@@ -1,8 +1,8 @@
 package mfc.interfaces.explorer;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
 import mfc.exceptions.PayoffNotFoundException;
+import mfc.pojo.Customer;
+import mfc.pojo.Payoff;
 
 import java.util.Optional;
 import java.util.Set;

@@ -1,7 +1,7 @@
 package mfc.interfaces.modifier;
 
-import mfc.POJO.Customer;
 import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.pojo.Customer;
 
 public interface CustomerRegistration {
     Customer register(String name, String mail, String password) throws AlreadyExistingAccountException;

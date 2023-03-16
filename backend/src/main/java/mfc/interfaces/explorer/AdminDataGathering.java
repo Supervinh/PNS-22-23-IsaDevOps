@@ -1,7 +1,7 @@
 package mfc.interfaces.explorer;
 
-import mfc.POJO.Admin;
-import mfc.POJO.Store;
+import mfc.pojo.Admin;
+import mfc.pojo.Store;
 
 import java.util.Map;
 

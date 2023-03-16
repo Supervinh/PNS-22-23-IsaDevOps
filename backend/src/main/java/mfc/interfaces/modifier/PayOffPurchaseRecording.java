@@ -1,7 +1,7 @@
 package mfc.interfaces.modifier;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
+import mfc.pojo.Customer;
+import mfc.pojo.Payoff;
 
 public interface PayOffPurchaseRecording {
     boolean recordPayOffPurchase(Payoff transaction, Customer user);

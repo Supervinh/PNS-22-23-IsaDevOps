@@ -1,12 +1,12 @@
 package mfc.components;
 
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
 import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.exceptions.CredentialsException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreRegistration;
+import mfc.pojo.Store;
+import mfc.pojo.StoreOwner;
 import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

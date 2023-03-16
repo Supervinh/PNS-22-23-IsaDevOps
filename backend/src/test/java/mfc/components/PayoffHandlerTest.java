@@ -1,9 +1,5 @@
 package mfc.components;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Payoff;
-import mfc.POJO.PayoffPurchase;
-import mfc.POJO.Store;
 import mfc.components.registries.CatalogRegistry;
 import mfc.components.registries.CustomerRegistry;
 import mfc.exceptions.CustomerNotFoundException;
@@ -69,7 +65,7 @@ class PayoffHandlerTest {
     }
 
     @Test
-    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException {
+    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException {
         payoffHandler.claimPayoff(customer, low);
         Mockito.verify(customerRegistry, Mockito.times(1)).editFidelityPoints(customer, -10);
         Mockito.verify(customerRegistry, Mockito.times(1)).editVFP(customer, LocalDate.now().plusDays(2));

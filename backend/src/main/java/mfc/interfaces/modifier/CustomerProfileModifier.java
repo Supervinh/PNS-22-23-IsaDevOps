@@ -1,10 +1,10 @@
 package mfc.interfaces.modifier;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Store;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.StoreAlreadyRegisteredException;
 import mfc.exceptions.StoreNotFoundException;
+import mfc.pojo.Customer;
+import mfc.pojo.Store;
 
 import java.util.Set;
 

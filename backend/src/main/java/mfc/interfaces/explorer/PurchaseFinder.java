@@ -1,8 +1,8 @@
 package mfc.interfaces.explorer;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Purchase;
-import mfc.POJO.Store;
+import mfc.pojo.Customer;
+import mfc.pojo.Purchase;
+import mfc.pojo.Store;
 
 import java.util.Optional;
 import java.util.Set;

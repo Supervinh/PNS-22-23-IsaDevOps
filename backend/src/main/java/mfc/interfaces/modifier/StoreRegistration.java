@@ -1,8 +1,8 @@
 package mfc.interfaces.modifier;
 
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
 import mfc.exceptions.AlreadyExistingStoreException;
+import mfc.pojo.Store;
+import mfc.pojo.StoreOwner;
 
 import java.util.List;
 

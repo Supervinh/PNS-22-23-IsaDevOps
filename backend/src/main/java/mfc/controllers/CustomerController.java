@@ -1,6 +1,5 @@
 package mfc.controllers;
 
-import mfc.POJO.Customer;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.exceptions.AlreadyExistingAccountException;
@@ -10,6 +9,7 @@ import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
+import mfc.pojo.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

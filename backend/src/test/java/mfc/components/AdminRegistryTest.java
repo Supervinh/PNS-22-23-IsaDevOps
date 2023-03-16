@@ -1,13 +1,13 @@
 package mfc.components;
 
-import mfc.POJO.Admin;
-import mfc.POJO.Store;
-import mfc.POJO.StoreOwner;
-import mfc.exceptions.*;
+import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
+import mfc.pojo.Admin;
 import mfc.repositories.AdminRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -98,7 +98,7 @@ class AdminRegistryTest {
     @Test
      void canFindByMailAndPassword() throws Exception {
         adminRegistration.registerAdmin(name, mail, password);
-        Optional<Admin> admin = adminFinder.findAdminByMailAndPassword(mail,password);
+        Optional<Admin> admin = adminFinder.findAdminByMailAndPassword(mail, password);
         assertTrue(admin.isPresent());
         assertEquals(name, admin.get().getName());
     }

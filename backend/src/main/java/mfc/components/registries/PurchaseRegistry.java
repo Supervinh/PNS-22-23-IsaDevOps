@@ -1,10 +1,10 @@
 package mfc.components.registries;
 
-import mfc.POJO.Customer;
-import mfc.POJO.Purchase;
-import mfc.POJO.Store;
 import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.PurchaseRecording;
+import mfc.pojo.Customer;
+import mfc.pojo.Purchase;
+import mfc.pojo.Store;
 import mfc.repositories.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
