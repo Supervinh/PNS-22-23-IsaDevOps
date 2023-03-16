@@ -1,8 +1,8 @@
 package cli.commands;
 
 import cli.CliContext;
+import cli.model.CliDashboard;
 import cli.model.CliStoreOwner;
-import cli.model.DashboardDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -29,13 +29,13 @@ public class StoreOwnerCommands {
         return res;
     }
 
-    @ShellMethod("Ask indicators regarding the fidelity program (dashboard)")
-    public DashboardDto dashboard() {
+    @ShellMethod("Ask indicators regarding the fidelity program (dashboard STORE_NAME)")
+    public CliDashboard dashboard(String storeName) {
         if (cliContext.getLoggedInUser() != null) {
             System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
             return null;
         }
-        return restTemplate.getForObject(getUri() + "/dashboard", DashboardDto.class);
+        return restTemplate.postForObject(getUri() + "/dashboard", storeName, CliDashboard.class);
     }
 
     private String getUri() {

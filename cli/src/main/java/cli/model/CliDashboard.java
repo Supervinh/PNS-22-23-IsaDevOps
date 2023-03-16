@@ -1,19 +1,19 @@
 package cli.model;
 
-public class DashboardDto {
+public class CliDashboard {
     private double numberOfCustomers;
     private double numberOfSales;
     private double salesVolumes;
-    private double payoffCumulatedPayoff;
+    private double payoffCumulatedCost;
 
-    public DashboardDto(double numberOfCustomers, double numberOfSales, double salesVolumes, double payoffCumulatedPayoff) {
+    public CliDashboard(double numberOfCustomers, double numberOfSales, double salesVolumes, double payoffCumulatedCost) {
         this.numberOfCustomers = numberOfCustomers;
         this.numberOfSales = numberOfSales;
         this.salesVolumes = salesVolumes;
-        this.payoffCumulatedPayoff = payoffCumulatedPayoff;
+        this.payoffCumulatedCost = payoffCumulatedCost;
     }
 
-    public DashboardDto() {
+    public CliDashboard() {
     }
 
     public double getNumberOfCustomers() {
@@ -40,11 +40,21 @@ public class DashboardDto {
         this.salesVolumes = salesVolumes;
     }
 
-    public double getPayoffCumulatedPayoff() {
-        return payoffCumulatedPayoff;
+    public double getPayoffCumulatedCost() {
+        return payoffCumulatedCost;
     }
 
-    public void setPayoffCumulatedPayoff(double payoffCumulatedPayoff) {
-        this.payoffCumulatedPayoff = payoffCumulatedPayoff;
+    public void setPayoffCumulatedCost(double payoffCumulatedCost) {
+        this.payoffCumulatedCost = payoffCumulatedCost;
+    }
+
+    @Override
+    public String toString() {
+        return "CliDashboard{" +
+                "numberOfCustomers=" + numberOfCustomers +
+                ", numberOfSales=" + numberOfSales +
+                ", salesVolumes=" + salesVolumes +
+                ", payoffCumulatedCost=" + payoffCumulatedCost +
+                '}';
     }
 }

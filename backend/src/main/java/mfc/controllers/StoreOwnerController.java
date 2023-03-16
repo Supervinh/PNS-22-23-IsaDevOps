@@ -1,11 +1,18 @@
 package mfc.controllers;
 
+import mfc.components.DataGatherer;
+import mfc.controllers.dto.DashboardDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.CredentialsException;
+import mfc.exceptions.StoreNotFoundException;
+import mfc.exceptions.StoreOwnerNotFoundException;
+import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
-import mfc.entities.StoreOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +23,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 import static mfc.controllers.dto.ConvertDTO.convertOwnerToDto;
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
@@ -32,6 +40,12 @@ public class StoreOwnerController {
 
     @Autowired
     private StoreOwnerFinder ownerFind;
+
+    @Autowired
+    private StoreFinder storeFinder;
+
+    @Autowired
+    private DataGatherer dataGatherer;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -76,4 +90,14 @@ public class StoreOwnerController {
         }
     }
 
+    @PostMapping(path = LOGGED_URI + "dashboard", consumes = ALL_VALUE)
+    public ResponseEntity<DashboardDTO> dashboard(@PathVariable("storeOwnerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException {
+        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
+        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+        if (store.getOwner().equals(storeOwner)) {
+            return ResponseEntity.status(HttpStatus.OK).body(dataGatherer.gather(store));
+        } else {
+            throw new CredentialsException();
+        }
+    }
 }
