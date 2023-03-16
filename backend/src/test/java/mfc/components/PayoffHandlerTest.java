@@ -2,12 +2,11 @@ package mfc.components;
 
 import mfc.components.registries.CatalogRegistry;
 import mfc.components.registries.CustomerRegistry;
-import mfc.exceptions.CustomerNotFoundException;
-import mfc.exceptions.NegativePointCostException;
-import mfc.exceptions.VFPExpiredException;
-import mfc.interfaces.explorer.CatalogExplorer;
-import mfc.repositories.PayoffPurchaseRepository;
-import mfc.repositories.StoreRepository;
+import mfc.entities.PayoffPurchase;
+import mfc.entities.Store;
+import mfc.exceptions.*;
+import mfc.entities.Payoff;
+import mfc.entities.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,8 +40,6 @@ class PayoffHandlerTest {
     private CustomerRegistry customerRegistry;
     @Autowired
     private PayoffHandler payoffHandler;
-    @Autowired
-    private StoreRepository storeRepository;
 
     @BeforeEach
     void setUp() throws NegativePointCostException, CustomerNotFoundException {
@@ -60,7 +57,7 @@ class PayoffHandlerTest {
     }
 
     @Test
-    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException {
+    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException {
         assertEquals(new PayoffPurchase("low", 10, 10, low.getStore(), customer), payoffHandler.claimPayoff(customer, low));
     }
 

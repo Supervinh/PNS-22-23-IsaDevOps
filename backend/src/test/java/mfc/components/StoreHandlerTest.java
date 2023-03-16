@@ -1,5 +1,7 @@
 package mfc.components;
 
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 import mfc.exceptions.CredentialsException;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
@@ -9,13 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest

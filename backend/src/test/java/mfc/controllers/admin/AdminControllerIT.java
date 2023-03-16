@@ -1,11 +1,8 @@
 package mfc.controllers.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-<<<<<<< HEAD:backend/src/test/java/mfc/controllers/admin/AdminControllerIT.java
 import mfc.entities.Admin;
 import mfc.controllers.AdminController;
-=======
->>>>>>> ISawWhereYouParkedLastSummer:backend/src/test/java/mfc/controllers/AdminControllerIT.java
 import mfc.controllers.dto.AdminDTO;
 import mfc.repositories.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
