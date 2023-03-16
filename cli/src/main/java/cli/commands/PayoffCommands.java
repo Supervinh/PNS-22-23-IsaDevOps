@@ -1,6 +1,7 @@
 package cli.commands;
 
 import cli.CliContext;
+import cli.model.CliCustomer;
 import cli.model.CliNotification;
 import cli.model.CliPayoffIdentifier;
 import cli.model.CliPayoffPurchase;
@@ -40,7 +41,7 @@ public class PayoffCommands {
     @Scheduled(fixedRate = 10000)
     public void getNotifications() {
         CliNotification cliNotification = null;
-        if (!isNull(cliContext.getLoggedInUser()))
+        if (!isNull(cliContext.getLoggedInUser()) && cliContext.getLoggedInUser().getClass()== CliCustomer.class)
             cliNotification = restTemplate.getForObject(getUriForCustomer() + "/getNotification", CliNotification.class);
         if (!isNull(cliNotification))
             System.out.println(cliNotification);

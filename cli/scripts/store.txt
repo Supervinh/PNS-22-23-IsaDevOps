@@ -9,3 +9,5 @@ add-payoff payoff 200 15 store
 edit-payoff store payoff 5 3
 edit-payoff store payoff --newCost 50
 edit-payoff store payoff --newPointCost 50
+
+logout

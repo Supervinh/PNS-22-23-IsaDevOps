@@ -3,3 +3,5 @@ login-customer catalog@customer pwd
 refill 50
 available-catalog
 explore-catalog test
+
+logout
