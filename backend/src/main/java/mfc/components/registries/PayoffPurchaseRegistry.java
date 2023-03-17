@@ -10,6 +10,7 @@ import mfc.repositories.PayoffPurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class PayoffPurchaseRegistry implements PayOffPurchaseRecording, PayOffPu
 
     @Override
     public Set<PayoffPurchase> lookUpPayOffPurchases() {
-        return payoffPurchaseRepository.findAll().stream().collect(Collectors.toSet());
+        return new HashSet<>(payoffPurchaseRepository.findAll());
     }
 
     @Override

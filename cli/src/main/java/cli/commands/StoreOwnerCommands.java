@@ -31,10 +31,6 @@ public class StoreOwnerCommands {
 
     @ShellMethod("Ask indicators regarding the fidelity program (dashboard STORE_NAME)")
     public CliDashboard dashboard(String storeName) {
-        if (cliContext.getLoggedInUser() != null) {
-            System.out.println("You are already logged in as " + cliContext.getLoggedInUser().getName());
-            return null;
-        }
         return restTemplate.postForObject(getUri() + "/dashboard", storeName, CliDashboard.class);
     }
 

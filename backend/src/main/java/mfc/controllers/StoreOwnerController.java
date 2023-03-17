@@ -91,7 +91,7 @@ public class StoreOwnerController {
     }
 
     @PostMapping(path = LOGGED_URI + "dashboard", consumes = ALL_VALUE)
-    public ResponseEntity<DashboardDTO> dashboard(@PathVariable("storeOwnerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException {
+    public ResponseEntity<DashboardDTO> dashboard(@PathVariable("ownerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException {
         Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
         StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
         if (store.getOwner().equals(storeOwner)) {

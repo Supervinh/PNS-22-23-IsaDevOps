@@ -1,6 +1,7 @@
 package mfc.components;
 
 import mfc.controllers.dto.DashboardDTO;
+import mfc.entities.PayoffPurchase;
 import mfc.entities.Purchase;
 import mfc.entities.Store;
 import mfc.interfaces.StoreDataGathering;
@@ -23,11 +24,13 @@ public class DataGatherer implements StoreDataGathering {
     @Override
     public DashboardDTO gather(Store store) {
         Set<Purchase> purchases = purchaseFinder.lookUpPurchasesByStore(store);
+        Set<PayoffPurchase> payoffs = payOffPurchaseFinder.lookUpPayOffPurchasesByStore(store);
         DashboardDTO dashboardDTO = new DashboardDTO();
         dashboardDTO.setSalesVolumes(purchases.stream().mapToDouble(Purchase::getCost).sum());
         dashboardDTO.setNumberOfSales(purchases.size());
         dashboardDTO.setNumberOfCustomers(purchases.stream().map(Purchase::getCustomer).distinct().count());
-        dashboardDTO.setPayoffCumulatedCost(payOffPurchaseFinder.lookUpPayOffPurchasesByStore(store).stream().mapToDouble(payoffPurchase -> payoffPurchase.getPointCost()).sum());
+        dashboardDTO.setNumberOfGivenPayoffs(payoffs.size());
+        dashboardDTO.setPayoffCumulatedCost(payoffs.stream().mapToDouble(PayoffPurchase::getCost).sum());
         return dashboardDTO;
     }
 }

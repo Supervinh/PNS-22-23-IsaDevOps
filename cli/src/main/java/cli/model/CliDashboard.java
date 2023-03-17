@@ -3,12 +3,14 @@ package cli.model;
 public class CliDashboard {
     private double numberOfCustomers;
     private double numberOfSales;
+    private double numberOfGivenPayoffs;
     private double salesVolumes;
     private double payoffCumulatedCost;
 
-    public CliDashboard(double numberOfCustomers, double numberOfSales, double salesVolumes, double payoffCumulatedCost) {
+    public CliDashboard(double numberOfCustomers, double numberOfSales, double numberOfGivenPayoffs, double salesVolumes, double payoffCumulatedCost) {
         this.numberOfCustomers = numberOfCustomers;
         this.numberOfSales = numberOfSales;
+        this.numberOfGivenPayoffs = numberOfGivenPayoffs;
         this.salesVolumes = salesVolumes;
         this.payoffCumulatedCost = payoffCumulatedCost;
     }
@@ -48,13 +50,27 @@ public class CliDashboard {
         this.payoffCumulatedCost = payoffCumulatedCost;
     }
 
+    public double getNumberOfGivenPayoffs() {
+        return numberOfGivenPayoffs;
+    }
+
+    public void setNumberOfGivenPayoffs(double numberOfGivenPayoffs) {
+        this.numberOfGivenPayoffs = numberOfGivenPayoffs;
+    }
+
     @Override
     public String toString() {
-        return "CliDashboard{" +
-                "numberOfCustomers=" + numberOfCustomers +
-                ", numberOfSales=" + numberOfSales +
-                ", salesVolumes=" + salesVolumes +
-                ", payoffCumulatedCost=" + payoffCumulatedCost +
-                '}';
+        return "\tDashboard of this store\t\n" +
+                "------------------------------------" +
+                "\nDistinct Customers :\t" + numberOfCustomers +
+                "\nSales :\t" + numberOfSales +
+                "\nGiven payoffs :\t" + numberOfGivenPayoffs +
+                "\nSales volumes :\t" + salesVolumes +
+                "\nCost of payoffs :\t" + payoffCumulatedCost +
+                "\n------------------------------------" +
+                "\nSales per customer :\t" + (numberOfSales / numberOfCustomers) +
+                "\nPayoff claimed per customer :\t" + (numberOfGivenPayoffs / numberOfCustomers) +
+                "\nTotal Income :\t" + (salesVolumes - payoffCumulatedCost) +
+                "\n------------------------------------";
     }
 }
