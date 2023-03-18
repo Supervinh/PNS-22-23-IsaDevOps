@@ -1,9 +1,9 @@
 package mfc.components.registries;
 
+import mfc.entities.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.entities.Admin;
 import mfc.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,8 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
     public AdminRegistry(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
         //create a basic Admin by default
-        Admin admin = new Admin("a","a@a","a");
-        adminRepository.save(admin);
+        if (findAdminByMail("a@a").isEmpty())
+            adminRepository.save(new Admin("a", "a@a", "a"));
     }
 
     @Override

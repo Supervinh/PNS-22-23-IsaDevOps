@@ -1,0 +1,6 @@
+admin
+    -name: b
+    -mail: a@a
+Init
+script buySomething.txt
+logout

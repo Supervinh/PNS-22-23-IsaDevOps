@@ -30,7 +30,7 @@
 
     <groupId>team-b</groupId>
     <artifactId>cli</artifactId>
-    <version>1.2-Dev</version>
+    <version>1.2</version>
     <name>cli</name>
 
     <properties>
