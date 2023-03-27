@@ -1,12 +1,12 @@
 package mfc.components.registries;
 
+import mfc.entities.Customer;
+import mfc.entities.Store;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
-import mfc.entities.Customer;
-import mfc.entities.Store;
 import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +42,13 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         Customer newcustomer = new Customer(name, mail, password, creditCard);
         customerRepository.save(newcustomer);
         return newcustomer;
+    }
+
+    @Override
+    public Customer delete(Customer customer) throws NoCorrespongingAccountException {
+        if (!findCustomerByName(customer.getName()).isPresent()) throw new NoCorrespongingAccountException();
+        customerRepository.delete(customer);
+        return customer;
     }
 
     @Override
@@ -177,5 +184,5 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         throw new CustomerNotFoundException();
     }
 
-    //TODO delete Customer --> delete les purchases liés au customer avant de delete le customer (acces aux 2 repositories)
+
 }

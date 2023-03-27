@@ -6,13 +6,11 @@ import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.AlreadyExistingAccountException;
-import mfc.exceptions.CredentialsException;
-import mfc.exceptions.StoreNotFoundException;
-import mfc.exceptions.StoreOwnerNotFoundException;
+import mfc.exceptions.*;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
+import mfc.interfaces.modifier.StoreRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +44,9 @@ public class StoreOwnerController {
 
     @Autowired
     private DataGatherer dataGatherer;
+
+    @Autowired
+    private StoreRegistration storeRegistration;
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -96,6 +97,25 @@ public class StoreOwnerController {
         StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
         if (store.getOwner().equals(storeOwner)) {
             return ResponseEntity.status(HttpStatus.OK).body(dataGatherer.gather(store));
+        } else {
+            throw new CredentialsException();
+        }
+    }
+
+    @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner", consumes = ALL_VALUE)
+    public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) throws StoreOwnerNotFoundException, NoCorrespongingAccountException {
+        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+        ownerReg.delete(storeOwner);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping(path = LOGGED_URI + "deleteStore", consumes = ALL_VALUE)
+    public ResponseEntity<StoreOwnerDTO> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
+        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
+        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+        if (store.getOwner().equals(storeOwner)) {
+            storeRegistration.delete(store);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             throw new CredentialsException();
         }

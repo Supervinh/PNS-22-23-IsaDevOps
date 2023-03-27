@@ -2,6 +2,7 @@ package mfc.controllers;
 
 import mfc.controllers.dto.CustomerDTO;
 import mfc.controllers.dto.ErrorDTO;
+import mfc.entities.Customer;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.NegativeCostException;
@@ -9,7 +10,6 @@ import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
-import mfc.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -119,6 +119,16 @@ public class CustomerController {
             }
             return ResponseEntity.ok().body(convertCustomerToDto(payment.refillBalance(customer, amount)));
 
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DeleteMapping(path = LOGGED_URI + "deleteCustomer")
+    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("customerId") Long customerId) {
+        try {
+            Customer customer = finder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
+            return ResponseEntity.ok().body(convertCustomerToDto(registry.delete(customer)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

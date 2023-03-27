@@ -39,4 +39,17 @@ public class AdminCommands {
     public CliStoreOwner registerOwner(String name, String mail, String password) {
         return restTemplate.postForObject("/owner/registerOwner", new CliStoreOwner(name, mail, password), CliStoreOwner.class);
     }
+
+    @ShellMethod("Delete an admin account in the CoD backend (deleteAdmin)")
+    public void deleteAdmin() {
+        if (!(cliContext.getLoggedInUser().getClass().equals(CliAdmin.class))) {
+            System.out.println("You are not an admin");
+            return;
+        }
+        restTemplate.delete(getUri() + "/deleteAdmin");
+    }
+
+    private String getUri() {
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
+    }
 }

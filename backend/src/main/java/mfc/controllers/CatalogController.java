@@ -1,18 +1,19 @@
 package mfc.controllers;
 
 import mfc.controllers.dto.CatalogDTO;
+import mfc.controllers.dto.DeletePayoffDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.PayoffDTO;
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.CatalogModifier;
-import mfc.entities.Customer;
-import mfc.entities.Payoff;
-import mfc.entities.Store;
-import mfc.entities.StoreOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -99,14 +100,14 @@ public class CatalogController {
         return storeFinder.findStoreByName(payoffDTO.getStoreName()).orElseThrow(StoreNotFoundException::new);
     }
 
-    @PostMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid DeletePayoffDTO deletePayoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Optional<StoreOwner> storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID);
-            Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), null/*, payoffDTO.getStore()*/);
+            Optional<Payoff> payOff = catalogExplorer.findPayoff(deletePayoffDTO.getPayoffName(), deletePayoffDTO.getStoreName());
             if (storeOwner.isPresent()) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(catalogModifier.deletePayoff(payOff)));
+                return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(catalogModifier.deletePayoff(payOff.get())));
             } else throw new StoreOwnerNotFoundException();
         } catch (PayoffNotFoundException e) {
             System.out.println(e.getMessage());

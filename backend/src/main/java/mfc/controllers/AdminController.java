@@ -1,9 +1,10 @@
 package mfc.controllers;
 
-import mfc.entities.Admin;
 import mfc.controllers.dto.AdminDTO;
 import mfc.controllers.dto.ErrorDTO;
+import mfc.entities.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.NoCorrespongingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +76,10 @@ public class AdminController {
         }
     }
 
-
+    @DeleteMapping(path = LOGGED_URI + "deleteAdmin")
+    public ResponseEntity<AdminDTO> deleteAdmin(@PathVariable("adminId") Long adminId) throws NoCorrespongingAccountException {
+        Admin admin = adminFind.findAdminById(adminId).orElseThrow(NoCorrespongingAccountException::new);
+        adminReg.delete(admin);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

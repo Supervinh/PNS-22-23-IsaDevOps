@@ -1,9 +1,10 @@
 package mfc.components.registries;
 
+import mfc.entities.StoreOwner;
 import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.NoCorrespongingAccountException;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
-import mfc.entities.StoreOwner;
 import mfc.repositories.StoreOwnerRepository;
 import org.springframework.stereotype.Component;
 
@@ -50,5 +51,14 @@ public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistrat
             return newOwner;
         }
         throw new AlreadyExistingAccountException();
+    }
+
+    @Override
+    public StoreOwner delete(StoreOwner owner) throws NoCorrespongingAccountException {
+        if (findStoreOwnerById(owner.getId()).isPresent()) {
+            ownerRepository.delete(owner);
+            return owner;
+        }
+        throw new NoCorrespongingAccountException();
     }
 }

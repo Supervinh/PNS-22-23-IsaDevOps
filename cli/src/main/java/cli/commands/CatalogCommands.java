@@ -1,10 +1,7 @@
 package cli.commands;
 
 import cli.CliContext;
-import cli.model.CliAdmin;
-import cli.model.CliCatalog;
-import cli.model.CliPayoff;
-import cli.model.CliStoreOwner;
+import cli.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -57,18 +54,18 @@ public class CatalogCommands {
     }
 
     @ShellMethod("Deletes a payoff from the catalog(deletePayoff STORE_NAME PAYOFF_NAME)")
-    public Boolean deletePayoff(String storeName, String payoffName) { //TODO refaire un dto pour le delete. Return un boolean ou une payoff ?
-        if(cliContext.getLoggedInUser() == null){
+    public void deletePayoff(String storeName, String payoffName) {
+        if (cliContext.getLoggedInUser() == null) {
             System.out.println("You are not logged in");
-            return null;
+            return;
         }
-        if(!(cliContext.getLoggedInUser().getClass() == CliStoreOwner.class ||
+        if (!(cliContext.getLoggedInUser().getClass() == CliStoreOwner.class ||
                 cliContext.getLoggedInUser().getClass() == CliAdmin.class)) {
             System.out.println("You are not logged in as a store owner or as an admin");
-            return null;
+            return;
         }
-        CliPayoff payoff = new CliPayoff(payoffName, 0, 0, storeName);
-        return restTemplate.postForObject(getUri() + "/deletePayoff/", payoff, Boolean.class);
+        CliDeletePayoff payoff = new CliDeletePayoff(storeName, payoffName);
+        restTemplate.delete(getUri() + "/deletePayoff/", payoff, Boolean.class);
     }
 
     //TODO editPayoffName available

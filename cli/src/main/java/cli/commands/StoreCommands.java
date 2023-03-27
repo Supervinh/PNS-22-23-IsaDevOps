@@ -41,6 +41,4 @@ public class StoreCommands {
     public CliPurchase addPurchase(String storeName, String customerEmail, int cost, @ShellOption(defaultValue = "false") boolean internalAccount) {
         return restTemplate.postForObject(BASE_URI + "/addPurchase", new CliPurchase(customerEmail, cost, storeName, internalAccount), CliPurchase.class);
     }
-
-
 }

@@ -1,12 +1,13 @@
 package mfc.components;
 
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.exceptions.CredentialsException;
+import mfc.exceptions.NoStoreFoundException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreRegistration;
-import mfc.entities.Store;
-import mfc.entities.StoreOwner;
 import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,15 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
             return newStore;
         }
         throw new AlreadyExistingStoreException();
+    }
+
+    @Override
+    public Store delete(Store store) throws NoStoreFoundException {
+        if (storeRepository.existsById(store.getId())) {
+            storeRepository.delete(store);
+            return store;
+        }
+        throw new NoStoreFoundException();
     }
 
     @Override
