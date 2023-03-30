@@ -1,6 +1,6 @@
 #!/bin/bash
 ./build-all-detach.sh
-sleep 60
+sleep 600
 # Récupère le nom du fichier d'entrée
 fichier="expected.txt"
 # Vérifie si le fichier existe
@@ -18,11 +18,8 @@ do
   # shellcheck disable=SC2086
   expected=$(echo $ligne | cut -d " " -f3-)
   # Exécute la commande pour tester le fichier
-  echo "script ${file}.txt" | socat -t10 EXEC:"docker attach cli",pty STDIO > res.txt
+  echo "script ${file}.txt" | socat -t30 EXEC:"docker attach cli",pty STDIO > res.txt
   # Récupère la dernière ligne du fichier de résultat
-  echo "---------------------------------------------------------------"
-  cat res.txt
-  echo "---------------------------------------------------------------"
   actual=$(tail -n 2 res.txt | head -n 1)
   # Vérifie si le résultat obtenu correspond au résultat attendu
   if [[ "$actual" =~ $expected ]]; then
@@ -34,6 +31,7 @@ do
         res=false
   fi
 done < "$fichier"
+docker compose down
 #rm res.txt
 if [ "$res" = false ]
 then
