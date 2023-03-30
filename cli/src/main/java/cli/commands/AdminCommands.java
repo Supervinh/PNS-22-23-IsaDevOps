@@ -47,6 +47,7 @@ public class AdminCommands {
             return;
         }
         restTemplate.delete(getUri() + "/deleteAdmin");
+        cliContext.setLoggedInUser(null);
     }
 
     private String getUri() {

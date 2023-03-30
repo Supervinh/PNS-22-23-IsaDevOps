@@ -41,6 +41,7 @@ public class StoreOwnerCommands {
             return;
         }
         restTemplate.delete(getUri() + "/deleteStoreOwner");
+        cliContext.setLoggedInUser(null);
     }
 
     @ShellMethod("Delete store (deleteStore STORE_NAME)")

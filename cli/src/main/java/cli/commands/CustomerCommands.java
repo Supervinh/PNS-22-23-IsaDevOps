@@ -78,6 +78,7 @@ public class CustomerCommands {
             return;
         }
         restTemplate.delete(getUriForCustomer() + "/deleteCustomer");
+        cliContext.setLoggedInUser(null);
     }
 
     private String getUriForCustomer() {

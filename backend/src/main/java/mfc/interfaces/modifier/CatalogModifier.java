@@ -14,6 +14,6 @@ public interface CatalogModifier {
 
     Payoff editPayOff(Payoff payOff, Optional<Double> cost, Optional<Integer> pointCost, boolean isVfp) throws NegativeCostException, NegativePointCostException, PayoffNotFoundException;
 
-    Payoff deletePayoff(Payoff payOff) throws PayoffNotFoundException;
+    void deletePayoff(Payoff payOff) throws PayoffNotFoundException;
 }
 

@@ -32,8 +32,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CatalogController {
 
     public static final String BASE_URI = "/catalog";
-    public static final String LOGGED_URI = "/{customerID}/cat/";
-    public static final String STORE_OWNER_URI = "/{storeOwnerID}/cat/";
+    public static final String LOGGED_URI = "/{customerID}/";
+    public static final String STORE_OWNER_URI = "/{storeOwnerID}/";
 
     @Autowired
     private CustomerFinder customerFinder;
@@ -100,15 +100,17 @@ public class CatalogController {
         return storeFinder.findStoreByName(payoffDTO.getStoreName()).orElseThrow(StoreNotFoundException::new);
     }
 
-    @DeleteMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid DeletePayoffDTO deletePayoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<Void> deletePayoff(@RequestBody @Valid DeletePayoffDTO deletePayoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException, CredentialsException {
         try {
-            Optional<StoreOwner> storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID);
-            Optional<Payoff> payOff = catalogExplorer.findPayoff(deletePayoffDTO.getPayoffName(), deletePayoffDTO.getStoreName());
-            if (storeOwner.isPresent()) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(catalogModifier.deletePayoff(payOff.get())));
-            } else throw new StoreOwnerNotFoundException();
+            StoreOwner storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(StoreOwnerNotFoundException::new);
+            Payoff payOff = catalogExplorer.findPayoff(deletePayoffDTO.getPayoffName(), deletePayoffDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
+            if (payOff.getStore().getOwner().equals(storeOwner)) {
+                catalogModifier.deletePayoff(payOff);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else
+                throw new CredentialsException();
         } catch (PayoffNotFoundException e) {
             System.out.println(e.getMessage());
             return null;

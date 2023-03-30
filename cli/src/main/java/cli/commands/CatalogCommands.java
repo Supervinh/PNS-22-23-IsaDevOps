@@ -65,7 +65,7 @@ public class CatalogCommands {
             return;
         }
         CliDeletePayoff payoff = new CliDeletePayoff(storeName, payoffName);
-        restTemplate.delete(getUri() + "/deletePayoff/", payoff, Boolean.class);
+        restTemplate.postForObject(getUri() + "/deletePayoff/", payoff, Void.class);
     }
 
     //TODO editPayoffName available
@@ -86,7 +86,7 @@ public class CatalogCommands {
 
 
     private String getUri() {
-        return BASE_URI + "/" + cliContext.getLoggedInUser().getId() + "/cat";
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
     }
 
 

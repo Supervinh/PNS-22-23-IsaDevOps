@@ -22,16 +22,16 @@ public class PayoffHandler implements PayOffProcessor {
 
     private final CatalogExplorer catalogExplorer;
     private final CustomerBalancesModifier customerBalancesModifier;
-    private final ParkingProcessor parkingHandler;
-    private final PayOffPurchaseRecording payoffPurchaseRegistry;
+    private final ParkingProcessor parkingProcessor;
+    private final PayOffPurchaseRecording payOffPurchaseRecording;
     private final PurchaseFinder purchaseFinder;
 
     @Autowired
-    public PayoffHandler(CatalogExplorer catalogExplorer, CustomerBalancesModifier customerBalancesModifier, ParkingProcessor parkingHandler, PayOffPurchaseRecording payoffPurchaseRegistry, PurchaseFinder purchaseFinder) {
+    public PayoffHandler(CatalogExplorer catalogExplorer, CustomerBalancesModifier customerBalancesModifier, ParkingProcessor parkingProcessor, PayOffPurchaseRecording payOffPurchaseRecording, PurchaseFinder purchaseFinder) {
         this.catalogExplorer = catalogExplorer;
         this.customerBalancesModifier = customerBalancesModifier;
-        this.parkingHandler = parkingHandler;
-        this.payoffPurchaseRegistry = payoffPurchaseRegistry;
+        this.parkingProcessor = parkingProcessor;
+        this.payOffPurchaseRecording = payOffPurchaseRecording;
         this.purchaseFinder = purchaseFinder;
     }
 
@@ -39,13 +39,13 @@ public class PayoffHandler implements PayOffProcessor {
     public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws InsufficientBalanceException, VFPExpiredException, NoMatriculationException, ParkingException, CustomerNotFoundException, NoPreviousPurchaseException, NegativePointCostException {
         catalogExplorer.isAvailablePayoff(customer, payoff); //check if payoff is available, throws exception if not
         if (payoff.getName().equals("Parking")) {
-            parkingHandler.useParkingPayOff(customer);
+            parkingProcessor.useParkingPayOff(customer);
         }
         customer = customerBalancesModifier.editFidelityPoints(customer, -payoff.getPointCost());
         if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
             customer.setVfp(LocalDate.now().plusDays(7));
         }
-        return payoffPurchaseRegistry.recordPayOffPurchase(payoff, customer);
+        return payOffPurchaseRecording.recordPayOffPurchase(payoff, customer);
 
     }
 }

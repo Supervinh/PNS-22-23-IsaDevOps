@@ -17,7 +17,7 @@ public class ConvertDTO {
     }
 
     public static StoreDTO convertStoreToDto(Store store) {
-        return new StoreDTO(store.getId(), store.getName(), store.getSchedule(), store.getOwner().getName());
+        return new StoreDTO(store.getId(), store.getName(), store.getSchedule());
     }
 
 

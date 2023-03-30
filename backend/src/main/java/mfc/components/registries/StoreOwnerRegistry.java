@@ -6,6 +6,7 @@ import mfc.exceptions.NoCorrespongingAccountException;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.StoreOwnerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,7 @@ public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistrat
 
     private final StoreOwnerRepository ownerRepository;
 
+    @Autowired
     public StoreOwnerRegistry(StoreOwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
     }

@@ -2,19 +2,16 @@ package mfc.controllers.dto;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class StoreDTO {
 
     private Long id;
     private String name;
     private List<String> schedule;
-    private String owner;
 
-    public StoreDTO(Long id, String name, List<String> schedule, String owner) {
+    public StoreDTO(Long id, String name, List<String> schedule) {
         this.name = name;
         this.schedule = schedule;
-        this.owner = owner;
         this.id = id;
     }
 
@@ -38,24 +35,16 @@ public class StoreDTO {
         this.schedule = schedule;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StoreDTO store = (StoreDTO) o;
-        return Objects.equals(id, store.id) && Objects.equals(name, store.name) && Objects.equals(owner, store.owner);
+        return Objects.equals(id, store.id) && Objects.equals(name, store.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, owner);
+        return Objects.hash(id, name);
     }
 }

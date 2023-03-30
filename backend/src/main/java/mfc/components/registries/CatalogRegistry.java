@@ -21,11 +21,15 @@ import java.util.stream.Collectors;
 @Component
 @Transactional
 public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
-    @Autowired
-    private PayoffRepository payoffRepository;
-    @Autowired
-    private PurchaseFinder purchaseFinder;
 
+    private final PayoffRepository payoffRepository;
+    private final PurchaseFinder purchaseFinder;
+
+    @Autowired
+    public CatalogRegistry(PayoffRepository payoffRepository, PurchaseFinder purchaseFinder) {
+        this.payoffRepository = payoffRepository;
+        this.purchaseFinder = purchaseFinder;
+    }
 
     @Override
     public void isAvailablePayoff(Customer customer, Payoff payoff) throws InsufficientBalanceException, VFPExpiredException, NoPreviousPurchaseException {
@@ -83,12 +87,9 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     }
 
     @Override
-    public Payoff deletePayoff(Payoff payOff) throws PayoffNotFoundException {
-        System.out.println("Test");
+    public void deletePayoff(Payoff payOff) throws PayoffNotFoundException {
         if (payoffRepository.existsById(payOff.getId())) {
-            System.out.println("Test");
             payoffRepository.deleteById(payOff.getId());
-            return payOff;
         } else throw new PayoffNotFoundException();
     }
 }

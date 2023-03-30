@@ -109,8 +109,8 @@ public class StoreOwnerController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping(path = LOGGED_URI + "deleteStore", consumes = ALL_VALUE)
-    public ResponseEntity<StoreOwnerDTO> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
+    @DeleteMapping(path = LOGGED_URI + "deleteStore/{storeName}")
+    public ResponseEntity<Void> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @PathVariable("storeName") String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
         Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
         StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
         if (store.getOwner().equals(storeOwner)) {

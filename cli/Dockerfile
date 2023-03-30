@@ -14,9 +14,9 @@ ARG JAR_FILE
 RUN addgroup dockergroup; adduser --ingroup dockergroup --disabled-password --system --shell /bin/false dockeruser
 WORKDIR /opt/app
 COPY docker/wait-for-it.sh ./wait-for-it.sh
-COPY scripts ./
 COPY --from=builder /opt/app/target/${JAR_FILE} ./app.jar
 RUN chown -R dockeruser:dockergroup /opt/app && chmod a+x ./wait-for-it.sh
+COPY scripts ./
 # Starting the service (shell form of ENTRYPOINT used for substitution)
 USER dockeruser
 ENTRYPOINT java -jar /opt/app/app.jar --mfc.host.baseurl=$SERVER_URL

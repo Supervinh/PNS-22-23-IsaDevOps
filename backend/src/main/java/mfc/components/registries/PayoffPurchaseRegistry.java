@@ -10,11 +10,13 @@ import mfc.repositories.PayoffPurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class PayoffPurchaseRegistry implements PayOffPurchaseRecording, PayOffPurchaseFinder {
 
     private final PayoffPurchaseRepository payoffPurchaseRepository;
