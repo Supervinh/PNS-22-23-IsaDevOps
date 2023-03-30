@@ -3,7 +3,10 @@ package mfc.entities;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -42,7 +45,6 @@ public class Purchase {
     }
 
     public Purchase() {
-
     }
 
     public double getCost() {

@@ -1,13 +1,13 @@
-package mfc.components;
+package mfc.components.registries;
 
+import mfc.entities.Customer;
+import mfc.entities.Store;
+import mfc.entities.StoreOwner;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
-import mfc.entities.Customer;
-import mfc.entities.Store;
-import mfc.entities.StoreOwner;
 import mfc.repositories.CustomerRepository;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;

@@ -2,12 +2,12 @@ package mfc.components.registries;
 
 import mfc.entities.Customer;
 import mfc.entities.Payoff;
-import mfc.entities.PayoffPurchase;
+import mfc.entities.Purchase;
 import mfc.entities.Store;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.CatalogExplorer;
+import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.CatalogModifier;
-import mfc.repositories.PayoffPurchaseRepository;
 import mfc.repositories.PayoffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,30 +21,25 @@ import java.util.stream.Collectors;
 @Component
 @Transactional
 public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
-    private final PayoffRepository payoffRepository;
-    private final PayoffPurchaseRepository payoffPurchaseRepository;
-
     @Autowired
-    public CatalogRegistry(PayoffRepository payoffRepository,
-                           PayoffPurchaseRepository payoffPurchaseRepository) {
-        this.payoffRepository = payoffRepository;
-        this.payoffPurchaseRepository = payoffPurchaseRepository;
-    }
+    private PayoffRepository payoffRepository;
+    @Autowired
+    private PurchaseFinder purchaseFinder;
+
 
     @Override
-    public void isAvailablePayoff(Customer customer, Payoff payoff) throws InsufficientBalanceException, VFPExpiredException {
-        if (payoff.isVfp() && !customer.getVfp().isBefore(LocalDate.now())) {
+    public void isAvailablePayoff(Customer customer, Payoff payoff) throws InsufficientBalanceException, VFPExpiredException, NoPreviousPurchaseException {
+        if (payoff.isVfp() && customer.getVfp().isBefore(LocalDate.now())) {
             throw new VFPExpiredException();
         } else if (payoff.getPointCost() > customer.getFidelityPoints()) {
             throw new InsufficientBalanceException();
         }
+        purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getStore().equals(payoff.getStore())).findAny().orElseThrow(NoPreviousPurchaseException::new);
     }
 
     @Override
     public Set<Payoff> showAvailablePayoffs(Customer customer) {
-        Set<Store> stores = payoffPurchaseRepository.findPayoffsPurchasesByCustomer_Id(customer.getId()).stream()
-                .map(PayoffPurchase::getStore)
-                .collect(Collectors.toSet());
+        Set<Store> stores = purchaseFinder.lookUpPurchasesByCustomer(customer).stream().map(Purchase::getStore).collect(Collectors.toSet());
         return payoffRepository.findAll().stream().filter(e -> e.getPointCost() <= customer.getFidelityPoints()) //Solde en points suffisants
                 .filter(e -> !customer.getVfp().isBefore(LocalDate.now()) || !e.isVfp()) //Soit le client est vfp, soit la payOff n'est pas vfp
                 .filter(e -> stores.contains(e.getStore())) //Le client a déjà acheté dans le magasin
@@ -89,7 +84,9 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
 
     @Override
     public Payoff deletePayoff(Payoff payOff) throws PayoffNotFoundException {
+        System.out.println("Test");
         if (payoffRepository.existsById(payOff.getId())) {
+            System.out.println("Test");
             payoffRepository.deleteById(payOff.getId());
             return payOff;
         } else throw new PayoffNotFoundException();

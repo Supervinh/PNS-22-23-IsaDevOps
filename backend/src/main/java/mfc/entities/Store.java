@@ -26,7 +26,7 @@ public class Store {
         this.name = name;
         String starting = "7h00";
         String ending = "19h00";
-        this.schedule = new ArrayList<String>(List.of(starting,ending,starting,ending,starting,ending,starting,ending,starting,ending,starting,ending));
+        this.schedule = new ArrayList<>(List.of(starting, ending, starting, ending, starting, ending, starting, ending, starting, ending, starting, ending));
         this.owner = owner;
     }
 
