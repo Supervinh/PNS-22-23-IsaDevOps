@@ -50,19 +50,19 @@ class PayoffHandlerTest {
         customer = new Customer("Mark", "a@a.fr", "password", "0123456789");
         noPayOffCustomer = new Customer("Mark", "a@a.fr", "password", "0123456789");
         customer.setFidelityPoints(50);
-        when(catalogRegistry.availablePayoffs(customer)).thenReturn(payoffs);
-        when(catalogRegistry.availablePayoffs(noPayOffCustomer)).thenReturn(new HashSet<>());
+        when(catalogRegistry.showAvailablePayoffs(customer)).thenReturn(payoffs);
+        when(catalogRegistry.showAvailablePayoffs(noPayOffCustomer)).thenReturn(new HashSet<>());
         when(customerRegistry.editVFP(eq(customer), any())).thenReturn(customer);
         when(customerRegistry.editFidelityPoints(eq(customer), anyInt())).thenReturn(customer);
     }
 
     @Test
-    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException {
+    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, PayoffNotFoundException {
         assertEquals(new PayoffPurchase("low", 10, 10, low.getStore(), customer), payoffHandler.claimPayoff(customer, low));
     }
 
     @Test
-    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException {
+    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, PayoffNotFoundException {
         payoffHandler.claimPayoff(customer, low);
         Mockito.verify(customerRegistry, Mockito.times(1)).editFidelityPoints(customer, -10);
         Mockito.verify(customerRegistry, Mockito.times(1)).editVFP(customer, LocalDate.now().plusDays(2));

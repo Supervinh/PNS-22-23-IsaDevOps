@@ -6,5 +6,5 @@ import mfc.entities.PayoffPurchase;
 import mfc.exceptions.*;
 
 public interface PayOffProcessor {
-    PayoffPurchase claimPayOff(Customer user, Payoff payOff) throws InsufficientBalanceException, VFPExpiredException, NoMatriculationException, ParkingException, NegativePointCostException, CustomerNotFoundException, PayoffNotFoundException;
+    PayoffPurchase claimPayoff(Customer user, Payoff payOff) throws InsufficientBalanceException, VFPExpiredException, NoMatriculationException, ParkingException, NegativePointCostException, CustomerNotFoundException, PayoffNotFoundException;
 }

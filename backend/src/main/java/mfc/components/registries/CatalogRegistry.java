@@ -45,7 +45,6 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
         Set<Store> stores = payoffPurchaseRepository.findPayoffsPurchasesByCustomer_Id(customer.getId()).stream()
                 .map(PayoffPurchase::getStore)
                 .collect(Collectors.toSet());
-
         return payoffRepository.findAll().stream().filter(e -> e.getPointCost() <= customer.getFidelityPoints()) //Solde en points suffisants
                 .filter(e -> !customer.getVfp().isBefore(LocalDate.now()) || !e.isVfp()) //Soit le client est vfp, soit la payOff n'est pas vfp
                 .filter(e -> stores.contains(e.getStore())) //Le client a déjà acheté dans le magasin
