@@ -87,7 +87,7 @@ public class CatalogController {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
             return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(
-                    catalogModifier.addPayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store)));
+                    catalogModifier.addPayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store, payoffDTO.isVfp())));
         } catch (StoreNotFoundException | NegativeCostException | NegativePointCostException |
                  AlreadyExistingPayoffException e) {
             System.out.println(e.getMessage());
@@ -119,10 +119,10 @@ public class CatalogController {
     public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
-            Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store);
+            Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store, payoffDTO.isVfp());
             Optional<Double> cost = payOff.getCost() == 0 ? Optional.empty() : Optional.of(payOff.getCost());
             Optional<Integer> pointCost = payOff.getPointCost() == 0 ? Optional.empty() : Optional.of(payOff.getPointCost());
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertPayoffToDTO(catalogModifier.editPayOff(payOff, cost, pointCost)));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertPayoffToDTO(catalogModifier.editPayOff(payOff, cost, pointCost, payoffDTO.isVfp())));
         } catch (PayoffNotFoundException | StoreNotFoundException | NegativeCostException |
                  NegativePointCostException e) {
             System.out.println(e.getMessage() + "" + e);

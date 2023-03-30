@@ -59,10 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
         List<String> tocompare = carrouf.get().getSchedule();
         StoreOwner own = carrouf.get().getOwner();
         storeHandler.updateOpeningHours(carrouf.get(), update, own);
-
         Optional<Store> carroufReloaded = storeRepository.findStoreByName("Leclerc");
-
         assertNotEquals(tocompare,carroufReloaded.get().getSchedule());
-
     }
 }

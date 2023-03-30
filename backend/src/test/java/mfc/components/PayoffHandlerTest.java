@@ -2,11 +2,11 @@ package mfc.components;
 
 import mfc.components.registries.CatalogRegistry;
 import mfc.components.registries.CustomerRegistry;
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
 import mfc.entities.PayoffPurchase;
 import mfc.entities.Store;
 import mfc.exceptions.*;
-import mfc.entities.Payoff;
-import mfc.entities.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,9 +43,9 @@ class PayoffHandlerTest {
 
     @BeforeEach
     void setUp() throws NegativePointCostException, CustomerNotFoundException {
-        low = new Payoff("low", 10, 10, new Store("StoreA", null, null));
-        medium = new Payoff("medium", 25, 25, new Store("StoreA", null, null));
-        expensive = new Payoff("expensive", 50, 50, new Store("StoreC", null, null));
+        low = new Payoff("low", 10, 10, new Store("StoreA", null, null), false);
+        medium = new Payoff("medium", 25, 25, new Store("StoreA", null, null), false);
+        expensive = new Payoff("expensive", 50, 50, new Store("StoreC", null, null), false);
         payoffs = new HashSet<>(Set.of(low, medium));
         customer = new Customer("Mark", "a@a.fr", "password", "0123456789");
         noPayOffCustomer = new Customer("Mark", "a@a.fr", "password", "0123456789");
