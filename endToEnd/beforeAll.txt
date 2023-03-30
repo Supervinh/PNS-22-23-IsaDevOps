@@ -2,5 +2,6 @@ admin
     -name: b
     -mail: a@a
 Init
+script register.txt
 script buySomething.txt
 logout
