@@ -19,8 +19,9 @@ export class AppService {
     }
 
     pay(paymentDto: PaymentDto): PaymentDto {
+        console.log('Receive a new payment');
         if (paymentDto.creditCard.includes(AppService.magicKey)) {
-            this.transactions.push(paymentDto);
+            console.log('Payment of ' + paymentDto.amount + ' accepted');
             return paymentDto;
         } else {
             throw new PaymentRejectedException(paymentDto.amount);
