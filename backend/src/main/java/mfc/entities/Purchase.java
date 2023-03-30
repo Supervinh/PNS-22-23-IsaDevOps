@@ -40,6 +40,14 @@ public class Purchase {
     }
 
     @Override
+    public String toString() {
+        return "Purchase{ date=" + date +
+                ", customer=" + customer +
+                ", id=" + id +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(store, cost, date, customer);
     }

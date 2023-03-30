@@ -7,6 +7,7 @@ import mfc.exceptions.*;
 import mfc.interfaces.ParkingProcessor;
 import mfc.interfaces.PayOffProcessor;
 import mfc.interfaces.explorer.CatalogExplorer;
+import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.PayOffPurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,15 @@ public class PayoffHandler implements PayOffProcessor {
     private final CustomerBalancesModifier customerBalancesModifier;
     private final ParkingProcessor parkingHandler;
     private final PayOffPurchaseRecording payoffPurchaseRegistry;
+    private final PurchaseFinder purchaseFinder;
 
     @Autowired
-    public PayoffHandler(CatalogExplorer catalogExplorer, CustomerBalancesModifier customerBalancesModifier, ParkingProcessor parkingHandler, PayOffPurchaseRecording payoffPurchaseRegistry) {
+    public PayoffHandler(CatalogExplorer catalogExplorer, CustomerBalancesModifier customerBalancesModifier, ParkingProcessor parkingHandler, PayOffPurchaseRecording payoffPurchaseRegistry, PurchaseFinder purchaseFinder) {
         this.catalogExplorer = catalogExplorer;
         this.customerBalancesModifier = customerBalancesModifier;
         this.parkingHandler = parkingHandler;
         this.payoffPurchaseRegistry = payoffPurchaseRegistry;
+        this.purchaseFinder = purchaseFinder;
     }
 
     @Override
@@ -39,7 +42,9 @@ public class PayoffHandler implements PayOffProcessor {
             parkingHandler.useParkingPayOff(customer);
         }
         customer = customerBalancesModifier.editFidelityPoints(customer, -payoff.getPointCost());
-        customer = customerBalancesModifier.editVFP(customer, LocalDate.now().plusDays(2));
+        if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
+            customer.setVfp(LocalDate.now().plusDays(7));
+        }
         return payoffPurchaseRegistry.recordPayOffPurchase(payoff, customer);
 
     }
