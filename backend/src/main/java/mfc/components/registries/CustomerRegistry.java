@@ -15,7 +15,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.StreamSupport;
 
 @Component
 @Transactional
@@ -53,7 +52,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Optional<Customer> findCustomerByMail(String mail) {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+        return customerRepository.findAll().stream()
                 .filter(cust -> mail.equals(cust.getMail())).findAny();
     }
 
@@ -64,7 +63,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Optional<Customer> findCustomerByName(String name) {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+        return customerRepository.findAll().stream()
                 .filter(cust -> name.equals(cust.getName())).findAny();
     }
 

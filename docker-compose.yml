@@ -24,7 +24,7 @@ services:
     depends_on:
       - mfc-server
     volumes:
-      - ./cli/demo.txt:/opt/app/demo.txt
+      - ./cli/scripts:/opt/app/scripts
     stdin_open: true
     tty: true
 
@@ -33,7 +33,7 @@ services:
     container_name: bank
 
   parking-service:
-    image: teamb/mfc-parking-service
+    image: jeannestheo/mfc-parking-service
     container_name: parking
 
   # the postgres DB to be connected to the backend (watch out: no volume specified, everything can be lost)
@@ -44,3 +44,5 @@ services:
       - POSTGRES_PASSWORD=postgrespass
       - POSTGRES_USER=postgresuser
       - POSTGRES_DB=tcf-db
+    volumes:
+      - ./database:/var/lib/postgresql/data
