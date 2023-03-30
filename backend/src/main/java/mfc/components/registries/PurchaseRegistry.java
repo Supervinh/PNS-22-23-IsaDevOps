@@ -50,10 +50,4 @@ public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
                 .filter(purchase -> customer.equals(purchase.getCustomer())).collect(Collectors.toSet());
     }
 
-    @Override
-    public Optional<Purchase> findById(UUID id) {
-        return StreamSupport.stream(purchaseRepository.findAll().spliterator(), false)
-                .filter(purchase -> id.equals(purchase.getId())).findAny();
-    }
-
 }

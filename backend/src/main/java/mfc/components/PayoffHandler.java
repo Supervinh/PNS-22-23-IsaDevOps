@@ -5,6 +5,7 @@ import mfc.entities.Customer;
 import mfc.entities.Payoff;
 import mfc.entities.PayoffPurchase;
 import mfc.exceptions.*;
+import mfc.interfaces.PayOffProcessor;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 
 @Component
 @Transactional
-public class PayoffHandler {
+public class PayoffHandler implements PayOffProcessor {
 
     private final CatalogExplorer catalogExplorer;
     private final CustomerBalancesModifier customerBalancesModifier;
@@ -30,6 +31,7 @@ public class PayoffHandler {
         this.payoffPurchaseRegistry = payoffPurchaseRegistry;
     }
 
+    @Override
     public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws VFPExpiredException, CustomerNotFoundException, NegativePointCostException, ParkingException, NoMatriculationException {
         if (!catalogExplorer.availablePayoffs(customer).contains(payoff)) {
             throw new VFPExpiredException();

@@ -1,12 +1,12 @@
 package mfc.controllers;
 
-import mfc.components.PayoffHandler;
 import mfc.connectors.externaldto.externaldto.NotificationDTO;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.PayoffIndentifierDTO;
 import mfc.controllers.dto.PayoffPurchaseDTO;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.PayoffNotFoundException;
+import mfc.interfaces.PayOffProcessor;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.entities.Customer;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static java.util.Objects.isNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -38,14 +37,14 @@ public class PayoffController {
     CustomerFinder customerFinder;
 
     @Autowired
-    PayoffHandler payOffHandler;
+    PayOffProcessor payOffProcessor;
 
     @PostMapping(path = LOGGED_URI + "claimPayoff", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") Long customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) {
         try {
             Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
             Payoff payoff = catalogExplorer.findPayoff(payoffIndentifierDTO.getPayOffName(), payoffIndentifierDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
-            return ResponseEntity.ok(ConvertDTO.convertPayoffPurchaseToDTO(payOffHandler.claimPayoff(customer, payoff)));
+            return ResponseEntity.ok(ConvertDTO.convertPayoffPurchaseToDTO(payOffProcessor.claimPayoff(customer, payoff)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

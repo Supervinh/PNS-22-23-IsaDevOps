@@ -15,6 +15,5 @@ public interface PurchaseFinder {
 
     Set<Purchase> lookUpPurchasesByCustomer(Customer customer);
 
-    Optional<Purchase> findById(UUID id);
 }
 
