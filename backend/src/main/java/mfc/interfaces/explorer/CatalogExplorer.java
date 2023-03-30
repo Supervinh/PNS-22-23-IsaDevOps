@@ -1,14 +1,18 @@
 package mfc.interfaces.explorer;
 
-import mfc.exceptions.PayoffNotFoundException;
 import mfc.entities.Customer;
 import mfc.entities.Payoff;
+import mfc.exceptions.InsufficientBalanceException;
+import mfc.exceptions.PayoffNotFoundException;
+import mfc.exceptions.VFPExpiredException;
 
 import java.util.Optional;
 import java.util.Set;
 
 public interface CatalogExplorer {
-    Set<Payoff> availablePayoffs(Customer customer);
+    void isAvailablePayoff(Customer customer, Payoff store) throws InsufficientBalanceException, VFPExpiredException;
+
+    Set<Payoff> showAvailablePayoffs(Customer customer);
 
     Set<Payoff> exploreCatalogue(Customer customer, String search);
 

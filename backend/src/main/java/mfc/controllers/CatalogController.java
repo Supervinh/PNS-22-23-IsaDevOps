@@ -68,7 +68,7 @@ public class CatalogController {
     public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
-            CatalogDTO c = convertCatalogToDTO(catalogExplorer.availablePayoffs((customer.get())));
+            CatalogDTO c = convertCatalogToDTO(catalogExplorer.showAvailablePayoffs((customer.get())));
             return ResponseEntity.status(HttpStatus.CREATED).body(c);
         } else throw new CustomerNotFoundException();
     }

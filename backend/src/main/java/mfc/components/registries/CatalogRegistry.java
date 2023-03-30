@@ -2,34 +2,54 @@ package mfc.components.registries;
 
 import mfc.entities.Customer;
 import mfc.entities.Payoff;
+import mfc.entities.PayoffPurchase;
 import mfc.entities.Store;
-import mfc.exceptions.AlreadyExistingPayoffException;
-import mfc.exceptions.NegativeCostException;
-import mfc.exceptions.NegativePointCostException;
-import mfc.exceptions.PayoffNotFoundException;
+import mfc.exceptions.*;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.modifier.CatalogModifier;
+import mfc.repositories.PayoffPurchaseRepository;
 import mfc.repositories.PayoffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional
 public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     private final PayoffRepository payoffRepository;
+    private final PayoffPurchaseRepository payoffPurchaseRepository;
 
     @Autowired
-    public CatalogRegistry(PayoffRepository payoffRepository) {
+    public CatalogRegistry(PayoffRepository payoffRepository,
+                           PayoffPurchaseRepository payoffPurchaseRepository) {
         this.payoffRepository = payoffRepository;
+        this.payoffPurchaseRepository = payoffPurchaseRepository;
     }
 
     @Override
-    public Set<Payoff> availablePayoffs(Customer customer) {
-        return payoffRepository.available(customer.getFidelityPoints());
+    public void isAvailablePayoff(Customer customer, Payoff payoff) throws InsufficientBalanceException, VFPExpiredException {
+        if (payoff.isVfp() && !customer.getVfp().isBefore(LocalDate.now())) {
+            throw new VFPExpiredException();
+        } else if (payoff.getPointCost() > customer.getFidelityPoints()) {
+            throw new InsufficientBalanceException();
+        }
+    }
+
+    @Override
+    public Set<Payoff> showAvailablePayoffs(Customer customer) {
+        Set<Store> stores = payoffPurchaseRepository.findPayoffsPurchasesByCustomer_Id(customer.getId()).stream()
+                .map(PayoffPurchase::getStore)
+                .collect(Collectors.toSet());
+
+        return payoffRepository.findAll().stream().filter(e -> e.getPointCost() <= customer.getFidelityPoints()) //Solde en points suffisants
+                .filter(e -> !customer.getVfp().isBefore(LocalDate.now()) || !e.isVfp()) //Soit le client est vfp, soit la payOff n'est pas vfp
+                .filter(e -> stores.contains(e.getStore())) //Le client a déjà acheté dans le magasin
+                .collect(Collectors.toSet());
     }
 
     @Override
