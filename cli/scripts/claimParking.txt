@@ -1,16 +1,12 @@
-register-customer kadoc a@a abc 5251896983
 login-customer a@a abc
 modify-matriculation AAA-404-AB
 refill 500
 logout
 
-register-admin admin a@æ admin
 login-admin a@æ admin
-register-owner to to@a owner
 logout
 
 login-owner to@a owner
-register-store abcdaire 22 15 08 20 to
 add-payoff dico 200 15 abcdaire
 add-payoff Parking 200 15 abcdaire
 add-purchase abcdaire a@a 250

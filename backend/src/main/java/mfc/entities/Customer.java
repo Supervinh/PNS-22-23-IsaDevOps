@@ -3,6 +3,7 @@ package mfc.entities;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class Customer extends Account {
         return creditCard;
     }
 
-    public void setCreditCard(String creditCard) {
+    public void setCreditCard(@Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits") String creditCard) {
         this.creditCard = creditCard;
     }
 

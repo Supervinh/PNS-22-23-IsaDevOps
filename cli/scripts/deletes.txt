@@ -1,12 +1,9 @@
-register-customer catalogCustomer catalog@customer pwd 5251896983
 login-customer catalog@customer pwd
 delete-customer catalog@customer pwd
 logout
 login-customer catalog@customer pwd
 
-register-admin admin ad@min pwd
 login-admin ad@min pwd
-register-owner owner ow@ner pwd
 delete-admin ad@min pwd
 logout
 login-admin ad@min pwd

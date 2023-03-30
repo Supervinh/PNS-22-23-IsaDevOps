@@ -23,7 +23,7 @@
 
     <groupId>team-b</groupId>
     <artifactId>server</artifactId>
-    <version>1.3-Dev</version>
+    <version>1.4-Dev</version>
     <packaging>jar</packaging>
     <name>server</name>
 

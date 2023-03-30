@@ -1,14 +1,7 @@
-register-customer firstCustomer firstCustomer@customer.fr abc 5251896983
-register-customer secondCustomer secondCustomer@customer.fr abc 5251896983
-register-customer thirdCustomer thirdCustomer@customer.fr abc 5251896983
-
-register-admin admin ad@min pwd
 login-admin ad@min pwd
 
-register-owner owner ow@ner pwd
 logout
 login-owner ow@ner pwd
-register-store dashStore 22 15 08 20 owner
 add-payoff expensivePayoff 50 25 dashStore
 add-payoff mediumPayoff 30 15 dashStore
 add-payoff lowPayoff 10 5 dashStore
@@ -35,5 +28,3 @@ logout
 
 login-owner ow@ner pwd
 dashboard dashStore
-
-
