@@ -147,3 +147,16 @@ Config Maven Artifactory : https://www.jfrog.com/confluence/display/JFROG/Maven+
 Maven3.8.7 workaround for https : https://gist.github.com/vegaasen/1d545aafeda867fcb48ae3f6cd8fd7c7  
 Set Up smee : https://www.jenkins.io/blog/2019/01/07/webhook-firewalls/  
 Install Docker : https://docs.docker.com/engine/install/ubuntu/
+
+## TODO
+
++ tester pull docker -> OK
++ Alternative locale → À tester quand smee fonctionne
++ push docker compose rendu -> a push sur artifactory ?
++ artifactory pull -> A tester
++ End-2-end check bd avant
++ BeforeAll / AfterAll
+
+---
+
++ PRA
