@@ -98,7 +98,7 @@ public class CustomerController {
         return ResponseEntity.ok().body(
                 convertCustomerToDto(
                         modifier.recordCreditCard(
-                        finder.findCustomerById(customerId).orElseThrow(), creditCard)));
+                                finder.findCustomerById(customerId).orElseThrow(), creditCard)));
 
     }
 
@@ -130,7 +130,7 @@ public class CustomerController {
             Customer customer = finder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
             return ResponseEntity.ok().body(convertCustomerToDto(registry.delete(customer)));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

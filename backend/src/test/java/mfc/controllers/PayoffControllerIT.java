@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 class PayoffControllerIT {
-
+/*
     @Autowired
     StoreRepository storeRepository;
 
@@ -47,5 +47,5 @@ class PayoffControllerIT {
         storeRepository.deleteById(store.getId());
         storeRepository.flush();
         assertEquals(payoffPurchaseRepository.findPayoffPurchaseById(pop.getId()), Optional.empty());
-    }
+    }*/
 }

@@ -7,3 +7,4 @@ logout
 
 login-owner to@a owner
 add-purchase abcdaire a@a 25
+logout

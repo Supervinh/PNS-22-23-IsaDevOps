@@ -12,4 +12,5 @@ login-owner ow@ner pwd
 delete-store-owner ow@ner pwd
 logout
 login-owner ow@ner pwd
+logout
 

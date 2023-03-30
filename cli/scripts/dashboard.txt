@@ -28,3 +28,4 @@ logout
 
 login-owner ow@ner pwd
 dashboard dashStore
+logout

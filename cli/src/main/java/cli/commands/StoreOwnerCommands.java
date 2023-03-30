@@ -36,7 +36,7 @@ public class StoreOwnerCommands {
 
     @ShellMethod("Delete account(deleteStoreOwner)")
     public void deleteStoreOwner() {
-        if (!(cliContext.getLoggedInUser().getClass() == CliStoreOwner.class)) {
+        if (cliContext.getLoggedInUser().getClass() != CliStoreOwner.class) {
             System.out.println("You are not a store owner");
             return;
         }
@@ -49,6 +49,7 @@ public class StoreOwnerCommands {
             System.out.println("You are not a store owner");
             return;
         }
+        System.out.println(getUri() + "/deleteStore/" + storeName);
         restTemplate.delete(getUri() + "/deleteStore/" + storeName);
     }
 

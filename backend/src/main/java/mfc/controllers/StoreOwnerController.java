@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static mfc.controllers.dto.ConvertDTO.convertCustomerToDto;
 import static mfc.controllers.dto.ConvertDTO.convertOwnerToDto;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -102,15 +103,19 @@ public class StoreOwnerController {
         }
     }
 
-    @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner", consumes = ALL_VALUE)
+    @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner")
     public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) throws StoreOwnerNotFoundException, NoCorrespongingAccountException {
-        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
-        ownerReg.delete(storeOwner);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        try {
+            StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+            return ResponseEntity.ok().body(convertOwnerToDto(ownerReg.delete(storeOwner)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping(path = LOGGED_URI + "deleteStore", consumes = ALL_VALUE)
     public ResponseEntity<StoreOwnerDTO> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
+        System.out.println("deleteStore");
         Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
         StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
         if (store.getOwner().equals(storeOwner)) {

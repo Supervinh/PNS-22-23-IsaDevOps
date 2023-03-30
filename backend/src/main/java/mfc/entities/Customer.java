@@ -23,9 +23,9 @@ public class Customer extends Account {
     public Customer() {
     }
 
-    public Customer(String name, String creditCard) {
+    /*public Customer(String name, String creditCard) {
         this(name, "", "", creditCard);
-    }
+    }*/
 
 
 
