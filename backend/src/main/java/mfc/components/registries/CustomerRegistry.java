@@ -59,13 +59,8 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     public Optional<Customer> findCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
     }
-
-    @Override
-    public Optional<Customer> findCustomerByName(String name) {
-        return customerRepository.findAll().stream().filter(cust -> name.equals(cust.getName())).findAny();
-    }
-
-    @Override
+    
+     @Override
     public Optional<Customer> findCustomerAtConnexion(String mail, String password) throws CredentialsException {
         Optional<Customer> customer = customerRepository.findCustomerByMail(mail);
         if (customer.isPresent() && customer.get().getPassword().equals(password)) {
@@ -75,6 +70,11 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
             throw new CredentialsException();
         }
         return customer;
+    }
+
+    @Override
+    public Optional<Customer> findCustomerByName(String name) {
+        return customerRepository.findAll().stream().filter(cust -> name.equals(cust.getName())).findAny();
     }
 
     @Override

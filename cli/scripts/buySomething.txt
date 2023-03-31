@@ -11,5 +11,3 @@ logout
 login-owner to@a owner
 register-store abcdaire 22 15 08 20 to
 add-purchase abcdaire a@a 25
-
-logout

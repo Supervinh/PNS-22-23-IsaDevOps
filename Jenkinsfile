@@ -70,7 +70,7 @@ node {
             }
         }
         def res = -1
-        if(behaviour == 'main' || pr_behaviour == 'dev'){
+        if(pr_behaviour == 'dev'){
             stage('Tests End-2-End'){
                 dir("endToEnd"){
                     res = sh returnStatus: true, script: './endToEnd.sh'
@@ -87,28 +87,48 @@ node {
                 }
             }
         }
-        if(behaviour == 'main' && res == 0){
-            stage('Publish on DockerHub'){
-                withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
-                    sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
+        if(behaviour == 'main'){
+             dir('Pull Artifactory'){
+                stage('Retrieve from artifactory & build'){
+                    withCredentials([string(credentialsId: 'Artifactory', variable: '$ARTIFACTORY_ID')]) {
+                       def versions = sh(script:"./build-all.sh --server --cli --none -u $ARTIFACTORY_ID", returnStdout: true).trim().split('\n').findAll{ it.startsWith("TAG:") }
+                    }
+                    def cli = versions.find{it.contains("cli")}
+                    if(cli != null)
+                        cli = cli.substring(cli.indexOf("->")+2).trim()
+                    else
+                        cli = ""
+                    def server = versions.find{it.contains("server")}
+                    if(server != null)
+                        server.substring(server.indexOf("->")+2).trim()
+                    else
+                        server=""
                 }
-                sh '''
-                    docker push jeannestheo/mfc-spring-server
-                    docker push jeannestheo/mfc-spring-cli
-                    docker push jeannestheo/mfc-bank-service
-                    '''
-            }
+                stage('Publish on DockerHub'){
+                    withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
+                        sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
+                    }
+                    sh """
+                        docker push jeannestheo/mfc-spring-cli:${cli}
+                        docker push jeannestheo/mfc-spring-server:${server}
+                        docker push jeannestheo/mfc-bank-service
+                        docker push jeannestheo/mfc-parking-service
+                        """
+                }
+             }
         }
-        stage('Deploy'){
-            echo 'Deploy on artifactory(8002:8081) and send to SonarQube (8001:9000)..'
-            withCredentials([string(credentialsId: 'Sonar', variable: 'SONAR_ID')]) {
-                dir('backend'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
-                }
-                dir('cli'){
-                    sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
-                }
-            }
+        if(behaviour != 'main'){
+            stage('Deploy'){
+                        echo 'Deploy on artifactory(8002:8081) and send to SonarQube (8001:9000)..'
+                        withCredentials([string(credentialsId: 'Sonar', variable: 'SONAR_ID')]) {
+                            dir('backend'){
+                                sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
+                            }
+                            dir('cli'){
+                                sh 'mvn deploy sonar:sonar -Dsonar.login=${SONAR_ID} -DskipTests -DskipITs'
+                            }
+                        }
+                    }
         }
         if(behaviour == 'PR'){
             stage('Notify'){
