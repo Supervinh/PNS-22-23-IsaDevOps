@@ -15,7 +15,7 @@ import mfc.exceptions.StoreOwnerNotFoundException;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
-import mfc.interfaces.modifier.StoreRegistration;
+import mfc.interfaces.modifier.StoreModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ public class StoreController {
     private CustomerFinder customerFinder;
 
     @Autowired
-    private StoreRegistration storeRegistration;
+    private StoreModifier storeModifier;
 
     @Autowired
     private TransactionHandler transactionHandler;
@@ -68,8 +68,7 @@ public class StoreController {
         try {
             // from DTO to POJO
             StoreOwner owner = ownerFinder.findStoreOwnerById(ownerId).orElseThrow(StoreOwnerNotFoundException::new);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertStoreToDto(storeRegistration.register(storeDTO.getName(), storeDTO.getSchedule(), owner)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(convertStoreToDto(storeModifier.register(storeDTO.getName(), storeDTO.getSchedule(), owner)));
         } catch (Exception e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -99,4 +98,18 @@ public class StoreController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    //    /store/6/modifySchedule
+    @PostMapping(path = LOGGED_URI + "modifySchedule", consumes = APPLICATION_JSON_VALUE)
+    // path is a REST CONTROLLER NAME
+    public ResponseEntity<StoreDTO> modifySchedule(@RequestBody @Valid StoreDTO storeDTO, @PathVariable("ownerId") long ownerId) throws StoreOwnerNotFoundException, StoreNotFoundException {
+        StoreOwner owner = ownerFinder.findStoreOwnerById(ownerId).orElseThrow(StoreOwnerNotFoundException::new);
+        Store store = storeFinder.findStoreByName(storeDTO.getName()).orElseThrow(StoreNotFoundException::new);
+        if (!store.getOwner().equals(owner)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertStoreToDto(storeModifier.updateOpeningHours(store, storeDTO.getSchedule())));
+    }
+
 }
+

@@ -3,7 +3,7 @@ package mfc.cucumber.purchase;
 import io.cucumber.java.en.Given;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.AlreadyExistingStoreException;
-import mfc.interfaces.modifier.StoreRegistration;
+import mfc.interfaces.modifier.StoreModifier;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class Store {
 
     @Autowired
-    private StoreRegistration storeRegistration;
+    private StoreModifier storeModifier;
 
     @Autowired
     private StoreRepository storeRepository;
@@ -28,10 +28,6 @@ public class Store {
     public void aStoreNamedOwnedByWithOpeningHoursFromTo(String storeName, String ownerMail, int openingHour, int openingMinute, int closingHour, int closingMinute) throws AlreadyExistingStoreException, AlreadyExistingAccountException {
         storeRepository.deleteAll();
         Map<String, String> scheduleList = new HashMap<>();
-//        for (int i = 0; i <= 6; i++) {
-//            scheduleList.add("7h00");
-//            scheduleList.add("19h30");
-//        }
-        storeRegistration.register(storeName, scheduleList, storeOwnerRepository.findStoreOwnerByMail(ownerMail).get());
+        storeModifier.register(storeName, scheduleList, storeOwnerRepository.findStoreOwnerByMail(ownerMail).get());
     }
 }

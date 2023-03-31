@@ -12,11 +12,15 @@ import org.springframework.web.client.RestTemplate;
 public class SurveyCommands {
     public static final String BASE_URI = "/survey";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public SurveyCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
 
     @ShellMethod("Answer a survey (answerSurvey SURVEY_NAME ANSWER)")
     public CliSurvey answerSurvey(String name, String answer) {

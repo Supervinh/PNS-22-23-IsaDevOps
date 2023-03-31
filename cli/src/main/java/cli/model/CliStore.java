@@ -1,5 +1,6 @@
 package cli.model;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -7,6 +8,7 @@ public class CliStore {
     private Long id;
     private String name;
     private Map<String, String> schedule;
+    private LocalDateTime lastUpdate;
 
     public CliStore(String name, Map<String, String> schedule) {
         this.name = name;
@@ -37,12 +39,21 @@ public class CliStore {
         this.schedule = schedule;
     }
 
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     @Override
     public String toString() {
         return "CliStore{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", schedule=" + schedule +
+                ", lastUpdate=" + lastUpdate +
                 '}';
     }
 

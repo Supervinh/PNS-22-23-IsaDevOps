@@ -45,4 +45,4 @@ services:
       - POSTGRES_USER=postgresuser
       - POSTGRES_DB=tcf-db
     volumes:
-      - ./postgres/data:/var/lib/postgresql/data
+      - ./database:/var/lib/postgresql/data

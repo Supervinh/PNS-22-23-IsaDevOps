@@ -13,11 +13,16 @@ public class CatalogCommands {
 
     public static final String BASE_URI = "/catalog";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public CatalogCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
+
 
     @ShellMethod("Shows avaible catalog to the customer(availableCatalog)")
     public CliCatalog availableCatalog() {

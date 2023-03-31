@@ -4,6 +4,7 @@ import mfc.entities.Customer;
 import mfc.entities.Survey;
 import mfc.exceptions.AlreadyAnsweredException;
 import mfc.exceptions.InvalidAnswerException;
+import mfc.exceptions.SurveyAlreadyExistsException;
 import mfc.exceptions.SurveyNotFoundException;
 import mfc.interfaces.SurveyFinder;
 import mfc.interfaces.SurveyModifier;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional
@@ -35,6 +37,11 @@ public class SurveyRegistry implements SurveyFinder, SurveyModifier {
     }
 
     @Override
+    public Set<Survey> findByCustomerDidntAnswered(Customer customer) {
+        return surveyRepository.findAll().stream().filter(e -> !e.getCustomersAnswered().contains(customer)).collect(Collectors.toSet());
+    }
+
+    @Override
     public Survey answerSurvey(Survey survey, String answer, Customer customer) throws SurveyNotFoundException, InvalidAnswerException, AlreadyAnsweredException {
         surveyRepository.findByName(survey.getName()).orElseThrow(SurveyNotFoundException::new);
         if (survey.getCustomersAnswered().contains(customer)) {
@@ -42,6 +49,7 @@ public class SurveyRegistry implements SurveyFinder, SurveyModifier {
         }
         if (survey.getAnswers().containsKey(answer)) {
             survey.getAnswers().put(answer, survey.getAnswers().get(answer) + 1);
+            survey.getCustomersAnswered().add(customer);
             surveyRepository.save(survey);
             return survey;
         } else {
@@ -50,7 +58,10 @@ public class SurveyRegistry implements SurveyFinder, SurveyModifier {
     }
 
     @Override
-    public Survey createSurvey(Survey survey) {
+    public Survey createSurvey(Survey survey) throws SurveyAlreadyExistsException {
+        if (surveyRepository.findByName(survey.getName()).isPresent()) {
+            throw new SurveyAlreadyExistsException();
+        }
         return surveyRepository.save(survey);
     }
 

@@ -13,11 +13,12 @@ public class ConvertDTO {
     public static CustomerDTO convertCustomerToDto(Customer customer) { // In more complex cases, we could use ModelMapper
         CustomerDTO dto = new CustomerDTO(customer.getId(), customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard(), customer.getMatriculation());
         dto.setBalance(customer.getBalance());
+        dto.setFavoritesStores(customer.getFavoriteStores().stream().map(ConvertDTO::convertStoreToDto).toList());
         return dto;
     }
 
     public static StoreDTO convertStoreToDto(Store store) {
-        return new StoreDTO(store.getId(), store.getName(), store.getSchedule());
+        return new StoreDTO(store.getId(), store.getName(), store.getSchedule(), store.getLastUpdate());
     }
 
 
@@ -47,6 +48,11 @@ public class ConvertDTO {
     }
 
     public static SurveyDTO convertSurveyToDTO(Survey survey) {
+        return new SurveyDTO(survey.getName(), survey.getQuestion(), survey.getAnswers());
+    }
+
+    public static SurveyDTO convertToSurveyDisplayDto(Survey survey) {
+        survey.getAnswers().forEach((k, v) -> survey.getAnswers().put(k, 0));
         return new SurveyDTO(survey.getName(), survey.getQuestion(), survey.getAnswers());
     }
 }

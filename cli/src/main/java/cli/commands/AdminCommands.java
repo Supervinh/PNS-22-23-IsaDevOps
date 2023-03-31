@@ -13,11 +13,15 @@ public class AdminCommands {
 
     public static final String BASE_URI = "/admin";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public AdminCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
 
     @ShellMethod("Register an admin in the CoD backend (registerAdmin ADMIN_NAME ADMIN_MAIL ADMIN_PWD AUTH_MAIL, AUTH_PWD)")
     public CliAdmin registerAdmin(String name, String mail, String password) {

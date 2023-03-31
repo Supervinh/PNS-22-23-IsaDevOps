@@ -16,21 +16,28 @@ public class StoreCommands {
 
     public static final String BASE_URI = "/store";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public StoreCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
 
-    @ShellMethod("Register a store in the CoD backend(registerStore STORE_NAME OPENING_TIME CLOSING_TIME)")
-    public CliStore registerStore(String name, String... horaires) {
+    @ShellMethod("Register a store in the CoD backend(registerStore STORE_NAME)")
+    public CliStore registerStore(String name) {
         HashMap<String, String> schedule = new HashMap<>();
-//        List<String> sch = new ArrayList<>(14);
-//        for (int i = 0; i < 7; i++) {
-//            sch.add(opening);
-//            sch.add(closing);
-//        }
         return restTemplate.postForObject(getUri() + "/register", new CliStore(name, schedule), CliStore.class);
+    }
+
+    @ShellMethod("Modify the schedule of a store(modifySchedule STORE_NAME OPENING CLOSING)")
+    public CliStore modifySchedule(String name, String day, String opening, String closing) {
+        HashMap<String, String> schedule = new HashMap<>();
+        schedule.put(day + "0", opening);
+        schedule.put(day + "1", closing);
+        return restTemplate.postForObject(getUri() + "/modifySchedule", new CliStore(name, schedule), CliStore.class);
     }
 
     @ShellMethod("Register a purchase from a customer(addPurchase STORE_NAME CUSTOMER_EMAIL COST INTERNAL_ACCOUNT)")

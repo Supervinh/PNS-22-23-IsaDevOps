@@ -2,7 +2,6 @@ package mfc.components;
 
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.CredentialsException;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 @Transactional
@@ -47,18 +43,18 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
     }
 
 
-    //    @Test
-     void UpdateStoreSchedule() throws CredentialsException {
-         Map<String, String> update = new HashMap<>();
-//        for(int i = 0; i <= 6; i++){
-//            update.put("7h30");
-//            update.put("19h30");
-//        }
-         Optional<Store> carrouf = storeRepository.findStoreByName("Leclerc");
-         Map<String, String> tocompare = carrouf.get().getSchedule();
-         StoreOwner own = carrouf.get().getOwner();
-         storeHandler.updateOpeningHours(carrouf.get(), update, own);
-         Optional<Store> carroufReloaded = storeRepository.findStoreByName("Leclerc");
-         assertNotEquals(tocompare, carroufReloaded.get().getSchedule());
-     }
+//    //    @Test
+//     void UpdateStoreSchedule() throws CredentialsException {
+//         Map<String, String> update = new HashMap<>();
+////        for(int i = 0; i <= 6; i++){
+////            update.put("7h30");
+////            update.put("19h30");
+////        }
+//         Optional<Store> carrouf = storeRepository.findStoreByName("Leclerc");
+//         Map<String, String> tocompare = carrouf.get().getSchedule();
+//         StoreOwner own = carrouf.get().getOwner();
+//         storeHandler.updateOpeningHours(carrouf.get(), update, own);
+//         Optional<Store> carroufReloaded = storeRepository.findStoreByName("Leclerc");
+//         assertNotEquals(tocompare, carroufReloaded.get().getSchedule());
+//     }
 }

@@ -1,18 +1,21 @@
 package mfc.controllers.dto;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
 public class StoreDTO {
 
-    private Long id;
+    private final Long id;
     private String name;
     private Map<String, String> schedule;
+    private LocalDateTime lastUpdate;
 
-    public StoreDTO(Long id, String name, Map<String, String> schedule) {
+    public StoreDTO(Long id, String name, Map<String, String> schedule, LocalDateTime lastUpdate) {
         this.name = name;
         this.schedule = schedule;
         this.id = id;
+        this.lastUpdate = lastUpdate;
     }
 
     public Long getId() {
@@ -33,6 +36,14 @@ public class StoreDTO {
 
     public void setSchedule(Map<String, String> schedule) {
         this.schedule = schedule;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override

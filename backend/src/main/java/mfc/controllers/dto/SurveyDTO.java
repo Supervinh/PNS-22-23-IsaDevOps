@@ -8,15 +8,13 @@ public class SurveyDTO {
     private String question;
     private Map<String, Integer> answers;
 
-    public SurveyDTO(String name, String question) {
-        this.name = name;
-        this.question = question;
-    }
-
     public SurveyDTO(String name, String question, Map<String, Integer> answers) {
         this.name = name;
         this.question = question;
         this.answers = answers;
+    }
+
+    public SurveyDTO() {
     }
 
     public String getName() {

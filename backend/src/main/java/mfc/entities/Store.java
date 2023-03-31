@@ -4,6 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,6 +27,7 @@ public class Store {
      */
     @ElementCollection
     private Map<String, String> schedule;
+    private LocalDateTime lastUpdate;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -33,17 +35,14 @@ public class Store {
 
     public Store(String name, StoreOwner owner) {
         this.name = name;
-        HashMap<String, String> setup = new HashMap<>();
-        setup.put("Mo0", "7h00");
-        setup.put("Mo1", "19h00");
-        this.schedule = setup;
+        this.schedule = new HashMap<>();
         this.owner = owner;
+        lastUpdate = LocalDateTime.now();
     }
 
     public Store(String name, Map<String, String> schedule, StoreOwner owner) {
-        this.name = name;
+        this(name, owner);
         this.schedule = schedule;
-        this.owner = owner;
     }
 
     public Store() {
@@ -79,6 +78,14 @@ public class Store {
 
     public void setOwner(StoreOwner owner) {
         this.owner = owner;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
