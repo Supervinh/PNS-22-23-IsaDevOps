@@ -46,6 +46,11 @@ public class SurveyCommands {
         return restTemplate.getForObject(getUri() + "/get/" + name, CliSurvey.class);
     }
 
+    @ShellMethod("Delete  a survey (deleteSurvey SURVEY_NAME)")
+    public void deleteSurvey(String name) {
+        restTemplate.delete(getUri() + "/delete/" + name);
+    }
+
     private String getUri() {
         return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
     }

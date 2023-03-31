@@ -56,7 +56,7 @@ public class SurveyController {
     public ResponseEntity<SurveyDTO> answer(@PathVariable("accountId") Long accountId, @PathVariable String surveyName, @RequestBody String answer) throws CustomerNotFoundException, SurveyNotFoundException, InvalidAnswerException, AlreadyAnsweredException {
         Customer customer = customerFinder.findCustomerById(accountId).orElseThrow(CustomerNotFoundException::new);
         Survey survey = surveyFinder.findByName(surveyName).orElseThrow(SurveyNotFoundException::new);
-        surveyModifier.answerSurvey(survey, answer, customer);
+        survey = surveyModifier.answerSurvey(survey, answer, customer);
         return ResponseEntity.ok(convertSurveyToDTO(survey));
     }
 
@@ -69,6 +69,14 @@ public class SurveyController {
         answers.forEach((k, v) -> answers.put(k, 0));
         surveyDTO.setAnswers(answers);
         return ResponseEntity.ok(surveyDTO);
+    }
+
+    @DeleteMapping(path = LOGGED_URI + "delete/{surveyName}")
+    public ResponseEntity<Void> delete(@PathVariable("accountId") Long accountId, @PathVariable String surveyName) throws CredentialsException, SurveyNotFoundException {
+        adminFinder.findAdminById(accountId).orElseThrow(CredentialsException::new);
+        Survey survey = surveyFinder.findByName(surveyName).orElseThrow(SurveyNotFoundException::new);
+        surveyModifier.deleteSurvey(survey);
+        return ResponseEntity.ok().build();
     }
 
 }

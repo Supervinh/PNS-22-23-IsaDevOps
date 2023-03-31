@@ -55,8 +55,8 @@ public class SurveyRegistry implements SurveyFinder, SurveyModifier {
     }
 
     @Override
-    public void deleteSurvey(String name) throws SurveyNotFoundException {
-        if (surveyRepository.deleteByName(name) == 0) {
+    public void deleteSurvey(Survey survey) throws SurveyNotFoundException {
+        if (surveyRepository.deleteByName(survey.getName()) == 0) {
             throw new SurveyNotFoundException();
         }
     }

@@ -11,5 +11,5 @@ public interface SurveyModifier {
 
     Survey createSurvey(Survey survey);
 
-    void deleteSurvey(String name) throws SurveyNotFoundException;
+    void deleteSurvey(Survey survey) throws SurveyNotFoundException;
 }
