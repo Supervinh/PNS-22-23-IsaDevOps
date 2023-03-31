@@ -18,8 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +32,7 @@ class CustomerRegistryTest {
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
-    private List<String> schedule = new ArrayList<>();
+    private Map<String, String> schedule = new HashMap<>();
     private static boolean setUpIsDone = false;
     @Autowired
     private CustomerRepository customerRepository;
@@ -52,14 +53,14 @@ class CustomerRegistryTest {
 
     @BeforeEach
     void setUp() {
-        if(setUpIsDone){
-            List<String> setupList = new ArrayList<>();
-            for(int i = 0; i <= 6; i++){
-                setupList.add("7h00");
-                setupList.add("19h30");
-            }
-            schedule = setupList;
-        }
+//        if(setUpIsDone){
+//            List<String> setupList = new ArrayList<>();
+//            for(int i = 0; i <= 6; i++){
+//                setupList.add("7h00");
+//                setupList.add("19h30");
+//            }
+//            schedule = setupList;
+//        }
         customerRepository.deleteAll();
         storeRepository.deleteAll();
         ownerRepository.deleteAll();
@@ -85,9 +86,7 @@ class CustomerRegistryTest {
     @Test
      void cannotRegisterTwice() throws Exception {
         customerRegistration.register(name, mail, password);
-        Assertions.assertThrows(AlreadyExistingAccountException.class, () -> {
-            customerRegistration.register(name, mail, password);
-        });
+        Assertions.assertThrows(AlreadyExistingAccountException.class, () -> customerRegistration.register(name, mail, password));
     }
 
     @Test
@@ -126,17 +125,13 @@ class CustomerRegistryTest {
     @Test
      void cannotEditBalanceWithNegativeValue() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
-        Assertions.assertThrows(InsufficientBalanceException.class, () -> {
-            customerBalancesModifier.editBalance(customer, -100);
-        });
+        Assertions.assertThrows(InsufficientBalanceException.class, () -> customerBalancesModifier.editBalance(customer, -100));
     }
 
     @Test
-     void editBalanceOfUnknownCustomer() throws Exception {
+    void editBalanceOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password);
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
-            customerBalancesModifier.editBalance(customer, 100);
-        });
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerBalancesModifier.editBalance(customer, 100));
     }
 
     @Test
@@ -172,11 +167,9 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void cannotRecordMatriculationOfUnknownCustomer() throws Exception {
+    void cannotRecordMatriculationOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password);
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
-            customerProfileModifier.recordMatriculation(customer, "AB-123-CD");
-        });
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordMatriculation(customer, "AB-123-CD"));
     }
 
     @Test
@@ -189,11 +182,9 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void cannotRecordCreditCardOfUnknownCustomer() throws Exception {
+    void cannotRecordCreditCardOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password);
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
-            customerProfileModifier.recordCreditCard(customer, "1234 5678 9012 3456");
-        });
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordCreditCard(customer, "1234 5678 9012 3456"));
     }
 
     @Test
@@ -219,9 +210,7 @@ class CustomerRegistryTest {
         storeRepository.save(store);
         store = storeRepository.findStoreByName(store.getName()).get();
         Store finalStore = store;
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
-            customerProfileModifier.recordNewFavoriteStore(customer, finalStore);
-        });
+        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordNewFavoriteStore(customer, finalStore));
     }
 
     @Test
@@ -235,9 +224,7 @@ class CustomerRegistryTest {
         store = storeRepository.findStoreByName(store.getName()).get();
         Store finalStore = store;
         Customer finalCustomer = customerProfileModifier.recordNewFavoriteStore(customer, finalStore);
-        Assertions.assertThrows(StoreAlreadyRegisteredException.class, () -> {
-            customerProfileModifier.recordNewFavoriteStore(finalCustomer, finalStore);
-        });
+        Assertions.assertThrows(StoreAlreadyRegisteredException.class, () -> customerProfileModifier.recordNewFavoriteStore(finalCustomer, finalStore));
     }
 
     @Test
@@ -272,9 +259,7 @@ class CustomerRegistryTest {
         ownerRepository.save(storeOwner);
         storeOwner = ownerRepository.findStoreOwnerByName(storeOwner.getName()).get();
         Store store = new Store("Carrefour", schedule, storeOwner);
-        Assertions.assertThrows(StoreNotFoundException.class, () -> {
-            customerProfileModifier.removeFavoriteStore(customer, store);
-        });
+        Assertions.assertThrows(StoreNotFoundException.class, () -> customerProfileModifier.removeFavoriteStore(customer, store));
     }
 
 }

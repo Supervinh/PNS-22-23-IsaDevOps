@@ -9,8 +9,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 @ShellComponent
 public class StoreCommands {
@@ -23,18 +22,15 @@ public class StoreCommands {
     @Autowired
     private CliContext cliContext;
 
-    //TODO string directs pour les horaires
-    //sauf si verif de la validité des horaires e.g 24h00m
-    @ShellMethod("Register a store in the CoD backend(registerStore STORE_NAME OPENING_HOUR OPENING_MINUTE CLOSING_HOUR CLOSING_MINUTE OWNER_NAME)")
-    public CliStore registerStore(String name, int openingHour, int openingMinute, int closingHour, int closingminute) {
-        String opening = openingHour + "h" + openingMinute + "m";
-        String closing = closingHour + "h" + closingminute + "m";
-        List<String> sch = new ArrayList<>(14);
-        for (int i = 0; i < 7; i++) {
-            sch.add(opening);
-            sch.add(closing);
-        }
-        return restTemplate.postForObject(getUri() + "/register", new CliStore(name, sch), CliStore.class);
+    @ShellMethod("Register a store in the CoD backend(registerStore STORE_NAME OPENING_TIME CLOSING_TIME)")
+    public CliStore registerStore(String name, String... horaires) {
+        HashMap<String, String> schedule = new HashMap<>();
+//        List<String> sch = new ArrayList<>(14);
+//        for (int i = 0; i < 7; i++) {
+//            sch.add(opening);
+//            sch.add(closing);
+//        }
+        return restTemplate.postForObject(getUri() + "/register", new CliStore(name, schedule), CliStore.class);
     }
 
     @ShellMethod("Register a purchase from a customer(addPurchase STORE_NAME CUSTOMER_EMAIL COST INTERNAL_ACCOUNT)")

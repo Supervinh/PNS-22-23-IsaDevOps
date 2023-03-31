@@ -27,7 +27,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(path = StoreOwnerController.BASE_URI, produces = APPLICATION_JSON_VALUE)
-
 public class StoreOwnerController {
     public static final String BASE_URI = "/owner";
 

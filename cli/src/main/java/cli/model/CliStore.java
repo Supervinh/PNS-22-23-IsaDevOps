@@ -1,13 +1,14 @@
 package cli.model;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class CliStore {
     private Long id;
     private String name;
-    private List<String> schedule;
-    public CliStore(String name, List<String> schedule) {
+    private Map<String, String> schedule;
+
+    public CliStore(String name, Map<String, String> schedule) {
         this.name = name;
         this.schedule = schedule;
     }
@@ -28,12 +29,21 @@ public class CliStore {
         this.name = name;
     }
 
-    public List<String> getSchedule() {
+    public Map<String, String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<String> schedule) {
+    public void setSchedule(Map<String, String> schedule) {
         this.schedule = schedule;
+    }
+
+    @Override
+    public String toString() {
+        return "CliStore{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", schedule=" + schedule +
+                '}';
     }
 
     @Override
@@ -46,14 +56,5 @@ public class CliStore {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, schedule);
-    }
-
-    @Override
-    public String toString() {
-        return "CliStore{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", schedule=" + schedule.toString() +
-                '}';
     }
 }

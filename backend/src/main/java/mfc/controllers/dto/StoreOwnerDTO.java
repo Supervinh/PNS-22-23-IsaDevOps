@@ -1,7 +1,5 @@
 package mfc.controllers.dto;
 
-import java.util.UUID;
-
 public class StoreOwnerDTO {
     private String name;
     private Long id;

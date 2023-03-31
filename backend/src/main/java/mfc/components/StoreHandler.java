@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -41,7 +41,7 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     }
 
     @Override
-    public Store register(String name, List<String> schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException {
+    public Store register(String name, Map<String, String> schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException {
         Optional<Store> store = findStoreByName(name);
         if (store.isEmpty()) {
             Store newStore = new Store(name, schedule, storeOwner);
@@ -61,7 +61,7 @@ public class StoreHandler implements StoreFinder, StoreModifier, StoreRegistrati
     }
 
     @Override
-    public boolean updateOpeningHours(Store store, List<String> schedule, StoreOwner storeOwner) throws CredentialsException {
+    public boolean updateOpeningHours(Store store, Map<String, String> schedule, StoreOwner storeOwner) throws CredentialsException {
         Optional<Store> storeToUpdate = findStoreById(store.getId());
         if (storeToUpdate.isPresent()) {
             System.out.println(storeToUpdate.get().getOwner().getName());

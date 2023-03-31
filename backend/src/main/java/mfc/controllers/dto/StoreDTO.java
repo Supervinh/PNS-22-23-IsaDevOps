@@ -1,15 +1,15 @@
 package mfc.controllers.dto;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class StoreDTO {
 
     private Long id;
     private String name;
-    private List<String> schedule;
+    private Map<String, String> schedule;
 
-    public StoreDTO(Long id, String name, List<String> schedule) {
+    public StoreDTO(Long id, String name, Map<String, String> schedule) {
         this.name = name;
         this.schedule = schedule;
         this.id = id;
@@ -27,20 +27,19 @@ public class StoreDTO {
         this.name = name;
     }
 
-    public List<String> getSchedule() {
+    public Map<String, String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<String> schedule) {
+    public void setSchedule(Map<String, String> schedule) {
         this.schedule = schedule;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StoreDTO store = (StoreDTO) o;
-        return Objects.equals(id, store.id) && Objects.equals(name, store.name);
+        if (!(o instanceof StoreDTO storeDTO)) return false;
+        return Objects.equals(id, storeDTO.id) && Objects.equals(name, storeDTO.name) && Objects.equals(schedule, storeDTO.schedule);
     }
 
     @Override

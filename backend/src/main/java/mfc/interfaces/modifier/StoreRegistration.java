@@ -5,10 +5,10 @@ import mfc.entities.StoreOwner;
 import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.exceptions.NoStoreFoundException;
 
-import java.util.List;
+import java.util.Map;
 
 public interface StoreRegistration {
-    Store register(String name, List<String> schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException;
+    Store register(String name, Map<String, String> schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException;
 
     Store delete(Store store) throws NoStoreFoundException;
 }
