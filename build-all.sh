@@ -21,13 +21,6 @@ function build_dir_from_artifactory() { # $1 is the dir to get it
   cd ..
 }
 
-function getLastVersion(){ # $1 should be credentials (user:password) and $2 should be the url of the artifact
-  VERSION=$(curl -u "$1" "$2" | grep -E '<a href="[0-9].?[0-9]/">' | cut -d '"' -f 2 | sed 's|/$||')
-  VERSION="$(echo "$VERSION" | tr ' ' '\n' | sort -r -V | head -n 1)"
-  echo "$VERSION"
-  return "$VERSION"
-}
-
 #admin:@yZvRLf3AG8BdS79w
 function getArtifact() {
   URL="http://$HOST:8002/artifactory/libs-release-local/team-b/$1/"
@@ -74,10 +67,10 @@ for arg in "$@"; do
     next=true
   fi
 done
-echo "CLI_FROM_ARTIFACTORY: $CLI_FROM_ARTIFACTORY, SERVER_FROM_ARTIFACTORY: $SERVER_FROM_ARTIFACTORY, DOCKER_DETACH: $DOCKER_DETACH, ATTACH_CLI: $ATTACH_CLI, DOCKER_COMPOSE: $DOCKER_COMPOSE"
-echo "** Building all"
-
-echo "** Stopping"
+if [ "$DOCKER_COMPOSE" = true ]; then
+  echo "** Building all"
+  echo "** Stopping"
+fi
 docker compose down --remove-orphans -t 30
 
 if [ "$CLI_FROM_ARTIFACTORY" = true ]; then

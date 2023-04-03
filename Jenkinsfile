@@ -90,18 +90,21 @@ node {
         if(behaviour == 'main'){
                 stage('Retrieve from artifactory & build'){
                     withCredentials([string(credentialsId: 'Artifactory', variable: '$ARTIFACTORY_ID')]) {
-                       def versions = sh(script:"./build-all.sh --server --cli --none -u $ARTIFACTORY_ID", returnStdout: true).trim().split('\n').findAll{ it.startsWith("TAG:") }
+                       def versions = sh(script:"./build-all.sh --server --cli --none -u $ARTIFACTORY_ID", returnStdout: true)
+                       sh ''' echo ${versions} '''
+                       versions = versions.trim().split('\n').findAll{ it.startsWith("TAG:") }
+                       def cli = versions.find{it.contains("cli")}
+                       sh ''' echo ${versions} '''
+                       if(cli != null)
+                           cli = cli.substring(cli.indexOf("->")+2).trim()
+                       else
+                           cli = ""
+                       def server = versions.find{it.contains("server")}
+                       if(server != null)
+                           server.substring(server.indexOf("->")+2).trim()
+                       else
+                           server=""
                     }
-                    def cli = versions.find{it.contains("cli")}
-                    if(cli != null)
-                        cli = cli.substring(cli.indexOf("->")+2).trim()
-                    else
-                        cli = ""
-                    def server = versions.find{it.contains("server")}
-                    if(server != null)
-                        server.substring(server.indexOf("->")+2).trim()
-                    else
-                        server=""
                 }
                 stage('Publish on DockerHub'){
                     withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
