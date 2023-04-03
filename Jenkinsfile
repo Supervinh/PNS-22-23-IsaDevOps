@@ -88,7 +88,6 @@ node {
             }
         }
         if(behaviour == 'main'){
-             dir('Pull Artifactory'){
                 stage('Retrieve from artifactory & build'){
                     withCredentials([string(credentialsId: 'Artifactory', variable: '$ARTIFACTORY_ID')]) {
                        def versions = sh(script:"./build-all.sh --server --cli --none -u $ARTIFACTORY_ID", returnStdout: true).trim().split('\n').findAll{ it.startsWith("TAG:") }
@@ -115,7 +114,6 @@ node {
                         docker push jeannestheo/mfc-parking-service
                         """
                 }
-             }
         }
         if(behaviour != 'main'){
             stage('Deploy'){
