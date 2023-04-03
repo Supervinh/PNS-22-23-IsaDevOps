@@ -5,14 +5,6 @@
             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!--    <distributionManagement>-->
-    <!--        <repository>-->
-    <!--            <id>central</id>-->
-    <!--            <name>b69cf9de1907-releases</name>-->
-    <!--            <url>http://artifactory:8081/artifactory/libs-release-local</url>-->
-    <!--            &lt;!&ndash;            <url>http://vmpx02.polytech.unice.fr:8003/artifactory/libs-release-local</url>&ndash;&gt;-->
-    <!--        </repository>-->
-    <!--    </distributionManagement>-->
     <distributionManagement>
         <repository>
             <id>central</id>
@@ -31,7 +23,7 @@
 
     <groupId>team-b</groupId>
     <artifactId>server</artifactId>
-    <version>1.3-Dev</version>
+    <version>1.5</version>
     <packaging>jar</packaging>
     <name>server</name>
 
@@ -150,12 +142,6 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.shell</groupId>
-            <artifactId>spring-shell-standard</artifactId>
-            <version>2.1.4</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.shell</groupId>

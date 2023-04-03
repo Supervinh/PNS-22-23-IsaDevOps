@@ -1,6 +1,5 @@
 package mfc.controllers;
 
-import mfc.components.TransactionHandler;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.PurchaseDTO;
 import mfc.controllers.dto.StoreDTO;
@@ -12,6 +11,7 @@ import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.NegativeCostException;
 import mfc.exceptions.StoreNotFoundException;
 import mfc.exceptions.StoreOwnerNotFoundException;
+import mfc.interfaces.TransactionProcessor;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
@@ -35,20 +35,24 @@ public class StoreController {
     public static final String BASE_URI = "/store";
     public static final String LOGGED_URI = "/{ownerId}/";
 
-    @Autowired
-    private StoreFinder storeFinder;
+    private final StoreFinder storeFinder;
+
+    private final StoreOwnerFinder ownerFinder;
+
+    private final CustomerFinder customerFinder;
+
+    private final StoreModifier storeModifier;
+
+    private final TransactionProcessor transactionProcessor;
 
     @Autowired
-    private StoreOwnerFinder ownerFinder;
-
-    @Autowired
-    private CustomerFinder customerFinder;
-
-    @Autowired
-    private StoreModifier storeModifier;
-
-    @Autowired
-    private TransactionHandler transactionHandler;
+    public StoreController(StoreFinder storeFinder, StoreOwnerFinder ownerFinder, CustomerFinder customerFinder, StoreModifier storeModifier, TransactionProcessor transactionProcessor) {
+        this.storeFinder = storeFinder;
+        this.ownerFinder = ownerFinder;
+        this.customerFinder = customerFinder;
+        this.storeModifier = storeModifier;
+        this.transactionProcessor = transactionProcessor;
+    }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -89,9 +93,9 @@ public class StoreController {
                 throw new NegativeCostException();
             }
             if (purchaseDTO.isInternalAccount()) {
-                p = transactionHandler.purchaseFidelityCardBalance(customer, purchaseDTO.getCost(), store);
+                p = transactionProcessor.purchaseFidelityCardBalance(customer, purchaseDTO.getCost(), store);
             } else {
-                p = transactionHandler.purchase(customer, purchaseDTO.getCost(), store);
+                p = transactionProcessor.purchase(customer, purchaseDTO.getCost(), store);
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(convertPurchaseToDto(p));
         } catch (Exception e) {

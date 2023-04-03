@@ -33,23 +33,27 @@ public class CustomerController {
     public static final String BASE_URI = "/customers";
     public static final String LOGGED_URI = "/{customerId}/";
 
-    @Autowired
-    private CustomerRegistration registry;
+    private final CustomerRegistration registry;
+
+    private final CustomerFinder finder;
+
+    private final CustomerProfileModifier modifier;
+
+    private final Payment payment;
+
+    private final SurveyFinder surveyFinder;
+
+    private final StoreFinder storeFinder;
 
     @Autowired
-    private CustomerFinder finder;
-
-    @Autowired
-    private CustomerProfileModifier modifier;
-
-    @Autowired
-    private Payment payment;
-
-    @Autowired
-    private SurveyFinder surveyFinder;
-
-    @Autowired
-    private StoreFinder storeFinder;
+    public CustomerController(CustomerRegistration registry, CustomerFinder finder, CustomerProfileModifier modifier, Payment payment, SurveyFinder surveyFinder, StoreFinder storeFinder) {
+        this.registry = registry;
+        this.finder = finder;
+        this.modifier = modifier;
+        this.payment = payment;
+        this.surveyFinder = surveyFinder;
+        this.storeFinder = storeFinder;
+    }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
