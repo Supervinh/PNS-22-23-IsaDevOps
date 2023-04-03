@@ -16,19 +16,14 @@ public class Customer extends Account {
     private String matriculation;
     private int fidelityPoints;
     private double balance;
+    private LocalDate vfp;
+    private String creditCard;
     @OneToMany(fetch = FetchType.LAZY)
     private List<Store> favoriteStores;
     private LocalDateTime lastConnexion;
-    private LocalDate vfp;
-    private String creditCard;
 
     public Customer() {
     }
-
-    /*public Customer(String name, String creditCard) {
-        this(name, "", "", creditCard);
-    }*/
-
 
     public Customer(String name, String mail, String password) {
         super(name, mail, password);

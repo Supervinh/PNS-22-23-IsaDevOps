@@ -1,8 +1,5 @@
-register-customer firstCustomer firstCustomer@customer.fr abc 5251896983
-register-admin admin ad@min pwd
 login-admin ad@min pwd
 
-register-owner owner ow@ner pwd
 delete-admin
 
 login-owner ow@ner pwd
