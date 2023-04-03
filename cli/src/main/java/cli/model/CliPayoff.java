@@ -7,12 +7,14 @@ public class CliPayoff {
     private double cost;
     private int pointCost;
     private String storeName;
+    private boolean isVfp;
 
-    public CliPayoff(String name, double cost, int pointCost, String storeName) {
+    public CliPayoff(String name, double cost, int pointCost, String storeName, boolean isVfp) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
         this.storeName = storeName;
+        this.isVfp = isVfp;
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class CliPayoff {
         this.storeName = storeName;
     }
 
+    public boolean isVfp() {
+        return isVfp;
+    }
+
+    public void setVfp(boolean vfp) {
+        isVfp = vfp;
+    }
+
     @Override
     public String toString() {
         return "CliPayoff{" +
@@ -63,6 +73,7 @@ public class CliPayoff {
                 ", cost=" + cost +
                 ", pointCost=" + pointCost +
                 ", storeName='" + storeName + '\'' +
+                ", isVfp=" + isVfp +
                 '}';
     }
 }

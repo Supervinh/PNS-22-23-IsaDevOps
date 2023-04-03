@@ -5,6 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Customer extends Account {
     private double balance;
     @OneToMany(fetch = FetchType.LAZY)
     private List<Store> favoriteStores;
+    private LocalDateTime lastConnexion;
     private LocalDate vfp;
     private String creditCard;
 
@@ -96,6 +98,14 @@ public class Customer extends Account {
 
     public void setCreditCard(@Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits") String creditCard) {
         this.creditCard = creditCard;
+    }
+
+    public LocalDateTime getLastConnexion() {
+        return lastConnexion;
+    }
+
+    public void setLastConnexion(LocalDateTime lastConnexion) {
+        this.lastConnexion = lastConnexion;
     }
 
     @Override

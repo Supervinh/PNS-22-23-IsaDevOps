@@ -1,10 +1,10 @@
 package mfc.interfaces;
 
-import mfc.entities.PayoffPurchase;
-import mfc.exceptions.*;
 import mfc.entities.Customer;
 import mfc.entities.Payoff;
+import mfc.entities.PayoffPurchase;
+import mfc.exceptions.*;
 
 public interface PayOffProcessor {
-    PayoffPurchase claimPayoff(Customer customer, Payoff payOff) throws VFPExpiredException, CustomerNotFoundException, NegativePointCostException, ParkingException, NoMatriculationException;
+    PayoffPurchase claimPayoff(Customer user, Payoff payOff) throws InsufficientBalanceException, VFPExpiredException, NoMatriculationException, ParkingException, NegativePointCostException, CustomerNotFoundException, PayoffNotFoundException, NoPreviousPurchaseException;
 }

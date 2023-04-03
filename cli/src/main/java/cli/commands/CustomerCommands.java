@@ -13,11 +13,15 @@ public class CustomerCommands {
 
     public static final String BASE_URI = "/customers";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public CustomerCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
 
     @ShellMethod("Register a customer in the CoD backend (registerCustomer CUSTOMER_NAME CUSTOMER_MAIL CUSTOMER_PASSWORD CREDIT_CARD_NUMBER)")
     public CliCustomer registerCustomer(String name, String mail, String password, @ShellOption(defaultValue = "") String creditCard) {
@@ -34,6 +38,24 @@ public class CustomerCommands {
         CliCustomer res = restTemplate.postForObject(BASE_URI + "/loginCustomer", new CliCustomer(mail, password), CliCustomer.class);
         cliContext.setLoggedInUser(res);
         return res;
+    }
+
+    @ShellMethod("Add a favorite store to the logged in user (addFavoriteStore STORE_NAME)")
+    public CliCustomer addFavoriteStore(String storeName) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
+        return restTemplate.postForObject(getUriForCustomer() + "/addFavoriteStore", storeName, CliCustomer.class);
+    }
+
+    @ShellMethod("Remove a favorite store from the logged in user (removeFavoriteStore STORE_NAME)")
+    public CliCustomer removeFavoriteStore(String storeName) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
+        return restTemplate.postForObject(getUriForCustomer() + "/removeFavoriteStore", storeName, CliCustomer.class);
     }
 
     @ShellMethod("Modify the credit card of the logged in user (modifyCreditCard CREDIT_CARD_NUMBER)")
@@ -78,6 +100,7 @@ public class CustomerCommands {
             return;
         }
         restTemplate.delete(getUriForCustomer() + "/deleteCustomer");
+        cliContext.setLoggedInUser(null);
     }
 
     private String getUriForCustomer() {

@@ -3,11 +3,13 @@ package mfc.controllers.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDTO {
 
-    private Long id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
+    private final Long id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
 
     @NotBlank(message = "name should not be blank")
     private String name;
@@ -15,9 +17,10 @@ public class CustomerDTO {
     private String mail;
     @NotBlank(message = "password should not be blank")
     private String password;
-    //    @Positive
-
+    private List<StoreDTO> favoritesStores;
+    private List<SurveyDTO> surveysToAnswer;
     private String creditCard;
+    private LocalDateTime lastConnexion;
 
     private String matriculation;
 
@@ -32,6 +35,8 @@ public class CustomerDTO {
         this.creditCard = creditCard;
         this.matriculation = matriculation;
         balance = 0;
+        surveysToAnswer = new ArrayList<>();
+        favoritesStores = new ArrayList<>();
     }
 
 
@@ -86,5 +91,45 @@ public class CustomerDTO {
 
     public void setMatriculation(String matriculation) {
         this.matriculation = matriculation;
+    }
+
+    public List<SurveyDTO> getSurveysToAnswer() {
+        return surveysToAnswer;
+    }
+
+    public void setSurveysToAnswer(List<SurveyDTO> surveysToAnswer) {
+        this.surveysToAnswer = surveysToAnswer;
+    }
+
+    public List<StoreDTO> getFavoritesStores() {
+        return favoritesStores;
+    }
+
+    public void setFavoritesStores(List<StoreDTO> favoritesStores) {
+        this.favoritesStores = favoritesStores;
+    }
+
+    public LocalDateTime getLastConnexion() {
+        return lastConnexion;
+    }
+
+    public void setLastConnexion(LocalDateTime lastConnexion) {
+        this.lastConnexion = lastConnexion;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", mail='" + mail + '\'' +
+                ", password='" + password + '\'' +
+                ", favoritesStores=" + favoritesStores +
+                ", surveysToAnswer=" + surveysToAnswer +
+                ", creditCard='" + creditCard + '\'' +
+                ", lastConnexion=" + lastConnexion +
+                ", matriculation='" + matriculation + '\'' +
+                ", balance=" + balance +
+                '}';
     }
 }

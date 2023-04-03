@@ -12,11 +12,15 @@ import org.springframework.web.client.RestTemplate;
 public class StoreOwnerCommands {
     public static final String BASE_URI = "/owner";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public StoreOwnerCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
 
     @ShellMethod("Login a store owner in the backend (loginOwner OWNER_MAIL OWNER_PASSWORD)")
     public CliStoreOwner loginOwner(String mail, String password) {
@@ -41,6 +45,7 @@ public class StoreOwnerCommands {
             return;
         }
         restTemplate.delete(getUri() + "/deleteStoreOwner");
+        cliContext.setLoggedInUser(null);
     }
 
     @ShellMethod("Delete store (deleteStore STORE_NAME)")

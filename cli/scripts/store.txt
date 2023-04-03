@@ -1,5 +1,7 @@
 login-admin ad@min pwd
 
+
+register-owner owner ow@ner pwd
 logout
 login-owner ow@ner pwd
 add-payoff payoff 200 15 store

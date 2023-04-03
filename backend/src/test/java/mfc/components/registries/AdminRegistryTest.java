@@ -1,9 +1,9 @@
-package mfc.components;
+package mfc.components.registries;
 
+import mfc.entities.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.entities.Admin;
 import mfc.repositories.AdminRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
