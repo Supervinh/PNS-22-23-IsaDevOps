@@ -27,13 +27,6 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         this.customerRepository = customerRepository;
     }
 
-    @Override
-    public Customer register(String name, String mail, String password) throws AlreadyExistingAccountException {
-        if (findCustomerByName(name).isPresent()) throw new AlreadyExistingAccountException();
-        Customer newcustomer = new Customer(name, mail, password);
-        customerRepository.save(newcustomer);
-        return newcustomer;
-    }
 
     @Override
     public Customer register(String name, String mail, String password, String creditCard) throws AlreadyExistingAccountException {
@@ -52,12 +45,12 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Optional<Customer> findCustomerByMail(String mail) {
-        return customerRepository.findAll().stream().filter(cust -> mail.equals(cust.getMail())).findAny();
+        return customerRepository.findCustomerByMail(mail);
     }
 
     @Override
     public Optional<Customer> findCustomerById(Long id) {
-        return customerRepository.findCustomerById(id);
+        return customerRepository.findById(id);
     }
 
     @Override
@@ -74,7 +67,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Optional<Customer> findCustomerByName(String name) {
-        return customerRepository.findAll().stream().filter(cust -> name.equals(cust.getName())).findAny();
+        return customerRepository.findCustomerByName(name);
     }
 
     @Override

@@ -16,11 +16,11 @@ public class Customer extends Account {
     private String matriculation;
     private int fidelityPoints;
     private double balance;
+    private LocalDate vfp;
+    private String creditCard;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Store> favoriteStores;
     private LocalDateTime lastConnexion;
-    private LocalDate vfp;
-    private String creditCard;
 
     public Customer() {
     }

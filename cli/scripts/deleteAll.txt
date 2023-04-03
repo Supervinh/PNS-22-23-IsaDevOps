@@ -1,0 +1,42 @@
+login-customer a@a abc
+delete-customer a@a abc
+
+login-admin a@æ admin
+delete-admin a@æ admin
+
+login-owner to@a owner
+delete-store-owner to@a owner
+
+login-customer catalog@customer pwd
+delete-customer catalog@customer pwd
+
+login-customer reward@customer pwd
+delete-customer reward@customer pwd
+
+login-admin reward@admin pwd
+delete-admin reward@admin pwd
+
+login-owner reward@owner pwd
+delete-store-owner reward@owner pwd
+
+login-customer firstCustomer@customer.fr abc
+delete-customer firstCustomer@customer.fr abc
+
+login-customer secondCustomer@customer.fr abc
+delete-customer secondCustomer@customer.fr abc
+
+login-customer thirdCustomer@customer.fr abc
+delete-customer thirdCustomer@customer.fr abc
+
+login-admin ad@min pwd
+delete-admin ad@min pwd
+
+login-owner ow@ner pwd
+delete-store-owner ow@ner pwd
+
+login-customer refill@customer pwd
+delete-customer refill@customer pwd
+
+
+
+
