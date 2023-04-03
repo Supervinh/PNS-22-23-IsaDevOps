@@ -45,8 +45,7 @@ public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
 
     @Override
     public Set<Purchase> lookUpPurchasesByCustomer(Customer customer) {
-        return purchaseRepository.findAll().stream()
-                .filter(purchase -> customer.equals(purchase.getCustomer())).collect(Collectors.toSet());
+        return purchaseRepository.findPurchasesByCustomer(customer);
     }
 
 }

@@ -6,6 +6,7 @@ Feature: Claim Payoff
     Given a customer named "John Doe" with "john@doe.com" as mail address and "123456789" as password
     Given a store owner named "Jane Doe" with "jane@doe.com" as mail address and "verySecurePassword" as password
     Given a store named "Jane's place", owned by "jane@doe.com", with opening hours from 8:0 to 20:0
+    Given "John Doe" makes a purchase of 10 euros at the store "Jane's place"
     Given a payOff named "Cookie", which costs 5 euros, which can be exchanged for 3 points and is available at "Jane's place"
 
   Scenario: Gaining points by making a purchase
