@@ -51,15 +51,15 @@ class CatalogRegistryTest {
 
     @BeforeEach
     void setUp() {
-        john = new Customer("john", "01234");
-        robert = new Customer("robert", "012354");
-        bob = new Customer("bob", "012354");
+        john = new Customer("john", "john@mail.com", "01234");
+        robert = new Customer("robert", "robert@mail.com", "012354");
+        bob = new Customer("bob", "bob@mail.com", "012354");
         robert.setFidelityPoints(500);
         john.setFidelityPoints(500);
         bob.setVfp(LocalDate.now().minusDays(1));
         bob.setFidelityPoints(350);
         john.setVfp(LocalDate.now().minusDays(1));
-        StoreOwner owner = new StoreOwner("owner", "owner", "owner");
+        StoreOwner owner = new StoreOwner("owner", "owner@mail.com", "owner");
         Store firstStore = new Store("a", owner);
         firstStore.setName("first");
         Store secondStore = new Store("b", owner);
