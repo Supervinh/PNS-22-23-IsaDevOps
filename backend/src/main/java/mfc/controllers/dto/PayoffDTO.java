@@ -25,6 +25,10 @@ public class PayoffDTO {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -47,10 +51,6 @@ public class PayoffDTO {
 
     public void setPointCost(int pointCost) {
         this.pointCost = pointCost;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getStoreName() {

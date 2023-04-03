@@ -77,7 +77,9 @@ done
 echo "CLI_FROM_ARTIFACTORY: $CLI_FROM_ARTIFACTORY, SERVER_FROM_ARTIFACTORY: $SERVER_FROM_ARTIFACTORY, DOCKER_DETACH: $DOCKER_DETACH, ATTACH_CLI: $ATTACH_CLI, DOCKER_COMPOSE: $DOCKER_COMPOSE"
 echo "** Building all"
 
+echo "** Stopping"
 docker compose down
+sleep 10
 
 if [ "$CLI_FROM_ARTIFACTORY" = true ]; then
   build_dir_from_artifactory "cli"

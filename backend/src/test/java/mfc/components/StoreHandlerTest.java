@@ -14,7 +14,7 @@ import java.util.Map;
 
 @SpringBootTest
 @Transactional
- class StoreHandlerTest {
+class StoreHandlerTest {
 
     @Autowired
     private StoreRepository storeRepository;

@@ -4,13 +4,12 @@ import mfc.connectors.externaldto.externaldto.NotificationDTO;
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.PayoffIndentifierDTO;
 import mfc.controllers.dto.PayoffPurchaseDTO;
-import mfc.exceptions.CustomerNotFoundException;
-import mfc.exceptions.PayoffNotFoundException;
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
+import mfc.exceptions.*;
 import mfc.interfaces.PayOffProcessor;
 import mfc.interfaces.explorer.CatalogExplorer;
 import mfc.interfaces.explorer.CustomerFinder;
-import mfc.entities.Customer;
-import mfc.entities.Payoff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,28 +29,28 @@ public class PayoffController {
     public static final String LOGGED_URI = "/{customerId}/";
     private static final Map<String, NotificationDTO> notifications = new HashMap<>();
 
-    @Autowired
-    CatalogExplorer catalogExplorer;
+    private final CatalogExplorer catalogExplorer;
+
+    private final CustomerFinder customerFinder;
+
+    private final PayOffProcessor payOffProcessor;
 
     @Autowired
-    CustomerFinder customerFinder;
-
-    @Autowired
-    PayOffProcessor payOffProcessor;
-
-    @PostMapping(path = LOGGED_URI + "claimPayoff", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") Long customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) {
-        try {
-            Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-            Payoff payoff = catalogExplorer.findPayoff(payoffIndentifierDTO.getPayOffName(), payoffIndentifierDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
-            return ResponseEntity.ok(ConvertDTO.convertPayoffPurchaseToDTO(payOffProcessor.claimPayoff(customer, payoff)));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public PayoffController(CatalogExplorer catalogExplorer, CustomerFinder customerFinder, PayOffProcessor payOffProcessor) {
+        this.catalogExplorer = catalogExplorer;
+        this.customerFinder = customerFinder;
+        this.payOffProcessor = payOffProcessor;
     }
 
     public static void addNotification(NotificationDTO notificationDTO) {
         notifications.put(notificationDTO.getNumberplate(), notificationDTO);
+    }
+
+    @PostMapping(path = LOGGED_URI + "claimPayoff", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") Long customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) throws PayoffNotFoundException, CustomerNotFoundException, NoMatriculationException, NegativePointCostException, VFPExpiredException, ParkingException, InsufficientBalanceException, NoPreviousPurchaseException {
+        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
+        Payoff payoff = catalogExplorer.findPayoff(payoffIndentifierDTO.getPayOffName(), payoffIndentifierDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
+        return ResponseEntity.ok(ConvertDTO.convertPayoffPurchaseToDTO(payOffProcessor.claimPayoff(customer, payoff)));
     }
 
     @GetMapping(path = LOGGED_URI + "getNotification")

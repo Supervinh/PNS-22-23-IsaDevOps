@@ -1,9 +1,9 @@
 package mfc.interfaces;
 
-import mfc.exceptions.InsufficientBalanceException;
 import mfc.entities.Customer;
 import mfc.entities.Purchase;
 import mfc.entities.Store;
+import mfc.exceptions.InsufficientBalanceException;
 
 public interface TransactionProcessor {
     //transaction paid without the application, register the transaction and add points

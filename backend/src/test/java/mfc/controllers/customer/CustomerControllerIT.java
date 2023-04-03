@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.CustomerController;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.repositories.CustomerRepository;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,17 +23,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CustomerControllerIT {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    private MockMvc mockMvc;
 
     //TODO décommenter quand on pourra importer Transactional
     //@Test
-    void registerCustomerWithInvalidCreditCard() throws Exception{
+    void registerCustomerWithInvalidCreditCard() throws Exception {
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, "a", "a@a", "pwd", "1", ""))))

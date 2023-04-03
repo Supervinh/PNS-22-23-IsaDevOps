@@ -59,8 +59,8 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     public Optional<Customer> findCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
     }
-    
-     @Override
+
+    @Override
     public Optional<Customer> findCustomerAtConnexion(String mail, String password) throws CredentialsException {
         Optional<Customer> customer = customerRepository.findCustomerByMail(mail);
         if (customer.isPresent() && customer.get().getPassword().equals(password)) {

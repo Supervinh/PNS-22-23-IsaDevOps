@@ -1,12 +1,12 @@
 package mfc.controllers;
 
-import mfc.components.DataGatherer;
 import mfc.controllers.dto.DashboardDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
 import mfc.exceptions.*;
+import mfc.interfaces.StoreDataGathering;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreModifier;
@@ -33,20 +33,20 @@ public class StoreOwnerController {
 
     public static final String LOGGED_URI = "/{ownerId}/";
 
-    @Autowired
-    private StoreOwnerRegistration ownerReg;
+    private final StoreOwnerRegistration ownerReg;
+    private final StoreOwnerFinder ownerFind;
+    private final StoreFinder storeFinder;
+    private final StoreDataGathering storeDataGathering;
+    private final StoreModifier storeModifier;
 
     @Autowired
-    private StoreOwnerFinder ownerFind;
-
-    @Autowired
-    private StoreFinder storeFinder;
-
-    @Autowired
-    private DataGatherer dataGatherer;
-
-    @Autowired
-    private StoreModifier storeModifier;
+    public StoreOwnerController(StoreOwnerRegistration ownerReg, StoreOwnerFinder ownerFind, StoreFinder storeFinder, StoreDataGathering storeDataGathering, StoreModifier storeModifier) {
+        this.ownerReg = ownerReg;
+        this.ownerFind = ownerFind;
+        this.storeFinder = storeFinder;
+        this.storeDataGathering = storeDataGathering;
+        this.storeModifier = storeModifier;
+    }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -96,7 +96,7 @@ public class StoreOwnerController {
         Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
         StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
         if (store.getOwner().equals(storeOwner)) {
-            return ResponseEntity.status(HttpStatus.OK).body(dataGatherer.gather(store));
+            return ResponseEntity.status(HttpStatus.OK).body(storeDataGathering.gather(store));
         } else {
             throw new CredentialsException();
         }

@@ -26,12 +26,15 @@ public class AdminController {
 
     public static final String LOGGED_URI = "/{adminId}/";
 
-    @Autowired
-    private AdminRegistration adminReg;
+    private final AdminRegistration adminReg;
 
+    private final AdminFinder adminFind;
 
     @Autowired
-    private AdminFinder adminFind;
+    public AdminController(AdminRegistration adminReg, AdminFinder adminFind) {
+        this.adminReg = adminReg;
+        this.adminFind = adminFind;
+    }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity

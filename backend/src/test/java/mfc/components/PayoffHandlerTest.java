@@ -34,11 +34,11 @@ class PayoffHandlerTest {
     Payoff medium;
     Payoff expensive;
     @MockBean
+    PurchaseRecording purchaseRecording;
+    @MockBean
     private CustomerRegistry customerRegistry;
     @Autowired
     private PayoffHandler payoffHandler;
-    @MockBean
-    PurchaseRecording purchaseRecording;
     @MockBean
     private PurchaseFinder purchaseFinder;
 

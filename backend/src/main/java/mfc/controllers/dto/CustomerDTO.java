@@ -57,7 +57,7 @@ public class CustomerDTO {
     }
 
 
-    public void setCreditCard( @Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits") String creditCard) {
+    public void setCreditCard(@Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits") String creditCard) {
         this.creditCard = creditCard;
     }
 

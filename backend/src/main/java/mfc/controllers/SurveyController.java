@@ -26,17 +26,18 @@ public class SurveyController {
     public static final String BASE_URI = "/survey";
     public static final String LOGGED_URI = "/{accountId}/";
 
-    @Autowired
-    private CustomerFinder customerFinder;
+    private final CustomerFinder customerFinder;
+    private final SurveyFinder surveyFinder;
+    private final SurveyModifier surveyModifier;
+    private final AdminFinder adminFinder;
 
     @Autowired
-    private SurveyFinder surveyFinder;
-
-    @Autowired
-    private SurveyModifier surveyModifier;
-
-    @Autowired
-    private AdminFinder adminFinder;
+    public SurveyController(CustomerFinder customerFinder, SurveyFinder surveyFinder, SurveyModifier surveyModifier, AdminFinder adminFinder) {
+        this.customerFinder = customerFinder;
+        this.surveyFinder = surveyFinder;
+        this.surveyModifier = surveyModifier;
+        this.adminFinder = adminFinder;
+    }
 
     @GetMapping(path = LOGGED_URI + "get/{surveyName}")
     public ResponseEntity<SurveyDTO> get(@PathVariable("accountId") Long accountId, @PathVariable("surveyName") String surveyName) throws CustomerNotFoundException, SurveyNotFoundException {

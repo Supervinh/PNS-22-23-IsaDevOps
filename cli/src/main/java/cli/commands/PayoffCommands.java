@@ -45,7 +45,7 @@ public class PayoffCommands {
     @Scheduled(fixedRate = 10000)
     public void getNotifications() {
         CliNotification cliNotification = null;
-        if (!isNull(cliContext.getLoggedInUser()) && cliContext.getLoggedInUser().getClass()== CliCustomer.class)
+        if (!isNull(cliContext.getLoggedInUser()) && cliContext.getLoggedInUser().getClass() == CliCustomer.class)
             cliNotification = restTemplate.getForObject(getUriForCustomer() + "/getNotification", CliNotification.class);
         if (!isNull(cliNotification))
             System.out.println(cliNotification);

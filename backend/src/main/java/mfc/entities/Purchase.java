@@ -31,6 +31,9 @@ public class Purchase {
         store = s;
     }
 
+    public Purchase() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,9 +53,6 @@ public class Purchase {
     @Override
     public int hashCode() {
         return Objects.hash(store, cost, date, customer);
-    }
-
-    public Purchase() {
     }
 
     public double getCost() {

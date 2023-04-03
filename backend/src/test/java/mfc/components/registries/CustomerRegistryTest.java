@@ -29,11 +29,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class CustomerRegistryTest {
 
+    private static boolean setUpIsDone = false;
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
     private Map<String, String> schedule = new HashMap<>();
-    private static boolean setUpIsDone = false;
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
@@ -48,7 +48,6 @@ class CustomerRegistryTest {
     private StoreRepository storeRepository;
     @Autowired
     private StoreOwnerRepository ownerRepository;
-
 
 
     @BeforeEach
@@ -67,63 +66,63 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void unknownCustomer() {
+    void unknownCustomer() {
         assertFalse(customerRepository.findCustomerByMail(mail).isPresent());
     }
 
     @Test
-     void registerCustomer() throws Exception {
+    void registerCustomer() throws Exception {
         Customer returned = customerRegistration.register(name, mail, password);
         Optional<Customer> customer = customerFinder.findCustomerByMail(mail);
         assertTrue(customer.isPresent());
         Customer mark = customer.get();
 
-        assertEquals(mark.getVfp(),returned.getVfp());
-        assertEquals(mark.getFavoriteStores(),returned.getFavoriteStores());
+        assertEquals(mark.getVfp(), returned.getVfp());
+        assertEquals(mark.getFavoriteStores(), returned.getFavoriteStores());
         assertEquals(mark, returned);
     }
 
     @Test
-     void cannotRegisterTwice() throws Exception {
+    void cannotRegisterTwice() throws Exception {
         customerRegistration.register(name, mail, password);
         Assertions.assertThrows(AlreadyExistingAccountException.class, () -> customerRegistration.register(name, mail, password));
     }
 
     @Test
-     void canFindByMail() throws Exception {
-        customerRegistration.register(name, mail , password);
+    void canFindByMail() throws Exception {
+        customerRegistration.register(name, mail, password);
         Optional<Customer> customer = customerFinder.findCustomerByMail(mail);
         assertTrue(customer.isPresent());
         assertEquals(name, customer.get().getName());
     }
 
     @Test
-     void unknownCustomerByMail() {
+    void unknownCustomerByMail() {
         assertFalse(customerFinder.findCustomerByMail(mail).isPresent());
     }
 
     @Test
-     void canFindById() throws Exception {
+    void canFindById() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         Optional<Customer> customer2 = customerFinder.findCustomerById(customer.getId());
         assertTrue(customer2.isPresent());
     }
 
     @Test
-     void unknownCustomerById() {
+    void unknownCustomerById() {
         Customer customer = new Customer(name, mail, password);
         assertFalse(customerFinder.findCustomerById(customer.getId()).isPresent());
     }
 
     @Test
-     void canEditBalance() throws Exception {
+    void canEditBalance() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         customer = customerBalancesModifier.editBalance(customer, 100);
         assertEquals(100, customer.getBalance());
     }
 
     @Test
-     void cannotEditBalanceWithNegativeValue() throws Exception {
+    void cannotEditBalanceWithNegativeValue() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         Assertions.assertThrows(InsufficientBalanceException.class, () -> customerBalancesModifier.editBalance(customer, -100));
     }
@@ -135,14 +134,14 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void canEditFidelityPoints() throws Exception {
+    void canEditFidelityPoints() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         customer = customerBalancesModifier.editFidelityPoints(customer, 100);
         assertEquals(100, customer.getFidelityPoints());
     }
 
     @Test
-     void cannotEditFidelityPointsWithNegativeValue() throws Exception {
+    void cannotEditFidelityPointsWithNegativeValue() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         Assertions.assertThrows(NegativePointCostException.class, () -> {
             customerBalancesModifier.editFidelityPoints(customer, -100);
@@ -150,7 +149,7 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void editFidelityPointsOfUnknownCustomer() throws Exception {
+    void editFidelityPointsOfUnknownCustomer() throws Exception {
         Customer customer = new Customer(name, mail, password);
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerBalancesModifier.editFidelityPoints(customer, 100);
@@ -158,7 +157,7 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void canRecordMatriculation() throws Exception {
+    void canRecordMatriculation() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         String matriculation = customer.getMatriculation();
         customer = customerProfileModifier.recordMatriculation(customer, "AB-123-CD");
@@ -173,7 +172,7 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void canRecordCreditCard() throws Exception {
+    void canRecordCreditCard() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         String creditCard = customer.getCreditCard();
         customer = customerProfileModifier.recordCreditCard(customer, "1234 5678 9012 3456");
@@ -188,7 +187,7 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void canRecordFavoriteStore() throws Exception {
+    void canRecordFavoriteStore() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         List<Store> favoriteStores = customer.getFavoriteStores();
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
@@ -201,7 +200,7 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void cannotRecordFavoriteStoreOfUnknownCustomer() {
+    void cannotRecordFavoriteStoreOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
         ownerRepository.save(storeOwner);
@@ -214,7 +213,7 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void favoriteStoreAlreadyRegistered() throws Exception {
+    void favoriteStoreAlreadyRegistered() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
         ownerRepository.save(storeOwner);
@@ -228,7 +227,7 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void canRemoveFavoriteStore() throws Exception {
+    void canRemoveFavoriteStore() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
         ownerRepository.save(storeOwner);
@@ -243,17 +242,17 @@ class CustomerRegistryTest {
     }
 
     @Test
-     void cannotRemoveFavoriteStoreOfUnknownCustomer() {
+    void cannotRemoveFavoriteStoreOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
-        Store store = new Store("Carrefour",schedule,  storeOwner);
+        Store store = new Store("Carrefour", schedule, storeOwner);
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerProfileModifier.removeFavoriteStore(customer, store);
         });
     }
 
     @Test
-     void cannotRemoveFavoriteStoreNotRegistered() throws Exception {
+    void cannotRemoveFavoriteStoreNotRegistered() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password);
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
         ownerRepository.save(storeOwner);

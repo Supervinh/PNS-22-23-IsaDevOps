@@ -30,7 +30,6 @@ public class Customer extends Account {
     }*/
 
 
-
     public Customer(String name, String mail, String password) {
         super(name, mail, password);
         this.creditCard = "";
