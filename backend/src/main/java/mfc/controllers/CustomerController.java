@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
 import static mfc.controllers.dto.ConvertDTO.convertCustomerToDto;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -69,14 +70,15 @@ public class CustomerController {
     }
 
     @PostMapping(path = "registerCustomer", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) {
+    public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) throws InterruptedException {
         // Note that there is no validation at all on the CustomerDto mapped
         String creditCard = cusdto.getCreditCard();
         if (!creditCard.equals("") && !creditCard.matches("\\d{10}+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(convertCustomerToDto(customerRegistration.register(cusdto.getName(), cusdto.getMail(), cusdto.getPassword(), creditCard)));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(convertCustomerToDto(customerRegistration.register(cusdto.getName(), cusdto.getMail(), cusdto.getPassword(), creditCard)));
         } catch (AlreadyExistingAccountException e) {
             // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -124,7 +126,8 @@ public class CustomerController {
     @DeleteMapping(path = LOGGED_URI + "deleteCustomer")
     public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("customerId") Long customerId) throws CustomerNotFoundException, NoCorrespongingAccountException {
         Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-        return ResponseEntity.ok().body(convertCustomerToDto(customerRegistration.delete(customer)));
+        customerRegistration.delete(customer);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(path = LOGGED_URI + "removeFavoriteStore", consumes = ALL_VALUE)
