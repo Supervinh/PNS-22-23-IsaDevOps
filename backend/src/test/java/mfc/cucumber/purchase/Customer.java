@@ -23,7 +23,7 @@ public class Customer {
     @Given("a customer named {string} with {string} as mail address and {string} as password")
     public void aCustomerNamedWithAsMailAddressAndAsPassword(String name, String mail, String password) throws AlreadyExistingAccountException {
         customerRepository.deleteAll();
-        customerRegistration.register(name, mail, password);
+        customerRegistration.register(name, mail, password, "");
     }
 
     @Given("{string} has {int} points")

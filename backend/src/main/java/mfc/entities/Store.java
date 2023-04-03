@@ -4,8 +4,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -15,29 +16,36 @@ public class Store {
     @GeneratedValue
     private Long id;
     private String name;
+    /**
+     * 0 --> opening
+     * 1 --> closing
+     * Days are defined by : Mo,Tu,We,Th,Fr,Sa,Su
+     * Keys are Day + 1 or 0
+     * Values are hours in string format
+     * Example : Mo0 = 7h00
+     * Mo1 = 19h00
+     */
     @ElementCollection
-    private List<String> schedule ;
+    private Map<String, String> schedule;
+    private LocalDateTime lastUpdate;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StoreOwner owner;
 
-    public Store(String name,StoreOwner owner) {
+    public Store(String name, StoreOwner owner) {
         this.name = name;
-        String starting = "7h00";
-        String ending = "19h00";
-        this.schedule = new ArrayList<String>(List.of(starting,ending,starting,ending,starting,ending,starting,ending,starting,ending,starting,ending));
+        this.schedule = new HashMap<>();
         this.owner = owner;
+        lastUpdate = LocalDateTime.now();
     }
 
-    public Store(String name, List<String> schedule,StoreOwner owner) {
-        this.name = name;
+    public Store(String name, Map<String, String> schedule, StoreOwner owner) {
+        this(name, owner);
         this.schedule = schedule;
-        this.owner = owner;
     }
 
     public Store() {
-
     }
 
     public Long getId() {
@@ -56,11 +64,11 @@ public class Store {
         this.name = name;
     }
 
-    public List<String> getSchedule() {
+    public Map<String, String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<String> schedule) {
+    public void setSchedule(Map<String, String> schedule) {
         this.schedule = schedule;
     }
 
@@ -70,6 +78,14 @@ public class Store {
 
     public void setOwner(StoreOwner owner) {
         this.owner = owner;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override

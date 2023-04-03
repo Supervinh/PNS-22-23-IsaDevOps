@@ -35,7 +35,7 @@ Projet développé par :
 * Toujours faire une PR, à valider par au moins deux personnes (non incluant l'auteur) sur cinq avant de merge
 * Pas de merge si les tests ne passent pas ou ne sont pas fait
 * Pensez à utiliser [SonarQube](http://vmpx02.polytech.unice.fr:8001/) pour vous assurer de la qualité de votre code
-* Pour tout les DTO & Cli, utilisez un constructeur vide, créez les setters correspondants et créez au besoin une
+* Pour tous les DTO & Cli, utilisez un constructeur vide, créez les setters correspondants et créez au besoin une
   fonction init() dans l'objet avec les arguments nécessaires pour redefiner les attributs souhaités
 * Pour les codes d'erreur, referez-vous
   à [REST API Design](https://drive.google.com/file/d/1Vv8m1Sub5WFFe2O1NEZPyP88C0muBpUY/view)

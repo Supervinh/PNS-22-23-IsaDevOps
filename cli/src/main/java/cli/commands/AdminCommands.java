@@ -13,11 +13,15 @@ public class AdminCommands {
 
     public static final String BASE_URI = "/admin";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public AdminCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
 
     @ShellMethod("Register an admin in the CoD backend (registerAdmin ADMIN_NAME ADMIN_MAIL ADMIN_PWD AUTH_MAIL, AUTH_PWD)")
     public CliAdmin registerAdmin(String name, String mail, String password) {
@@ -37,6 +41,24 @@ public class AdminCommands {
 
     @ShellMethod("Register a store owner in the CoD backend (registerOwner OWNER_NAME OWNER_MAIL OWNER_PWD)")
     public CliStoreOwner registerOwner(String name, String mail, String password) {
+        if(!(cliContext.getLoggedInUser().getClass().equals(CliAdmin.class))) {
+            System.out.println("You are not an admin");
+            return null;
+        }
         return restTemplate.postForObject("/owner/registerOwner", new CliStoreOwner(name, mail, password), CliStoreOwner.class);
+    }
+
+    @ShellMethod("Delete an admin account in the CoD backend (deleteAdmin)")
+    public void deleteAdmin() {
+        if (!(cliContext.getLoggedInUser().getClass().equals(CliAdmin.class))) {
+            System.out.println("You are not an admin");
+            return;
+        }
+        restTemplate.delete(getUri() + "/deleteAdmin");
+        cliContext.setLoggedInUser(null);
+    }
+
+    private String getUri() {
+        return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
     }
 }

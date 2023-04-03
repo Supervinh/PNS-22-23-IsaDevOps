@@ -7,7 +7,7 @@ RUN ./mvnw -B dependency:go-offline
 COPY ./src ./src
 RUN ./mvnw -B verify
 
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:17-jre-jammy as runner
 LABEL org.opencontainers.image.authors="TeamB-PolytechNice"
 ARG JAR_FILE
 RUN addgroup dockergroup; adduser --ingroup dockergroup --disabled-password --system --shell /bin/false dockeruser

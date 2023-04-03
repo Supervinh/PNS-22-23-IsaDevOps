@@ -1,15 +1,10 @@
-register-customer kadoc a@a abc 5251896983
 login-customer a@a abc
 refill 500
 logout
 
-register-admin admin a@æ admin
 login-admin a@æ admin
-register-owner to to@a owner
 logout
 
 login-owner to@a owner
-register-store abcdaire 22 15 08 20 to
 add-purchase abcdaire a@a 25
-
 logout

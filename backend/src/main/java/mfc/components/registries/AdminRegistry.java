@@ -1,9 +1,10 @@
 package mfc.components.registries;
 
+import mfc.entities.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.NoCorrespongingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.entities.Admin;
 import mfc.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,14 +16,14 @@ import java.util.Optional;
 @Transactional
 public class AdminRegistry implements AdminFinder, AdminRegistration {
 
-    @Autowired
     private final AdminRepository adminRepository;
 
+    @Autowired
     public AdminRegistry(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
         //create a basic Admin by default
-        Admin admin = new Admin("a","a@a","a");
-        adminRepository.save(admin);
+        if (adminRepository.findAll().isEmpty())
+            adminRepository.save(new Admin("a", "a@a", "a"));
     }
 
     @Override
@@ -48,5 +49,14 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
             return newAdmin;
         }
         throw new AlreadyExistingAccountException();
+    }
+
+    @Override
+    public Admin delete(Admin admin) throws NoCorrespongingAccountException {
+        if (adminRepository.existsById(admin.getId())) {
+            adminRepository.delete(admin);
+            return admin;
+        }
+        throw new NoCorrespongingAccountException();
     }
 }

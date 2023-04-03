@@ -1,9 +1,6 @@
 package cli.model;
 
-import java.util.UUID;
-
 public class CliAccount {
-
 
     private Long id;
     private String name;

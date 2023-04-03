@@ -1,11 +1,16 @@
 package mfc.controllers;
 
+import mfc.controllers.dto.DashboardDTO;
 import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
-import mfc.exceptions.AlreadyExistingAccountException;
-import mfc.interfaces.explorer.StoreOwnerFinder;
-import mfc.interfaces.modifier.StoreOwnerRegistration;
+import mfc.entities.Store;
 import mfc.entities.StoreOwner;
+import mfc.exceptions.*;
+import mfc.interfaces.StoreDataGathering;
+import mfc.interfaces.explorer.StoreFinder;
+import mfc.interfaces.explorer.StoreOwnerFinder;
+import mfc.interfaces.modifier.StoreModifier;
+import mfc.interfaces.modifier.StoreOwnerRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +21,31 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 import static mfc.controllers.dto.ConvertDTO.convertOwnerToDto;
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RestController
 @RequestMapping(path = StoreOwnerController.BASE_URI, produces = APPLICATION_JSON_VALUE)
-
 public class StoreOwnerController {
     public static final String BASE_URI = "/owner";
 
     public static final String LOGGED_URI = "/{ownerId}/";
 
-    @Autowired
-    private StoreOwnerRegistration ownerReg;
+    private final StoreOwnerRegistration ownerReg;
+    private final StoreOwnerFinder ownerFind;
+    private final StoreFinder storeFinder;
+    private final StoreDataGathering storeDataGathering;
+    private final StoreModifier storeModifier;
 
     @Autowired
-    private StoreOwnerFinder ownerFind;
+    public StoreOwnerController(StoreOwnerRegistration ownerReg, StoreOwnerFinder ownerFind, StoreFinder storeFinder, StoreDataGathering storeDataGathering, StoreModifier storeModifier) {
+        this.ownerReg = ownerReg;
+        this.ownerFind = ownerFind;
+        this.storeFinder = storeFinder;
+        this.storeDataGathering = storeDataGathering;
+        this.storeModifier = storeModifier;
+    }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
@@ -76,4 +90,36 @@ public class StoreOwnerController {
         }
     }
 
+    @PostMapping(path = LOGGED_URI + "dashboard", consumes = ALL_VALUE)
+    public ResponseEntity<DashboardDTO> dashboard(@PathVariable("ownerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException {
+        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
+        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+        if (store.getOwner().equals(storeOwner)) {
+            return ResponseEntity.status(HttpStatus.OK).body(storeDataGathering.gather(store));
+        } else {
+            throw new CredentialsException();
+        }
+    }
+
+    @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner")
+    public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) {
+        try {
+            StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+            return ResponseEntity.ok().body(convertOwnerToDto(ownerReg.delete(storeOwner)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping(path = LOGGED_URI + "deleteStore/{storeName}")
+    public ResponseEntity<Void> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @PathVariable("storeName") String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
+        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
+        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+        if (store.getOwner().equals(storeOwner)) {
+            storeModifier.delete(store);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            throw new CredentialsException();
+        }
+    }
 }

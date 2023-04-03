@@ -6,5 +6,6 @@ import java.util.Optional;
 
 public interface StoreFinder {
     Optional<Store> findStoreByName(String name);
+
     Optional<Store> findStoreById(Long id);
 }

@@ -1,14 +1,14 @@
 package mfc.components;
 
+import mfc.entities.Customer;
+import mfc.entities.Purchase;
+import mfc.entities.Store;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.interfaces.TransactionProcessor;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.PurchaseRecording;
-import mfc.entities.Customer;
-import mfc.entities.Purchase;
-import mfc.entities.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

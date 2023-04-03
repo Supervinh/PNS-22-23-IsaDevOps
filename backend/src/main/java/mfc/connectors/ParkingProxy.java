@@ -15,10 +15,9 @@ import static java.util.Objects.isNull;
 @Component
 public class ParkingProxy implements Parking {
 
+    private final RestTemplate restTemplate;
     @Value("${parking.host.baseurl}")
     private String parkingHostandPort;
-
-    private final RestTemplate restTemplate;
 
     @Autowired
     public ParkingProxy() {

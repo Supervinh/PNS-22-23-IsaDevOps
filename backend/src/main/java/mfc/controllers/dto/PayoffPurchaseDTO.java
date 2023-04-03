@@ -1,7 +1,5 @@
 package mfc.controllers.dto;
 
-import java.util.UUID;
-
 public class PayoffPurchaseDTO {
     private Long id;
     private String name;

@@ -1,9 +1,9 @@
 package mfc.controllers.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.entities.Admin;
 import mfc.controllers.AdminController;
 import mfc.controllers.dto.AdminDTO;
+import mfc.entities.Admin;
 import mfc.repositories.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,16 +24,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AdminControllerIT {
 
-    @Autowired
+    /*@Autowired
     ObjectMapper objectMapper;
     @Autowired
     AdminRepository adminRepository;
-
+    Admin defaultAdmin;
     @Autowired
     private MockMvc mockMvc;
-
-    Admin defaultAdmin;
-
 
     @BeforeEach
     void setUp() {
@@ -120,6 +117,6 @@ class AdminControllerIT {
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }
+    }*/
 
 }

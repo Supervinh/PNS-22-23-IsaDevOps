@@ -1,6 +1,8 @@
 package mfc.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity
@@ -11,11 +13,15 @@ public abstract class Account {
     @GeneratedValue
     private Long id;
 
+    @NotBlank(message = "name should not be blank")
     private String name;
+    @Email(message = "mail should be a valid email")
     private String mail;
+    @NotBlank(message = "password should not be blank")
     private String password;
 
-    protected Account(){}
+    protected Account() {
+    }
 
     protected Account(String name, String mail, String password) {
         this.name = name;
