@@ -54,7 +54,6 @@ public class StoreOwnerCommands {
             System.out.println("You are not a store owner");
             return;
         }
-        System.out.println(getUri() + "/deleteStore/" + storeName);
         restTemplate.delete(getUri() + "/deleteStore/" + storeName);
     }
 
