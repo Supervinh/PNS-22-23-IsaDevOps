@@ -1,9 +1,9 @@
 package mfc.controllers.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.entities.Admin;
 import mfc.controllers.AdminController;
 import mfc.controllers.dto.AdminDTO;
+import mfc.entities.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
@@ -90,7 +90,7 @@ class AdminControllerTest {
     @Test
     void loginAdmin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(0L,"admin", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "admin", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -104,7 +104,7 @@ class AdminControllerTest {
     @Test
     void wrongPasswordLogin() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(0L,"admin", "password", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "password", "admin")))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());

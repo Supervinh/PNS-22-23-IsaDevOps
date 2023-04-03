@@ -1,9 +1,9 @@
 package mfc.controllers.customer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.entities.Customer;
 import mfc.controllers.CustomerController;
 import mfc.controllers.dto.CustomerDTO;
+import mfc.entities.Customer;
 import mfc.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void registerCustomerWithACreditCard() throws Exception{
+    void registerCustomerWithACreditCard() throws Exception {
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, "a", "a@a", "pwd", "0123456789", ""))))
@@ -65,7 +65,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void registerCustomerAlreadyExists() throws Exception{
+    void registerCustomerAlreadyExists() throws Exception {
         Customer customer = new Customer("a", "a@a", "pwd");
         customerRepository.save(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
@@ -76,7 +76,7 @@ class CustomerControllerTest {
 
     //TODO : Possiblement changer le constructeur de CustomerDTO pour obliger à passer une carte de crédit valide ou vide
     @Test
-    void registerCustomerWithoutName() throws Exception{
+    void registerCustomerWithoutName() throws Exception {
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, null, "a@a", "pwd", "", ""))))
@@ -84,7 +84,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void registerCustomerWithNameEmptyString() throws Exception{
+    void registerCustomerWithNameEmptyString() throws Exception {
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, "", "a@a", "pwd", "", ""))))
@@ -92,7 +92,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void loginCustomer() throws Exception{
+    void loginCustomer() throws Exception {
         Customer customer = new Customer("a", "a@a", "pwd");
         customerRepository.save(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/loginCustomer")
@@ -106,10 +106,10 @@ class CustomerControllerTest {
     }
 
     @Test
-    void modifyCustomerSCreditCard() throws Exception{
+    void modifyCustomerSCreditCard() throws Exception {
         Customer customer = new Customer("a", "a@a", "pwd");
         customerRepository.save(customer);
-        mockMvc.perform(post(CustomerController.BASE_URI + "/"+customer.getId()+"/modifyCreditCard")
+        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/modifyCreditCard")
                         .contentType(MediaType.ALL_VALUE)
                         .content("0123456789"))
                 .andExpect(status().isOk())
@@ -122,10 +122,10 @@ class CustomerControllerTest {
     }
 
     @Test
-    void modifyCustomerSMatriculation() throws Exception{
+    void modifyCustomerSMatriculation() throws Exception {
         Customer customer = new Customer("a", "a@a", "pwd");
         customerRepository.save(customer);
-        mockMvc.perform(post(CustomerController.BASE_URI + "/"+customer.getId()+"/modifyMatriculation")
+        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/modifyMatriculation")
                         .contentType(MediaType.ALL_VALUE)
                         .content("XX-XX-XX"))
                 .andExpect(status().isOk())

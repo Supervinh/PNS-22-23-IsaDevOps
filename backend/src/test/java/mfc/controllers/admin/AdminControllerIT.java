@@ -1,9 +1,9 @@
 package mfc.controllers.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mfc.entities.Admin;
 import mfc.controllers.AdminController;
 import mfc.controllers.dto.AdminDTO;
+import mfc.entities.Admin;
 import mfc.repositories.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +28,9 @@ class AdminControllerIT {
     ObjectMapper objectMapper;
     @Autowired
     AdminRepository adminRepository;
-
+    Admin defaultAdmin;
     @Autowired
     private MockMvc mockMvc;
-
-    Admin defaultAdmin;
-
 
     @BeforeEach
     void setUp() {

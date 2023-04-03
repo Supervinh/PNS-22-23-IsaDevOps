@@ -30,6 +30,10 @@ public class Payoff {
         this.isVfp = isVfp;
     }
 
+    public Payoff() {
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,10 +45,6 @@ public class Payoff {
     @Override
     public int hashCode() {
         return Objects.hash(name, cost, pointCost, store);
-    }
-
-    public Payoff() {
-
     }
 
     public Long getId() {

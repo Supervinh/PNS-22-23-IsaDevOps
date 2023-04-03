@@ -1,7 +1,5 @@
 package cli.model;
 
-import java.util.UUID;
-
 public class CliPayoffPurchase {
     private Long id;
     private String name;

@@ -42,15 +42,15 @@ public class PayoffController {
         this.payOffProcessor = payOffProcessor;
     }
 
+    public static void addNotification(NotificationDTO notificationDTO) {
+        notifications.put(notificationDTO.getNumberplate(), notificationDTO);
+    }
+
     @PostMapping(path = LOGGED_URI + "claimPayoff", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") Long customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) throws PayoffNotFoundException, CustomerNotFoundException, NoMatriculationException, NegativePointCostException, VFPExpiredException, ParkingException, InsufficientBalanceException, NoPreviousPurchaseException {
         Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
         Payoff payoff = catalogExplorer.findPayoff(payoffIndentifierDTO.getPayOffName(), payoffIndentifierDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
         return ResponseEntity.ok(ConvertDTO.convertPayoffPurchaseToDTO(payOffProcessor.claimPayoff(customer, payoff)));
-    }
-
-    public static void addNotification(NotificationDTO notificationDTO) {
-        notifications.put(notificationDTO.getNumberplate(), notificationDTO);
     }
 
     @GetMapping(path = LOGGED_URI + "getNotification")

@@ -10,7 +10,9 @@ import java.util.Optional;
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findStoreByName(String name);
+
     Optional<Store> findStoreById(Long id);
+
     void deleteById(Long id);
 
 }

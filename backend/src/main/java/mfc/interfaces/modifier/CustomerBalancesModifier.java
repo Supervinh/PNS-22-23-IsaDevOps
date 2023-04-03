@@ -1,9 +1,9 @@
 package mfc.interfaces.modifier;
 
+import mfc.entities.Customer;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NegativePointCostException;
-import mfc.entities.Customer;
 
 import java.time.LocalDate;
 

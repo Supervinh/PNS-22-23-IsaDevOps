@@ -21,22 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class StoreOwnerRegistryTest {
 
-    @Autowired
-    private StoreOwnerRepository ownerRepository;
-
-    @Autowired
-    private StoreOwnerRegistration ownerRegistration;
-
-    @Autowired
-    private StoreRepository storeRepository;
-
-    @Autowired
-    private StoreOwnerFinder ownerFinder;
-
     private final String mail = "Owner@pns.fr";
     private final String name = "Steve";
     private final String password = "Travail";
-
+    @Autowired
+    private StoreOwnerRepository ownerRepository;
+    @Autowired
+    private StoreOwnerRegistration ownerRegistration;
+    @Autowired
+    private StoreRepository storeRepository;
+    @Autowired
+    private StoreOwnerFinder ownerFinder;
 
     @BeforeEach
     void setUp() {
@@ -62,7 +57,7 @@ class StoreOwnerRegistryTest {
     }
 
     @Test
-     void cannotRegisterTwice() throws Exception {
+    void cannotRegisterTwice() throws Exception {
         ownerRegistration.registerStoreOwner(name, mail, password);
         Assertions.assertThrows(AlreadyExistingAccountException.class, () -> {
             ownerRegistration.registerStoreOwner(name, mail, password);
@@ -70,7 +65,7 @@ class StoreOwnerRegistryTest {
     }
 
     @Test
-     void canFindByMail() throws Exception {
+    void canFindByMail() throws Exception {
         ownerRegistration.registerStoreOwner(name, mail, password);
         Optional<StoreOwner> owner = ownerFinder.findStoreOwnerByMail(mail);
         assertTrue(owner.isPresent());
@@ -78,34 +73,34 @@ class StoreOwnerRegistryTest {
     }
 
     @Test
-     void unknownStoreOwnerByMail() {
+    void unknownStoreOwnerByMail() {
         assertFalse(ownerFinder.findStoreOwnerByMail(mail).isPresent());
     }
 
     @Test
-     void canFindById() throws Exception {
+    void canFindById() throws Exception {
         StoreOwner owner = ownerRegistration.registerStoreOwner(name, mail, password);
         Optional<StoreOwner> owner2 = ownerFinder.findStoreOwnerById(owner.getId());
         assertTrue(owner2.isPresent());
     }
 
     @Test
-     void unknownStoreOwnerById() {
+    void unknownStoreOwnerById() {
         StoreOwner owner = new StoreOwner(name, mail, password);
         assertFalse(ownerFinder.findStoreOwnerById(owner.getId()).isPresent());
     }
 
     @Test
-     void canFindByMailAndPassword() throws Exception {
+    void canFindByMailAndPassword() throws Exception {
         ownerRegistration.registerStoreOwner(name, mail, password);
-        Optional<StoreOwner> owner = ownerFinder.findStoreOwnerByMailAndPassword(mail,password);
+        Optional<StoreOwner> owner = ownerFinder.findStoreOwnerByMailAndPassword(mail, password);
         assertTrue(owner.isPresent());
         assertEquals(name, owner.get().getName());
     }
 
     @Test
-     void unknownStoreOwnerByMailAndPassword() {
-        assertFalse(ownerFinder.findStoreOwnerByMailAndPassword(mail,password).isPresent());
+    void unknownStoreOwnerByMailAndPassword() {
+        assertFalse(ownerFinder.findStoreOwnerByMailAndPassword(mail, password).isPresent());
     }
 
 }

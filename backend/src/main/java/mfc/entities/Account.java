@@ -15,7 +15,8 @@ public abstract class Account {
     private String mail;
     private String password;
 
-    protected Account(){}
+    protected Account() {
+    }
 
     protected Account(String name, String mail, String password) {
         this.name = name;
