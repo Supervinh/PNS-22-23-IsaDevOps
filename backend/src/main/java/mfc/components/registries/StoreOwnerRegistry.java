@@ -4,6 +4,7 @@ import mfc.entities.StoreOwner;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.NoCorrespongingAccountException;
 import mfc.interfaces.explorer.StoreOwnerFinder;
+import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.StoreOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import java.util.Optional;
 public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistration {
 
     private final StoreOwnerRepository ownerRepository;
+    private final StoreModifier storeModifier;
 
     @Autowired
-    public StoreOwnerRegistry(StoreOwnerRepository ownerRepository) {
+    public StoreOwnerRegistry(StoreOwnerRepository ownerRepository, StoreModifier storeModifier) {
         this.ownerRepository = ownerRepository;
+        this.storeModifier = storeModifier;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistrat
 
     @Override
     public Optional<StoreOwner> findStoreOwnerById(Long id) {
-        return ownerRepository.findStoreOwnerById(id);
+        return ownerRepository.findById(id);
     }
 
     @Override
@@ -58,6 +61,7 @@ public class StoreOwnerRegistry implements StoreOwnerFinder, StoreOwnerRegistrat
     @Override
     public StoreOwner delete(StoreOwner owner) throws NoCorrespongingAccountException {
         if (findStoreOwnerById(owner.getId()).isPresent()) {
+            storeModifier.deleteStores(owner);
             ownerRepository.delete(owner);
             return owner;
         }

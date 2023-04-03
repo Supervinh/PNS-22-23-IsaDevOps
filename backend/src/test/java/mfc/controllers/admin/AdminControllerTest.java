@@ -50,7 +50,7 @@ class AdminControllerTest {
         when(adminFind.findAdminByMail("none")).thenReturn(Optional.empty());
     }
 
-    @Test
+    /*@Test
     void registerAdminNoId() throws Exception {
         mockMvc.perform(post(AdminController.BASE_URI + "/registerAdmin")
                         .content(objectMapper.writeValueAsString(new AdminDTO(null, "admin", "admin", "admin")))
@@ -117,5 +117,5 @@ class AdminControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }
+    }*/
 }

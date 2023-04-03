@@ -2,7 +2,6 @@ package cli.model;
 
 public class CliAccount {
 
-
     private Long id;
     private String name;
     private String mail;

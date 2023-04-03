@@ -22,7 +22,7 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
     public AdminRegistry(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
         //create a basic Admin by default
-        if (findAdminByMail("a@a").isEmpty())
+        if (adminRepository.findAll().isEmpty())
             adminRepository.save(new Admin("a", "a@a", "a"));
     }
 

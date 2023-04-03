@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,14 +43,7 @@ public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
 
     @Override
     public Set<Purchase> lookUpPurchasesByCustomer(Customer customer) {
-        return purchaseRepository.findAll().stream()
-                .filter(purchase -> customer.equals(purchase.getCustomer())).collect(Collectors.toSet());
-    }
-
-    @Override
-    public Optional<Purchase> findById(UUID id) {
-        return purchaseRepository.findAll().stream()
-                .filter(purchase -> id.equals(purchase.getId())).findAny();
+        return purchaseRepository.findPurchasesByCustomer(customer);
     }
 
 }

@@ -1,4 +1,3 @@
-register-customer catalogCustomer catalog@customer pwd 5251896983
 login-customer catalog@customer pwd
 refill 50
 available-catalog

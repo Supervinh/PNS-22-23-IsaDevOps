@@ -54,13 +54,17 @@ public class PayoffController {
     }
 
     @GetMapping(path = LOGGED_URI + "getNotification")
-    public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") long customerId) throws CustomerNotFoundException {
-        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-        NotificationDTO notificationDTO = notifications.get(customer.getMatriculation());
-        if (!isNull(notificationDTO)) {
-            notifications.remove(notificationDTO.getNumberplate());
+    public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") long customerId) {
+        try {
+            Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
+            NotificationDTO notificationDTO = notifications.get(customer.getMatriculation());
+            if (!isNull(notificationDTO)) {
+                notifications.remove(notificationDTO.getNumberplate());
+            }
+            return ResponseEntity.ok(notificationDTO);
+        } catch (Exception e) {
+            return ResponseEntity.ok(null);
         }
-        return ResponseEntity.ok(notificationDTO);
     }
 
     @PostMapping(path = "notify", consumes = APPLICATION_JSON_VALUE)

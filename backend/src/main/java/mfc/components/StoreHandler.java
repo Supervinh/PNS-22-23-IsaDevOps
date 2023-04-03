@@ -52,10 +52,23 @@ public class StoreHandler implements StoreFinder, StoreModifier {
     @Override
     public Store delete(Store store) throws NoStoreFoundException {
         if (storeRepository.existsById(store.getId())) {
-            storeRepository.delete(store);
+            storeRepository.deleteStore(store);
             return store;
         }
         throw new NoStoreFoundException();
+    }
+
+    @Override
+    public boolean deleteStores(StoreOwner owner) {
+        boolean result = true;
+        for (Store e : storeRepository.findByOwner(owner)) {
+            try {
+                delete(e);
+            } catch (NoStoreFoundException ex) {
+                result = false;
+            }
+        }
+        return result;
     }
 
     @Override

@@ -1,9 +1,8 @@
-register-admin admin ad@min pwd
 login-admin ad@min pwd
 
-register-owner owner ow@ner pwd
+
+logout
 login-owner ow@ner pwd
-register-store store 22 15 08 20 owner
 add-payoff payoff 200 15 store
 edit-payoff store payoff 5 3
 edit-payoff store payoff --newCost 50

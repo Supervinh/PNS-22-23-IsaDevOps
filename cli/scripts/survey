@@ -1,6 +1,3 @@
-register-customer firstCustomer firstCustomer@customer.fr abc 5251896983
-register-admin admin ad@min pwd
-
 login-admin ad@min pwd
 create-survey test "Etes vous content?"
 create-survey test "Etes vous content?"

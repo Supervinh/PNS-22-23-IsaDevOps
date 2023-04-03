@@ -101,11 +101,14 @@ public class StoreOwnerController {
         }
     }
 
-    @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner", consumes = ALL_VALUE)
-    public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) throws StoreOwnerNotFoundException, NoCorrespongingAccountException {
-        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
-        ownerReg.delete(storeOwner);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner")
+    public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) {
+        try {
+            StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+            return ResponseEntity.ok().body(convertOwnerToDto(ownerReg.delete(storeOwner)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping(path = LOGGED_URI + "deleteStore/{storeName}")

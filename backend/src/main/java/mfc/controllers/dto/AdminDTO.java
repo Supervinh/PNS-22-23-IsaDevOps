@@ -1,9 +1,15 @@
 package mfc.controllers.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class AdminDTO {
+    @NotBlank(message = "name should not be blank")
     private String name;
     private Long id;
+    @Email(message = "mail should be a valid email")
     private String mail;
+    @NotBlank(message = "password should not be blank")
     private String password;
 
 
