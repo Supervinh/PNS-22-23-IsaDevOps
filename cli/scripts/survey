@@ -1,0 +1,17 @@
+register-customer firstCustomer firstCustomer@customer.fr abc 5251896983
+register-admin admin ad@min pwd
+
+login-admin ad@min pwd
+create-survey test "Etes vous content?"
+create-survey test "Etes vous content?"
+get-survey test
+login-customer firstCustomer@customer.fr abc
+show-survey test
+answer-survey test Yes
+answer-survey test Yes
+logout
+login-admin ad@min pwd
+get-survey test
+delete-survey test
+
+add-favorite-store test

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Set;
 
 @Component
 @Transactional
@@ -45,26 +45,36 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer delete(Customer customer) throws NoCorrespongingAccountException {
-        if (!findCustomerByName(customer.getName()).isPresent()) throw new NoCorrespongingAccountException();
+        if (findCustomerByName(customer.getName()).isEmpty()) throw new NoCorrespongingAccountException();
         customerRepository.delete(customer);
         return customer;
     }
 
     @Override
     public Optional<Customer> findCustomerByMail(String mail) {
-        return customerRepository.findAll().stream()
-                .filter(cust -> mail.equals(cust.getMail())).findAny();
+        return customerRepository.findAll().stream().filter(cust -> mail.equals(cust.getMail())).findAny();
     }
 
     @Override
     public Optional<Customer> findCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
     }
+    
+     @Override
+    public Optional<Customer> findCustomerAtConnexion(String mail, String password) throws CredentialsException {
+        Optional<Customer> customer = customerRepository.findCustomerByMail(mail);
+        if (customer.isPresent() && customer.get().getPassword().equals(password)) {
+            customer.get().setLastConnexion(LocalDateTime.now());
+            customerRepository.save(customer.get());
+        } else if (customer.isPresent()) {
+            throw new CredentialsException();
+        }
+        return customer;
+    }
 
     @Override
     public Optional<Customer> findCustomerByName(String name) {
-        return customerRepository.findAll().stream()
-                .filter(cust -> name.equals(cust.getName())).findAny();
+        return customerRepository.findAll().stream().filter(cust -> name.equals(cust.getName())).findAny();
     }
 
     @Override
@@ -80,8 +90,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         Optional<Customer> customerUpdatedBalance = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedBalance.isPresent()) {
             customerUpdatedBalance.get().setBalance(customerUpdatedBalance.get().getBalance() + balanceChange);
-            if (customerUpdatedBalance.get().getBalance() < 0)
-                throw new InsufficientBalanceException();
+            if (customerUpdatedBalance.get().getBalance() < 0) throw new InsufficientBalanceException();
             customerRepository.save(customerUpdatedBalance.get());
             return customerUpdatedBalance.get();
         }
@@ -93,8 +102,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
         Optional<Customer> customerUpdatedFidelityPoints = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedFidelityPoints.isPresent()) {
             customerUpdatedFidelityPoints.get().setFidelityPoints(customerUpdatedFidelityPoints.get().getFidelityPoints() + fidelityPointsBalanceChange);
-            if (customerUpdatedFidelityPoints.get().getFidelityPoints() < 0)
-                throw new NegativePointCostException();
+            if (customerUpdatedFidelityPoints.get().getFidelityPoints() < 0) throw new NegativePointCostException();
             customerRepository.save(customerUpdatedFidelityPoints.get());
             return customerUpdatedFidelityPoints.get();
         }
@@ -126,62 +134,22 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer recordNewFavoriteStore(Customer customer, Store store) throws CustomerNotFoundException, StoreAlreadyRegisteredException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
-        if (customerUpdatedFavoriteStore.isPresent()) {
-            Optional<Store> storeToBeAdded = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(s -> s.getId().equals(store.getId())).findAny();
-            if (storeToBeAdded.isEmpty()) {
-                customerUpdatedFavoriteStore.get().getFavoriteStores().add(store);
-                customerRepository.save(customerUpdatedFavoriteStore.get());
-                return customerUpdatedFavoriteStore.get();
-            }
+        Customer customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName()).orElseThrow(CustomerNotFoundException::new);
+        if (customerUpdatedFavoriteStore.getFavoriteStores().stream().anyMatch(e -> e.equals(store)))
             throw new StoreAlreadyRegisteredException();
-        }
-        throw new CustomerNotFoundException();
-
+        customerUpdatedFavoriteStore.getFavoriteStores().add(store);
+        customerRepository.save(customerUpdatedFavoriteStore);
+        return customerUpdatedFavoriteStore;
     }
 
     @Override
     public Customer removeFavoriteStore(Customer customer, Store store) throws StoreNotFoundException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
-        if (customerUpdatedFavoriteStore.isPresent()) {
-            Optional<Store> storeToBeRemoved = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(s -> s.getId().equals(store.getId())).findAny();
-            if (storeToBeRemoved.isPresent()) {
-                customerUpdatedFavoriteStore.get().getFavoriteStores().remove(storeToBeRemoved.get());
-                customerRepository.save(customerUpdatedFavoriteStore.get());
-                return customerUpdatedFavoriteStore.get();
-            }
+        Customer customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName()).orElseThrow(CustomerNotFoundException::new);
+        if (customerUpdatedFavoriteStore.getFavoriteStores().stream().noneMatch(e -> e.equals(store)))
             throw new StoreNotFoundException();
-        }
-        throw new CustomerNotFoundException();
+        customerUpdatedFavoriteStore.getFavoriteStores().remove(store);
+        customerRepository.save(customerUpdatedFavoriteStore);
+        return customerUpdatedFavoriteStore;
     }
-
-    @Override
-    public Customer recordNewFavoriteStores(Customer customer, Set<Store> store) throws StoreAlreadyRegisteredException, CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
-        if (customerUpdatedFavoriteStore.isPresent()) {
-            for (Store s : store) {
-                recordNewFavoriteStore(customerUpdatedFavoriteStore.get(), s);
-            }
-            customerRepository.save(customerUpdatedFavoriteStore.get());
-            return customerUpdatedFavoriteStore.get();
-        }
-        throw new CustomerNotFoundException();
-    }
-
-
-    @Override
-    public Customer removeAllFavoriteStores(Customer customer, Set<Store> store) throws CustomerNotFoundException {
-        Optional<Customer> customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName());
-        if (customerUpdatedFavoriteStore.isPresent()) {
-            for (Store s : store) {
-                Optional<Store> storeToBeRemoved = customerUpdatedFavoriteStore.get().getFavoriteStores().stream().filter(st -> st.getId().equals(s.getId())).findAny();
-                storeToBeRemoved.ifPresent(value -> customerUpdatedFavoriteStore.get().getFavoriteStores().remove(value));
-            }
-            customerRepository.save(customerUpdatedFavoriteStore.get());
-            return customerUpdatedFavoriteStore.get();
-        }
-        throw new CustomerNotFoundException();
-    }
-
 
 }

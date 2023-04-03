@@ -4,15 +4,16 @@ import cli.CliContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import org.springframework.web.client.RestTemplate;
 
 @ShellComponent
 public class AccountCommands {
-    @Autowired
-    RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public AccountCommands(CliContext cliContext) {
+        this.cliContext = cliContext;
+    }
 
     @ShellMethod("Logout a account in the CoD backend (logout)")
     public void logout() {

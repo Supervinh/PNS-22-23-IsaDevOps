@@ -9,11 +9,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 @Repository
 public interface PayoffRepository extends JpaRepository<Payoff, Long> {
-    public default Set<Payoff> explore(String name) {
-        return findAll().stream().filter(payOff -> payOff.getName().contains(name))
+    default Set<Payoff> explore(String name) {
+        return findAll().stream()
+                .filter(payOff -> payOff.getName().contains(name))
                 .collect(Collectors.toSet());
     }
 
@@ -24,4 +24,5 @@ public interface PayoffRepository extends JpaRepository<Payoff, Long> {
     }
 
     Optional<Payoff> findPayoffByNameAndStore_Name(String name, String store);
+
 }

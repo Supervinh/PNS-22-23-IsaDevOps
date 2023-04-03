@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Component
 @Transactional
@@ -52,7 +51,7 @@ public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
 
     @Override
     public Optional<Purchase> findById(UUID id) {
-        return StreamSupport.stream(purchaseRepository.findAll().spliterator(), false)
+        return purchaseRepository.findAll().stream()
                 .filter(purchase -> id.equals(purchase.getId())).findAny();
     }
 

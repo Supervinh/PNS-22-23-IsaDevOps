@@ -3,7 +3,10 @@ package mfc.entities;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -37,12 +40,19 @@ public class Purchase {
     }
 
     @Override
+    public String toString() {
+        return "Purchase{ date=" + date +
+                ", customer=" + customer +
+                ", id=" + id +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(store, cost, date, customer);
     }
 
     public Purchase() {
-
     }
 
     public double getCost() {

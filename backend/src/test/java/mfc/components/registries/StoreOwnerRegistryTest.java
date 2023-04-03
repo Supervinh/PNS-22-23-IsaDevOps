@@ -1,7 +1,7 @@
-package mfc.components;
+package mfc.components.registries;
 
 import mfc.entities.StoreOwner;
-import mfc.exceptions.*;
+import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.StoreOwnerRepository;
@@ -45,12 +45,12 @@ class StoreOwnerRegistryTest {
     }
 
     @Test
-     void unknownowner() {
+    void unknownOwner() {
         assertFalse(ownerRepository.findStoreOwnerByMail(mail).isPresent());
     }
 
     @Test
-     void registerowner() throws Exception {
+    void registerOwner() throws Exception {
         StoreOwner returned = ownerRegistration.registerStoreOwner(name, mail, password);
         Optional<StoreOwner> owner = ownerFinder.findStoreOwnerById(returned.getId());
         assertTrue(owner.isPresent());

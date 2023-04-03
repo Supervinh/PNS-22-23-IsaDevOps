@@ -10,16 +10,22 @@ import mfc.interfaces.explorer.PurchaseFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Component
+@Transactional
 public class DataGatherer implements StoreDataGathering {
 
-    @Autowired
-    private PurchaseFinder purchaseFinder;
+    private final PurchaseFinder purchaseFinder;
+
+    private final PayOffPurchaseFinder payOffPurchaseFinder;
 
     @Autowired
-    private PayOffPurchaseFinder payOffPurchaseFinder;
+    public DataGatherer(PurchaseFinder purchaseFinder, PayOffPurchaseFinder payOffPurchaseFinder) {
+        this.purchaseFinder = purchaseFinder;
+        this.payOffPurchaseFinder = payOffPurchaseFinder;
+    }
 
     @Override
     public DashboardDTO gather(Store store) {

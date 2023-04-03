@@ -32,8 +32,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CatalogController {
 
     public static final String BASE_URI = "/catalog";
-    public static final String LOGGED_URI = "/{customerID}/cat/";
-    public static final String STORE_OWNER_URI = "/{storeOwnerID}/cat/";
+    public static final String LOGGED_URI = "/{customerID}/";
+    public static final String STORE_OWNER_URI = "/{storeOwnerID}/";
 
     @Autowired
     private CustomerFinder customerFinder;
@@ -68,7 +68,7 @@ public class CatalogController {
     public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
         Optional<Customer> customer = customerFinder.findCustomerById(customerID);
         if (customer.isPresent()) {
-            CatalogDTO c = convertCatalogToDTO(catalogExplorer.availablePayoffs((customer.get())));
+            CatalogDTO c = convertCatalogToDTO(catalogExplorer.showAvailablePayoffs((customer.get())));
             return ResponseEntity.status(HttpStatus.CREATED).body(c);
         } else throw new CustomerNotFoundException();
     }
@@ -87,7 +87,7 @@ public class CatalogController {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
             return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(
-                    catalogModifier.addPayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store)));
+                    catalogModifier.addPayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store, payoffDTO.isVfp())));
         } catch (StoreNotFoundException | NegativeCostException | NegativePointCostException |
                  AlreadyExistingPayoffException e) {
             System.out.println(e.getMessage());
@@ -100,15 +100,17 @@ public class CatalogController {
         return storeFinder.findStoreByName(payoffDTO.getStoreName()).orElseThrow(StoreNotFoundException::new);
     }
 
-    @DeleteMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> deletePayoff(@RequestBody @Valid DeletePayoffDTO deletePayoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
+    public ResponseEntity<Void> deletePayoff(@RequestBody @Valid DeletePayoffDTO deletePayoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException, CredentialsException {
         try {
-            Optional<StoreOwner> storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID);
-            Optional<Payoff> payOff = catalogExplorer.findPayoff(deletePayoffDTO.getPayoffName(), deletePayoffDTO.getStoreName());
-            if (storeOwner.isPresent()) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(catalogModifier.deletePayoff(payOff.get())));
-            } else throw new StoreOwnerNotFoundException();
+            StoreOwner storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(StoreOwnerNotFoundException::new);
+            Payoff payOff = catalogExplorer.findPayoff(deletePayoffDTO.getPayoffName(), deletePayoffDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
+            if (payOff.getStore().getOwner().equals(storeOwner)) {
+                catalogModifier.deletePayoff(payOff);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else
+                throw new CredentialsException();
         } catch (PayoffNotFoundException e) {
             System.out.println(e.getMessage());
             return null;
@@ -119,10 +121,10 @@ public class CatalogController {
     public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
         try {
             Store store = getStore(payoffDTO, storeOwnerID);
-            Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store);
+            Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store, payoffDTO.isVfp());
             Optional<Double> cost = payOff.getCost() == 0 ? Optional.empty() : Optional.of(payOff.getCost());
             Optional<Integer> pointCost = payOff.getPointCost() == 0 ? Optional.empty() : Optional.of(payOff.getPointCost());
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertPayoffToDTO(catalogModifier.editPayOff(payOff, cost, pointCost)));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertPayoffToDTO(catalogModifier.editPayOff(payOff, cost, pointCost, payoffDTO.isVfp())));
         } catch (PayoffNotFoundException | StoreNotFoundException | NegativeCostException |
                  NegativePointCostException e) {
             System.out.println(e.getMessage() + "" + e);

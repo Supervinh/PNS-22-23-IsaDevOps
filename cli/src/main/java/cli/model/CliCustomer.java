@@ -3,6 +3,10 @@ package cli.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 // A cli side class being equivalent to the backend CustomerDTO, in terms of attributes
 // so that the automatic JSON (de-)/serialization will make the two compatible on each side
 public class CliCustomer extends CliAccount {
@@ -10,12 +14,17 @@ public class CliCustomer extends CliAccount {
     private double balance;
     private String creditCard;
     private String matriculation;
+    private List<CliSurvey> surveysToAnswer;
+    private List<CliStore> favoritesStores;
+    private LocalDateTime lastConnexion;
 
     @JsonCreator
     public CliCustomer(@JsonProperty("name") String name, @JsonProperty("mail") String mail, @JsonProperty("password") String password, @JsonProperty("creditCard") String creditCard, @JsonProperty("matriculation") String matriculation) {
         super(name, mail, password);
         this.creditCard = creditCard;
         this.matriculation = matriculation;
+        surveysToAnswer = new ArrayList<>();
+        favoritesStores = new ArrayList<>();
     }
 
     /***
@@ -53,16 +62,39 @@ public class CliCustomer extends CliAccount {
         this.matriculation = matriculation;
     }
 
+    public List<CliSurvey> getSurveysToAnswer() {
+        return surveysToAnswer;
+    }
+
+    public void setSurveysToAnswer(List<CliSurvey> surveysToAnswer) {
+        this.surveysToAnswer = surveysToAnswer;
+    }
+
+    public List<CliStore> getFavoritesStores() {
+        return favoritesStores;
+    }
+
+    public void setFavoritesStores(List<CliStore> favoritesStores) {
+        this.favoritesStores = favoritesStores;
+    }
+
+    public LocalDateTime getLastConnexion() {
+        return lastConnexion;
+    }
+
+    public void setLastConnexion(LocalDateTime lastConnexion) {
+        this.lastConnexion = lastConnexion;
+    }
+
     @Override
     public String toString() {
         return "CliCustomer{" +
-                "id=" + super.getId() +
-                ", name='" + super.getName() + '\'' +
-                ", mail='" + super.getMail() + '\'' +
-                ", password='" + super.getPassword() + '\'' +
-                ", balance=" + balance +
+                "balance=" + balance +
                 ", creditCard='" + creditCard + '\'' +
                 ", matriculation='" + matriculation + '\'' +
+                ", surveysToAnswer=" + surveysToAnswer +
+                ", favoritesStores=" + favoritesStores +
+                ", lastConnexion=" + lastConnexion +
                 '}';
     }
 }

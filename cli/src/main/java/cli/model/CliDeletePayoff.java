@@ -24,4 +24,12 @@ public class CliDeletePayoff {
     public void setPayoffName(String payoffName) {
         this.payoffName = payoffName;
     }
+
+    @Override
+    public String toString() {
+        return "CliDeletePayoff{" +
+                "storeName='" + storeName + '\'' +
+                ", payoffName='" + payoffName + '\'' +
+                '}';
+    }
 }
