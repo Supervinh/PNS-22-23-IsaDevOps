@@ -1,5 +1,5 @@
 customer
-    -name: theo
+    -name: theoa
     -mail: refill@customer
 Init
 login-customer refill@customer pwd
