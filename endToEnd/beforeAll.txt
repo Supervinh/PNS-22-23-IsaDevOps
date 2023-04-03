@@ -1,8 +1,6 @@
 customer
-    -name: theoa
+    -name: theo
     -mail: refill@customer
 Init
-login-customer refill@customer pwd
-delete-customer
 register-customer theo refill@customer pwd 5251896983
 login-customer refill@customer pwd
