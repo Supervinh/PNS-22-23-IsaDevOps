@@ -1,7 +1,6 @@
-admin
-    -name: b
-    -mail: a@a
+customer
+    -name: theo
+    -mail: refill@customer
 Init
-script register.txt
-script buySomething.txt
-logout
+register-customer theo refill@customer pwd 5251896983
+login-customer refill@customer pwd

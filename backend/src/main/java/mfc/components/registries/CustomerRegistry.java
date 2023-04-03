@@ -30,7 +30,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer register(String name, String mail, String password, String creditCard) throws AlreadyExistingAccountException {
-        if (findCustomerByName(name).isPresent()) throw new AlreadyExistingAccountException();
+        if (findCustomerByMail(mail).isPresent()) throw new AlreadyExistingAccountException();
         Customer newcustomer = new Customer(name, mail, password, creditCard);
         customerRepository.save(newcustomer);
         return newcustomer;
@@ -38,7 +38,7 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
 
     @Override
     public Customer delete(Customer customer) throws NoCorrespongingAccountException {
-        if (findCustomerByName(customer.getName()).isEmpty()) throw new NoCorrespongingAccountException();
+        findCustomerByMail(customer.getMail()).orElseThrow(NoCorrespongingAccountException::new);
         customerRepository.delete(customer);
         return customer;
     }
