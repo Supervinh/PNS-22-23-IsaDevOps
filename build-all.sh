@@ -78,8 +78,7 @@ echo "CLI_FROM_ARTIFACTORY: $CLI_FROM_ARTIFACTORY, SERVER_FROM_ARTIFACTORY: $SER
 echo "** Building all"
 
 echo "** Stopping"
-docker compose down
-sleep 10
+docker compose down --rmi --remove-orphans
 
 if [ "$CLI_FROM_ARTIFACTORY" = true ]; then
   build_dir_from_artifactory "cli"
