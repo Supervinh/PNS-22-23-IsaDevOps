@@ -1,5 +1,5 @@
-login-customer a@a pwd
-delete-customer a@a pwd
+login-customer a@a abc
+delete-customer a@a abc
 
 login-admin a@æ admin
 delete-admin a@æ admin

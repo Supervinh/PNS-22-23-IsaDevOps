@@ -41,6 +41,10 @@ public class AdminCommands {
 
     @ShellMethod("Register a store owner in the CoD backend (registerOwner OWNER_NAME OWNER_MAIL OWNER_PWD)")
     public CliStoreOwner registerOwner(String name, String mail, String password) {
+        if(!(cliContext.getLoggedInUser().getClass().equals(CliAdmin.class))) {
+            System.out.println("You are not an admin");
+            return null;
+        }
         return restTemplate.postForObject("/owner/registerOwner", new CliStoreOwner(name, mail, password), CliStoreOwner.class);
     }
 

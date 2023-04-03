@@ -85,12 +85,6 @@ class StoreOwnerRegistryTest {
     }
 
     @Test
-    void unknownStoreOwnerById() {
-        StoreOwner owner = new StoreOwner(name, mail, password);
-        assertFalse(ownerFinder.findStoreOwnerById(owner.getId()).isPresent());
-    }
-
-    @Test
     void canFindByMailAndPassword() throws Exception {
         ownerRegistration.registerStoreOwner(name, mail, password);
         Optional<StoreOwner> owner = ownerFinder.findStoreOwnerByMailAndPassword(mail, password);

@@ -1,5 +1,6 @@
 register-customer kadoc a@a abc 5251896983
 register-admin admin a@æ admin
+login-admin a@æ admin
 register-owner to to@a owner
 register-store abcdaire 22 15 08 20 to
 register-customer catalogCustomer catalog@customer pwd 5251896983
@@ -15,4 +16,4 @@ register-owner owner ow@ner pwd
 register-store dashStore 22 15 08 20 owner
 register-customer refillCustomer refill@customer pwd 5251896983
 register-store store 22 15 08 20 owner
-
+logout

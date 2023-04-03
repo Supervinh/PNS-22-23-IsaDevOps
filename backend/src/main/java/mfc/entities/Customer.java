@@ -18,7 +18,7 @@ public class Customer extends Account {
     private double balance;
     private LocalDate vfp;
     private String creditCard;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Store> favoriteStores;
     private LocalDateTime lastConnexion;
 

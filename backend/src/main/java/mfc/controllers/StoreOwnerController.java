@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
-import static mfc.controllers.dto.ConvertDTO.convertCustomerToDto;
 import static mfc.controllers.dto.ConvertDTO.convertOwnerToDto;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -103,7 +102,7 @@ public class StoreOwnerController {
     }
 
     @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner")
-    public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) throws StoreOwnerNotFoundException, NoCorrespongingAccountException {
+    public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) {
         try {
             StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
             return ResponseEntity.ok().body(convertOwnerToDto(ownerReg.delete(storeOwner)));
