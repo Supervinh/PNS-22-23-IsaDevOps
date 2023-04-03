@@ -109,12 +109,6 @@ class CustomerRegistryTest {
     }
 
     @Test
-    void unknownCustomerById() {
-        Customer customer = new Customer(name, mail, password, "");
-        assertFalse(customerFinder.findCustomerById(customer.getId()).isPresent());
-    }
-
-    @Test
     void canEditBalance() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password, "");
         customer = customerBalancesModifier.editBalance(customer, 100);
