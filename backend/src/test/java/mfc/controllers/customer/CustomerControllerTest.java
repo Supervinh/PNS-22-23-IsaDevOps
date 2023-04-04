@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.CustomerController;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.entities.Customer;
+import mfc.interfaces.Payment;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.CustomerProfileModifier;
@@ -46,6 +47,9 @@ class CustomerControllerTest {
 
     @MockBean
     CustomerBalancesModifier customerBalancesModifier;
+
+    @MockBean
+    Payment payment;
 
     @Test
     void registerCustomerWithoutCreditCard() throws Exception {
@@ -147,5 +151,23 @@ class CustomerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
+
+
+    @Test
+    void refillCustomerWallet() throws Exception {
+        Customer customer = mock(Customer.class);
+        when(customer.getId()).thenReturn(1L);
+        when(customer.getName()).thenReturn("a");
+        when(customer.getMail()).thenReturn("a@a");
+        when(customer.getPassword()).thenReturn("pwd");
+        when(customer.getCreditCard()).thenReturn("0123456789");
+        when(customerFinder.findCustomerById(customer.getId())).thenReturn(Optional.of(customer));
+        double amount = 10;
+        when(payment.refillBalance(customer, amount)).thenReturn(customer);
+        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/refill")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(String.valueOf(amount)))
+                .andExpect(status().isOk());
+    }
 
 }

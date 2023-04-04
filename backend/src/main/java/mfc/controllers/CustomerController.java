@@ -117,12 +117,18 @@ public class CustomerController {
     }
 
     @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") Long customerId) throws NegativeCostException, CustomerNotFoundException, NoCreditCardException, PaymentException, NegativeRefillException {
-        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-        if (amount < 0) {
-            throw new NegativeCostException();
+    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") Long customerId) throws NoCreditCardException, PaymentException, NegativeRefillException {
+        Optional<Customer> customer = customerFinder.findCustomerById(customerId);
+        if (customer.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok().body(convertCustomerToDto(payment.refillBalance(customer, amount)));
+        if(customer.get().getCreditCard().equals("")){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        if (amount <= 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.ok().body(convertCustomerToDto(payment.refillBalance(customer.get(), amount)));
     }
 
     @DeleteMapping(path = LOGGED_URI + "deleteCustomer")

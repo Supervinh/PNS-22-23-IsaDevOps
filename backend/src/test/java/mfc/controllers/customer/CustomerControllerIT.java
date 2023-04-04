@@ -6,11 +6,12 @@ import mfc.controllers.dto.CustomerDTO;
 import mfc.entities.Customer;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
+import mfc.interfaces.Bank;
+import mfc.interfaces.Payment;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
 import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.transaction.Transactional;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +53,7 @@ class CustomerControllerIT {
 
     @Autowired
     CustomerProfileModifier customerProfileModifier;
+
 
     @Test
     void registerCustomerWithInvalidCreditCard() throws Exception {
@@ -162,13 +163,13 @@ class CustomerControllerIT {
     }
 
     @Test
-    void loginCustomerWrongMail() throws Exception{
+    void loginCustomerWrongMail() throws Exception {
         mockMvc.perform(post(CustomerController.BASE_URI + "/loginCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, "default", "a@a", "pwd", "", ""))))
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
     }
-    
+
     @Test
     void modifyCustomerSCreditCard() throws Exception {
         Customer customer = customerRegistration.register("a", "a@a", "pwd", "");
@@ -334,4 +335,42 @@ class CustomerControllerIT {
                 .andExpect(status().isConflict());
     }
 
+    @Test
+    void refillCustomerWalletWithWrongId() throws Exception {
+        double amount = 10;
+        mockMvc.perform(post(CustomerController.BASE_URI + "/0/refill")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(String.valueOf(amount)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void refillCustomerWalletWithEmptyId() throws Exception {
+        double amount = 10;
+        mockMvc.perform(post(CustomerController.BASE_URI + "/refill")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(String.valueOf(amount)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void refillCustomerWalletWithWrongAmount() throws Exception {
+        Customer customer = customerRegistration.register("a", "a@a", "pwd", "5251896983");
+        double amount = -10;
+        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/refill")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(String.valueOf(amount)))
+                .andExpect(status().isConflict());
+    }
+
+
+    @Test
+    void refillCustomerNoCreditCard() throws Exception {
+        Customer customer = customerRegistration.register("a", "a@a", "pwd", "");
+        double amount = 10;
+        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/refill")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(String.valueOf(amount)))
+                .andExpect(status().isConflict());
+    }
 }
