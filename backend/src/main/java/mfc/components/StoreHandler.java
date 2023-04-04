@@ -30,7 +30,7 @@ public class StoreHandler implements StoreFinder, StoreModifier {
 
     @Override
     public Optional<Store> findStoreByName(String name) {
-        return storeRepository.findAll().stream().filter(store -> name.equals(store.getName())).findAny();
+        return storeRepository.findStoreByName(name);
     }
 
     @Override
@@ -52,24 +52,12 @@ public class StoreHandler implements StoreFinder, StoreModifier {
     @Override
     public Store delete(Store store) throws NoStoreFoundException {
         if (storeRepository.existsById(store.getId())) {
-            storeRepository.deleteStore(store);
+            storeRepository.delete(store);
             return store;
         }
         throw new NoStoreFoundException();
     }
 
-    @Override
-    public boolean deleteStores(StoreOwner owner) {
-        boolean result = true;
-        for (Store e : storeRepository.findByOwner(owner)) {
-            try {
-                delete(e);
-            } catch (NoStoreFoundException ex) {
-                result = false;
-            }
-        }
-        return result;
-    }
 
     @Override
     public Store updateOpeningHours(Store store, Map<String, String> schedule) throws StoreNotFoundException {

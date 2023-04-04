@@ -25,7 +25,7 @@ public class Customer extends Account {
     public Customer() {
     }
 
-    public Customer(String name, String mail, String password) {
+/*    public Customer(String name, String mail, String password) {
         super(name, mail, password);
         this.creditCard = "";
         vfp = LocalDate.now().minus(Period.ofDays(1));
@@ -33,7 +33,7 @@ public class Customer extends Account {
         balance = 0;
         matriculation = "";
         favoriteStores = new ArrayList<>();
-    }
+    }*/
 
     public Customer(String name, String mail, String password, String creditCard) {
         super(name, mail, password);

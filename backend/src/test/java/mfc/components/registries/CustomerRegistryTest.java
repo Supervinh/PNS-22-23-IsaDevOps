@@ -123,7 +123,7 @@ class CustomerRegistryTest {
 
     @Test
     void editBalanceOfUnknownCustomer() {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> customerBalancesModifier.editBalance(customer, 100));
     }
 
@@ -144,7 +144,7 @@ class CustomerRegistryTest {
 
     @Test
     void editFidelityPointsOfUnknownCustomer() throws Exception {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerBalancesModifier.editFidelityPoints(customer, 100);
         });
@@ -161,7 +161,7 @@ class CustomerRegistryTest {
 
     @Test
     void cannotRecordMatriculationOfUnknownCustomer() {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordMatriculation(customer, "AB-123-CD"));
     }
 
@@ -176,7 +176,7 @@ class CustomerRegistryTest {
 
     @Test
     void cannotRecordCreditCardOfUnknownCustomer() {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordCreditCard(customer, "1234 5678 9012 3456"));
     }
 

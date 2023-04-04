@@ -66,7 +66,7 @@ class CustomerControllerTest {
 
     @Test
     void registerCustomerAlreadyExists() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
+        Customer customer = new Customer("a", "a@a", "pwd", "");
         customerRepository.save(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ class CustomerControllerTest {
 
     @Test
     void loginCustomer() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
+        Customer customer = new Customer("a", "a@a", "pwd", "");
         customerRepository.save(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/loginCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +107,7 @@ class CustomerControllerTest {
 
     @Test
     void modifyCustomerSCreditCard() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
+        Customer customer = new Customer("a", "a@a", "pwd", "");
         customerRepository.save(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/modifyCreditCard")
                         .contentType(MediaType.ALL_VALUE)
@@ -123,7 +123,7 @@ class CustomerControllerTest {
 
     @Test
     void modifyCustomerSMatriculation() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
+        Customer customer = new Customer("a", "a@a", "pwd","");
         customerRepository.save(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/modifyMatriculation")
                         .contentType(MediaType.ALL_VALUE)
