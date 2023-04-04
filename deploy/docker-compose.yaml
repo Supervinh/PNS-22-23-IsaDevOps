@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  # The Cookie Factory backend in SpringBoot
+  mfc-server:
+    image: jeannestheo/mfc-spring-server
+    container_name: server
+    environment:
+      - BANK_WITH_PORT=bank-service:9090
+      - PARKING_WITH_PORT=parking:9191
+      - POSTGRES_HOST=postgres:5432
+    entrypoint: "bash -c '/opt/app/wait-for-it.sh $${POSTGRES_HOST} -- ./wait-for-it.sh $${BANK_WITH_PORT} -- ./wait-for-it.sh $${PARKING_WITH_PORT} -- java -jar /opt/app/app.jar --bank.host.baseurl=http://$${BANK_WITH_PORT} --parking.host.baseurl=http://$${PARKING_WITH_PORT}'"
+    depends_on:
+      - bank-service
+      - postgres
+
+  # A simple java CLI
+  mfc-cli:
+    image: jeannestheo/mfc-spring-cli
+    container_name: cli
+    environment:
+      - SERVER_WITH_PORT=server:8080
+    entrypoint: "bash -c '/opt/app/wait-for-it.sh $${SERVER_WITH_PORT} -- java -jar /opt/app/app.jar'"
+    depends_on:
+      - mfc-server
+    volumes:
+      - ./scripts:/opt/app/scripts
+    stdin_open: true
+    tty: true
+
+  bank-service:
+    image: jeannestheo/mfc-bank-service
+    container_name: bank
+
+  parking-service:
+    image: jeannestheo/mfc-parking-service
+    container_name: parking
+
+  # the postgres DB to be connected to the backend (watch out: no volume specified, everything can be lost)
+  postgres:
+    image: postgres:15.2
+    container_name: db
+    environment:
+      - POSTGRES_PASSWORD=postgrespass
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_DB=tcf-db
+    volumes:
+      - ./database:/var/lib/postgresql/data
