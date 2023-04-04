@@ -15,17 +15,17 @@ function build_dir_from_artifactory() { # $1 is the dir to get it
     ARTIFACT="$1"
   fi
   cd "$1" || exit
-  getArtifact "$ARTIFACT"
-  ./build.sh -a
+  #getArtifact "$ARTIFACT"
+      URL="http://$HOST:8002/artifactory/libs-release-local/team-b/$ARTIFACT/"
+      #find the latest stable version of the artifact
+      #Retrieve the artifact
+      VERSION=$(curl -u "$CREDS" "$URL" | grep -E '<a href="[0-9].?[0-9]/">' | cut -d '"' -f 2 | sed 's|/$||')
+      VERSION="$(echo "$VERSION" | tr ' ' '\n' | sort -r -V | head -n 1)"
+      echo "TAG: $ARTIFACT ->$VERSION"
+      curl -u "$CREDS" -L "$URL""$VERSION"/"$ARTIFACT"-"$VERSION".jar --output "$ARTIFACT".jar
+  ./build.sh "$VERSION"
   rm "$ARTIFACT".jar
   cd ..
-}
-
-function getLastVersion(){ # $1 should be credentials (user:password) and $2 should be the url of the artifact
-  VERSION=$(curl -u "$1" "$2" | grep -E '<a href="[0-9].?[0-9]/">' | cut -d '"' -f 2 | sed 's|/$||')
-  VERSION="$(echo "$VERSION" | tr ' ' '\n' | sort -r -V | head -n 1)"
-  echo "$VERSION"
-  return "$VERSION"
 }
 
 #admin:@yZvRLf3AG8BdS79w
@@ -74,12 +74,11 @@ for arg in "$@"; do
     next=true
   fi
 done
-echo "CLI_FROM_ARTIFACTORY: $CLI_FROM_ARTIFACTORY, SERVER_FROM_ARTIFACTORY: $SERVER_FROM_ARTIFACTORY, DOCKER_DETACH: $DOCKER_DETACH, ATTACH_CLI: $ATTACH_CLI, DOCKER_COMPOSE: $DOCKER_COMPOSE"
-echo "** Building all"
-
-echo "** Stopping"
-docker compose down
-sleep 10
+if [ "$DOCKER_COMPOSE" = true ]; then
+  echo "** Building all"
+  echo "** Stopping"
+fi
+docker compose down --remove-orphans -t 30
 
 if [ "$CLI_FROM_ARTIFACTORY" = true ]; then
   build_dir_from_artifactory "cli"

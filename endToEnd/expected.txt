@@ -1,1 +1,1 @@
-buySomething : CliPurchase\{id=.*, customerEmail='customer@abc', cost=25.0, storeName='abcdaire', internalAccount=false\}
+refill : .*balance=500\.0.*
