@@ -92,8 +92,7 @@ node {
             def server=""
             stage('Retrieve from artifactory & build'){
                 withCredentials([string(credentialsId: 'Artifactory', variable: 'ARTIFACTORY_ID')]) {
-                   def versions = sh(script:"./build-all.sh --server --cli --none -u $ARTIFACTORY_ID", returnStdout: true)
-                   sh ''' echo ${versions} '''
+                   def versions = sh(script:"./build-all.sh --server --cli --none -u ${ARTIFACTORY_ID}", returnStdout: true)
                    versions = versions.trim().split('\n').findAll{ it.startsWith("TAG:") }
                    cli = versions.find{it.contains("cli")}
                    if(cli != null)
@@ -105,6 +104,9 @@ node {
                        server = server.substring(server.indexOf("->")+2).trim()
                    else
                        server=""
+                   sh """
+                    ./deploy.sh ${ARTIFACTORY_ID} artifactory
+                   """
                 }
             }
             stage('Deploy on docker'){
