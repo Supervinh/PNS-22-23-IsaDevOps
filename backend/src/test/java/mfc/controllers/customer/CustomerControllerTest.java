@@ -74,7 +74,6 @@ class CustomerControllerTest {
                 .andExpect(status().isConflict());
     }
 
-    //TODO : Possiblement changer le constructeur de CustomerDTO pour obliger à passer une carte de crédit valide ou vide
     @Test
     void registerCustomerWithoutName() throws Exception {
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
