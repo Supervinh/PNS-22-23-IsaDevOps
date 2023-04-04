@@ -2,9 +2,11 @@ package mfc.controllers.storeOwner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.StoreOwnerController;
+import mfc.controllers.dto.DashboardDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
+import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.CredentialsException;
 import mfc.exceptions.StoreNotFoundException;
 import mfc.exceptions.StoreOwnerNotFoundException;
@@ -257,6 +259,83 @@ class StoreOwnerControllerIT {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void retrieveDashboard() throws Exception {
+        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+        String storeName = "store";
+        Map<String, String> storeSchedule = new HashMap<>();
+        storeModifier.register(storeName, storeSchedule, owner);
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(storeName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.numberOfCustomers").value("0.0"))
+                .andExpect(jsonPath("$.numberOfSales").value("0.0"))
+                .andExpect(jsonPath("$.numberOfGivenPayoffs").value("0.0"))
+                .andExpect(jsonPath("$.salesVolumes").value("0.0"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void retrieveDashBordForUnknownStoreOwner() throws Exception {
+        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+        String storeName = "store";
+        Map<String, String> storeSchedule = new HashMap<>();
+        storeModifier.register(storeName, storeSchedule, owner);
+        assertThrows(StoreOwnerNotFoundException.class, () -> {
+            try{
+                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + -1L + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(storeName));
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
+    }
+
+    @Test
+    void retrieveDashBordForUnknownStore() throws Exception{
+        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+        String storeName = "store";
+        assertThrows(StoreNotFoundException.class, () -> {
+            try{
+                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(storeName));
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
+    }
+
+    @Test
+    void retrieveNotOwnedStoreDashBord() throws Exception {
+        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+        StoreOwner secondOwner = storeOwnerRegistration.registerStoreOwner("b", "b@b", "pwd");
+        String storeName = "store";
+        Map<String, String> storeSchedule = new HashMap<>();
+        storeModifier.register(storeName, storeSchedule, secondOwner);
+        assertThrows(CredentialsException.class, () -> {
+            try{
+                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(storeName));
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
+    }
+
+    @Test
+    void retrieveDashBordWithEmptyBody() throws Exception {
+        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

@@ -2,12 +2,14 @@ package mfc.controllers.storeOwner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.StoreOwnerController;
+import mfc.controllers.dto.DashboardDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
 import mfc.exceptions.CredentialsException;
 import mfc.exceptions.StoreNotFoundException;
 import mfc.exceptions.StoreOwnerNotFoundException;
+import mfc.interfaces.StoreDataGathering;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreModifier;
@@ -52,6 +54,9 @@ class StoreOwnerControllerTest {
 
     @MockBean
     StoreFinder storeFinder;
+
+    @MockBean
+    StoreDataGathering storeDataGathering;
 
     @Test
     void registerStoreOwner() throws Exception {
@@ -266,6 +271,118 @@ class StoreOwnerControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void retrieveDashboard() throws Exception {
+        Long ownerId = 5L;
+        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
+        String storeName = "store";
+        Store store = new Store(storeName, owner);
+        DashboardDTO dashboardDTO = new DashboardDTO();
+        dashboardDTO.setSalesVolumes(0);
+        dashboardDTO.setNumberOfSales(0);
+        dashboardDTO.setNumberOfCustomers(0);
+        dashboardDTO.setNumberOfGivenPayoffs(0);
+        dashboardDTO.setPayoffCumulatedCost(0);
+        when(storeOwnerFinder.findStoreOwnerById(ownerId)).thenReturn(Optional.of(owner));
+        when(storeFinder.findStoreByName(storeName)).thenReturn(Optional.of(store));
+        when(storeDataGathering.gather(store)).thenReturn(dashboardDTO);
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + ownerId + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(storeName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.numberOfCustomers").value("0.0"))
+                .andExpect(jsonPath("$.numberOfSales").value("0.0"))
+                .andExpect(jsonPath("$.numberOfGivenPayoffs").value("0.0"))
+                .andExpect(jsonPath("$.salesVolumes").value("0.0"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void retrieveDashBordForUnknownStoreOwner(){
+        Long ownerId = 5L;
+        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
+        String storeName = "store";
+        Store store = new Store(storeName, owner);
+        DashboardDTO dashboardDTO = new DashboardDTO();
+        dashboardDTO.setSalesVolumes(0);
+        dashboardDTO.setNumberOfSales(0);
+        dashboardDTO.setNumberOfCustomers(0);
+        dashboardDTO.setNumberOfGivenPayoffs(0);
+        dashboardDTO.setPayoffCumulatedCost(0);
+        when(storeOwnerFinder.findStoreOwnerById(ownerId)).thenReturn(Optional.of(owner));
+        when(storeFinder.findStoreByName(storeName)).thenReturn(Optional.of(store));
+        when(storeDataGathering.gather(store)).thenReturn(dashboardDTO);
+        assertThrows(StoreOwnerNotFoundException.class, () -> {
+                try{
+                    mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + -1L + "/dashboard/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(storeName));
+                } catch (NestedServletException e) {
+                    throw e.getCause();
+                }
+        });
+    }
+
+    @Test
+    void retrieveDashBordForUnknownStore() {
+        Long ownerId = 5L;
+        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
+        String storeName = "store";
+        when(storeOwnerFinder.findStoreOwnerById(ownerId)).thenReturn(Optional.of(owner));
+        when(storeFinder.findStoreByName(storeName)).thenReturn(Optional.empty());
+        assertThrows(StoreNotFoundException.class, () -> {
+                try{
+                    mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + ownerId + "/dashboard/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(storeName));
+                } catch (NestedServletException e) {
+                    throw e.getCause();
+                }
+        });
+    }
+
+    @Test
+    void retrieveNotOwnedStoreDashBord() {
+        Long ownerId = 5L;
+        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
+        StoreOwner secondOwner = new StoreOwner("b", "b@b", "pwd");
+        String storeName = "store";
+        Store store = new Store(storeName, secondOwner);
+        when(storeOwnerFinder.findStoreOwnerById(ownerId)).thenReturn(Optional.of(owner));
+        when(storeFinder.findStoreByName(storeName)).thenReturn(Optional.of(store));
+        assertThrows(CredentialsException.class, () -> {
+            try{
+                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + ownerId + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(storeName));
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
+    }
+
+    @Test
+    void retrieveDashBordWithEmptyBody() throws Exception {
+        Long ownerId = 5L;
+        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
+        String storeName = "store";
+        Store store = new Store(storeName, owner);
+        DashboardDTO dashboardDTO = new DashboardDTO();
+        dashboardDTO.setSalesVolumes(0);
+        dashboardDTO.setNumberOfSales(0);
+        dashboardDTO.setNumberOfCustomers(0);
+        dashboardDTO.setNumberOfGivenPayoffs(0);
+        dashboardDTO.setPayoffCumulatedCost(0);
+        when(storeOwnerFinder.findStoreOwnerById(ownerId)).thenReturn(Optional.of(owner));
+        when(storeFinder.findStoreByName(storeName)).thenReturn(Optional.of(store));
+        when(storeDataGathering.gather(store)).thenReturn(dashboardDTO);
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + ownerId + "/dashboard/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
