@@ -88,34 +88,36 @@ node {
             }
         }
         if(behaviour == 'main'){
-                stage('Retrieve from artifactory & build'){
-                    withCredentials([string(credentialsId: 'Artifactory', variable: 'ARTIFACTORY_ID')]) {
-                       def versions = sh(script:"./build-all.sh --server --cli --none -u $ARTIFACTORY_ID", returnStdout: true)
-                       sh ''' echo ${versions} '''
-                       versions = versions.trim().split('\n').findAll{ it.startsWith("TAG:") }
-                       def cli = versions.find{it.contains("cli")}
-                       if(cli != null)
-                           cli = cli.substring(cli.indexOf("->")+2).trim()
-                       else
-                           cli = ""
-                       def server = versions.find{it.contains("server")}
-                       if(server != null)
-                           server = server.substring(server.indexOf("->")+2).trim()
-                       else
-                           server=""
-                    }
+            def cli=""
+            def server=""
+            stage('Retrieve from artifactory & build'){
+                withCredentials([string(credentialsId: 'Artifactory', variable: 'ARTIFACTORY_ID')]) {
+                   def versions = sh(script:"./build-all.sh --server --cli --none -u $ARTIFACTORY_ID", returnStdout: true)
+                   sh ''' echo ${versions} '''
+                   versions = versions.trim().split('\n').findAll{ it.startsWith("TAG:") }
+                   cli = versions.find{it.contains("cli")}
+                   if(cli != null)
+                       cli = cli.substring(cli.indexOf("->")+2).trim()
+                   else
+                       cli = ""
+                   server = versions.find{it.contains("server")}
+                   if(server != null)
+                       server = server.substring(server.indexOf("->")+2).trim()
+                   else
+                       server=""
                 }
-                stage('Publish on DockerHub'){
-                    withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
-                        sh 'echo $DOCKER_ID | docker login -u jeannestheo --password-stdin'
-                    }
+            }
+            stage('Deploy on docker'){
+                withCredentials([string(credentialsId: 'Docker', variable: 'DOCKER_ID')]) {
                     sh """
+                        echo ${DOCKER_ID} | docker login -u jeannestheo --password-stdin
                         docker push jeannestheo/mfc-spring-cli:${cli}
                         docker push jeannestheo/mfc-spring-server:${server}
                         docker push jeannestheo/mfc-bank-service
                         docker push jeannestheo/mfc-parking-service
                         """
                 }
+            }
         }
         if(behaviour != 'main'){
             stage('Deploy'){
