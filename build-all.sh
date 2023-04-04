@@ -15,8 +15,15 @@ function build_dir_from_artifactory() { # $1 is the dir to get it
     ARTIFACT="$1"
   fi
   cd "$1" || exit
-  getArtifact "$ARTIFACT"
-  ./build.sh -a
+  #getArtifact "$ARTIFACT"
+      URL="http://$HOST:8002/artifactory/libs-release-local/team-b/$ARTIFACT/"
+      #find the latest stable version of the artifact
+      #Retrieve the artifact
+      VERSION=$(curl -u "$CREDS" "$URL" | grep -E '<a href="[0-9].?[0-9]/">' | cut -d '"' -f 2 | sed 's|/$||')
+      VERSION="$(echo "$VERSION" | tr ' ' '\n' | sort -r -V | head -n 1)"
+      echo "TAG: $ARTIFACT ->$VERSION"
+      curl -u "$CREDS" -L "$URL""$VERSION"/"$ARTIFACT"-"$VERSION".jar --output "$ARTIFACT".jar
+  ./build.sh "$VERSION"
   rm "$ARTIFACT".jar
   cd ..
 }
