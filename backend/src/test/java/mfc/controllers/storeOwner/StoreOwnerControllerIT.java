@@ -2,11 +2,8 @@ package mfc.controllers.storeOwner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.StoreOwnerController;
-import mfc.controllers.dto.DashboardDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
-import mfc.entities.Store;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.CredentialsException;
 import mfc.exceptions.StoreNotFoundException;
 import mfc.exceptions.StoreOwnerNotFoundException;
@@ -18,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -27,10 +23,8 @@ import org.springframework.web.util.NestedServletException;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -286,7 +280,7 @@ class StoreOwnerControllerIT {
         Map<String, String> storeSchedule = new HashMap<>();
         storeModifier.register(storeName, storeSchedule, owner);
         assertThrows(StoreOwnerNotFoundException.class, () -> {
-            try{
+            try {
                 mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + -1L + "/dashboard/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(storeName));
@@ -297,11 +291,11 @@ class StoreOwnerControllerIT {
     }
 
     @Test
-    void retrieveDashBordForUnknownStore() throws Exception{
+    void retrieveDashBordForUnknownStore() throws Exception {
         StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
         String storeName = "store";
         assertThrows(StoreNotFoundException.class, () -> {
-            try{
+            try {
                 mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(storeName));
@@ -319,7 +313,7 @@ class StoreOwnerControllerIT {
         Map<String, String> storeSchedule = new HashMap<>();
         storeModifier.register(storeName, storeSchedule, secondOwner);
         assertThrows(CredentialsException.class, () -> {
-            try{
+            try {
                 mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(storeName));
@@ -413,7 +407,7 @@ class StoreOwnerControllerIT {
     @Test
     void deleteNotOwnedStore() throws Exception {
         StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
-        StoreOwner secondOwner =storeOwnerRegistration.registerStoreOwner("b", "b@b", "pwd");
+        StoreOwner secondOwner = storeOwnerRegistration.registerStoreOwner("b", "b@b", "pwd");
         String storeName = "store";
         Map<String, String> storeSchedule = new HashMap<>();
         storeModifier.register(storeName, storeSchedule, secondOwner);
