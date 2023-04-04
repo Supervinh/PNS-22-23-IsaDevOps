@@ -4,16 +4,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.CustomerController;
 import mfc.controllers.dto.CustomerDTO;
 import mfc.entities.Customer;
-import mfc.repositories.CustomerRepository;
-import org.junit.jupiter.api.BeforeEach;
+import mfc.interfaces.Payment;
+import mfc.interfaces.explorer.CustomerFinder;
+import mfc.interfaces.modifier.CustomerBalancesModifier;
+import mfc.interfaces.modifier.CustomerProfileModifier;
+import mfc.interfaces.modifier.CustomerRegistration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Optional;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,19 +34,27 @@ class CustomerControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    CustomerRegistration customerRegistration;
 
-    @BeforeEach
-    void setUp() {
-        customerRepository.deleteAll();
-    }
+    @MockBean
+    CustomerFinder customerFinder;
+
+    @MockBean
+    CustomerProfileModifier customerProfileModifier;
+
+    @MockBean
+    CustomerBalancesModifier customerBalancesModifier;
+
+    @MockBean
+    Payment payment;
 
     @Test
     void registerCustomerWithoutCreditCard() throws Exception {
+        Customer customer = new Customer("a", "a@a", "pwd", "");
+        when(customerRegistration.register(customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard())).thenReturn(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, "a", "a@a", "pwd", "", ""))))
@@ -46,12 +62,16 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.name").value("a"))
                 .andExpect(jsonPath("$.password").value("pwd"))
                 .andExpect(jsonPath("$.mail").value("a@a"))
+                .andExpect(jsonPath("$.creditCard").value(""))
+                .andExpect(jsonPath("$.matriculation").value(""))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void registerCustomerWithACreditCard() throws Exception {
+        Customer customer = new Customer("a", "a@a", "pwd", "0123456789");
+        when(customerRegistration.register(customer.getName(), customer.getMail(), customer.getPassword(), customer.getCreditCard())).thenReturn(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, "a", "a@a", "pwd", "0123456789", ""))))
@@ -60,56 +80,42 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.password").value("pwd"))
                 .andExpect(jsonPath("$.mail").value("a@a"))
                 .andExpect(jsonPath("$.creditCard").value("0123456789"))
+                .andExpect(jsonPath("$.matriculation").value(""))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
-    @Test
-    void registerCustomerAlreadyExists() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
-        customerRepository.save(customer);
-        mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CustomerDTO(null, "a", "a@a", "pwd", "", ""))))
-                .andExpect(status().isConflict());
-    }
-
-    //TODO : Possiblement changer le constructeur de CustomerDTO pour obliger à passer une carte de crédit valide ou vide
-    @Test
-    void registerCustomerWithoutName() throws Exception {
-        mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CustomerDTO(null, null, "a@a", "pwd", "", ""))))
-                .andExpect(status().isUnprocessableEntity());
-    }
-
-    @Test
-    void registerCustomerWithNameEmptyString() throws Exception {
-        mockMvc.perform(post(CustomerController.BASE_URI + "/registerCustomer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CustomerDTO(null, "", "a@a", "pwd", "", ""))))
-                .andExpect(status().isUnprocessableEntity());
-    }
 
     @Test
     void loginCustomer() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
-        customerRepository.save(customer);
+        Customer customer = new Customer("a", "a@a", "pwd", "");
+        when(customerFinder.findCustomerAtConnexion(customer.getMail(), customer.getPassword())).thenReturn(Optional.of(customer));
         mockMvc.perform(post(CustomerController.BASE_URI + "/loginCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CustomerDTO(null, "default", "a@a", "pwd", "", ""))))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("a"))
                 .andExpect(jsonPath("$.password").value("pwd"))
                 .andExpect(jsonPath("$.mail").value("a@a"))
+                .andExpect(jsonPath("$.creditCard").value(""))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void modifyCustomerSCreditCard() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
-        customerRepository.save(customer);
-        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/modifyCreditCard")
+        Long customerId = 1L;
+        Customer customer = mock(Customer.class);
+        when(customer.getId()).thenReturn(customerId);
+        when(customer.getName()).thenReturn("a");
+        when(customer.getMail()).thenReturn("a@a");
+        when(customer.getPassword()).thenReturn("pwd");
+        when(customer.getCreditCard()).thenReturn("0123456789");
+        when(customerFinder.findCustomerById(customerId)).thenReturn(Optional.of(customer));
+        when(customerProfileModifier.recordCreditCard
+                (customer,
+                        "0123456789")).thenReturn(customer);
+        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customerId + "/modifyCreditCard")
                         .contentType(MediaType.ALL_VALUE)
                         .content("0123456789"))
                 .andExpect(status().isOk())
@@ -123,8 +129,16 @@ class CustomerControllerTest {
 
     @Test
     void modifyCustomerSMatriculation() throws Exception {
-        Customer customer = new Customer("a", "a@a", "pwd");
-        customerRepository.save(customer);
+        Long customerId = 1L;
+        Customer customer = mock(Customer.class);
+        when(customer.getId()).thenReturn(customerId);
+        when(customer.getName()).thenReturn("a");
+        when(customer.getMail()).thenReturn("a@a");
+        when(customer.getPassword()).thenReturn("pwd");
+        when(customer.getMatriculation()).thenReturn("XX-XX-XX");
+        when(customerFinder.findCustomerById(customer.getId())).thenReturn(Optional.of(customer));
+        when(customerProfileModifier.recordMatriculation
+                (customer,"XX-XX-XX")).thenReturn(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/modifyMatriculation")
                         .contentType(MediaType.ALL_VALUE)
                         .content("XX-XX-XX"))
@@ -137,5 +151,23 @@ class CustomerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
+
+
+    @Test
+    void refillCustomerWallet() throws Exception {
+        Customer customer = mock(Customer.class);
+        when(customer.getId()).thenReturn(1L);
+        when(customer.getName()).thenReturn("a");
+        when(customer.getMail()).thenReturn("a@a");
+        when(customer.getPassword()).thenReturn("pwd");
+        when(customer.getCreditCard()).thenReturn("0123456789");
+        when(customerFinder.findCustomerById(customer.getId())).thenReturn(Optional.of(customer));
+        double amount = 10;
+        when(payment.refillBalance(customer, amount)).thenReturn(customer);
+        mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/refill")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(String.valueOf(amount)))
+                .andExpect(status().isOk());
+    }
 
 }

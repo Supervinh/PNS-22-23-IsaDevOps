@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class CustomerRegistryTest {
 
-    private static boolean setUpIsDone = false;
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
@@ -49,21 +48,6 @@ class CustomerRegistryTest {
     @Autowired
     private StoreOwnerRepository ownerRepository;
 
-
-    @BeforeEach
-    void setUp() {
-//        if(setUpIsDone){
-//            List<String> setupList = new ArrayList<>();
-//            for(int i = 0; i <= 6; i++){
-//                setupList.add("7h00");
-//                setupList.add("19h30");
-//            }
-//            schedule = setupList;
-//        }
-        customerRepository.deleteAll();
-        storeRepository.deleteAll();
-        ownerRepository.deleteAll();
-    }
 
     @Test
     void unknownCustomer() {
@@ -123,7 +107,7 @@ class CustomerRegistryTest {
 
     @Test
     void editBalanceOfUnknownCustomer() {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> customerBalancesModifier.editBalance(customer, 100));
     }
 
@@ -144,7 +128,7 @@ class CustomerRegistryTest {
 
     @Test
     void editFidelityPointsOfUnknownCustomer() throws Exception {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> {
             customerBalancesModifier.editFidelityPoints(customer, 100);
         });
@@ -161,7 +145,7 @@ class CustomerRegistryTest {
 
     @Test
     void cannotRecordMatriculationOfUnknownCustomer() {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordMatriculation(customer, "AB-123-CD"));
     }
 
@@ -176,7 +160,7 @@ class CustomerRegistryTest {
 
     @Test
     void cannotRecordCreditCardOfUnknownCustomer() {
-        Customer customer = new Customer(name, mail, password);
+        Customer customer = new Customer(name, mail, password, "");
         Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordCreditCard(customer, "1234 5678 9012 3456"));
     }
 
