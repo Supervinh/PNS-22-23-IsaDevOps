@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class CustomerRegistryTest {
 
-    private static boolean setUpIsDone = false;
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
@@ -49,21 +48,6 @@ class CustomerRegistryTest {
     @Autowired
     private StoreOwnerRepository ownerRepository;
 
-
-    @BeforeEach
-    void setUp() {
-//        if(setUpIsDone){
-//            List<String> setupList = new ArrayList<>();
-//            for(int i = 0; i <= 6; i++){
-//                setupList.add("7h00");
-//                setupList.add("19h30");
-//            }
-//            schedule = setupList;
-//        }
-        customerRepository.deleteAll();
-        storeRepository.deleteAll();
-        ownerRepository.deleteAll();
-    }
 
     @Test
     void unknownCustomer() {

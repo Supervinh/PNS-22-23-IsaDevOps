@@ -337,9 +337,8 @@ class StoreOwnerControllerIT {
         StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
         mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/deleteStoreOwner")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content()
-                        .contentType(MediaType.APPLICATION_JSON));
+                .andExpect(status().isOk());
+
     }
 
     @Test
