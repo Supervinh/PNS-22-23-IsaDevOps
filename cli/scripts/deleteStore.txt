@@ -12,3 +12,5 @@ delete-customer
 
 login-owner ow@ner pwd
 delete-payoff dashStore expensivePayoff
+
+logout

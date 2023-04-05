@@ -11,3 +11,4 @@ logout
 login-admin ad@min pwd
 get-survey test
 delete-survey test
+logout
