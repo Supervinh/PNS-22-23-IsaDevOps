@@ -1,8 +1,6 @@
 package mfc.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +17,7 @@ public class Customer extends Account {
     private LocalDate vfp;
     private String creditCard;
     @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
     private List<Store> favoriteStores;
     private LocalDateTime lastConnexion;
 
