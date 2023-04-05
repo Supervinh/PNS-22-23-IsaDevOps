@@ -1,0 +1,11 @@
+logout
+login-admin a@a a
+delete-admin
+login-owner ow@ner pwd
+delete-store-owner
+login-customer firstCustomer@customer.fr abc
+delete-customer
+login-customer  secondCustomer@customer.fr abc
+delete-customer
+login-customer thirdCustomer@customer.fr abc
+delete-customer

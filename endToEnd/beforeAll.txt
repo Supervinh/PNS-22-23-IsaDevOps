@@ -1,6 +1,14 @@
-admin
-    -name: b
-    -mail: a@a
+customer
+    -mail: firstCustomer@customer.fr
+customer
+    -mail: secondCustomer@customer.fr
+customer
+    -mail: thirdCustomer@customer.fr
 Init
-script buySomething.txt
+login-admin a@a a
+register-owner owner ow@ner pwd
 logout
+register-customer theo firstCustomer@customer.fr abc 5251896983
+register-customer second secondCustomer@customer.fr abc 5251896983
+register-customer third thirdCustomer@customer.fr abc 5251896983
+login-owner ow@ner pwd

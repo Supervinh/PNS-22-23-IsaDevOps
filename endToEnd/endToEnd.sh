@@ -66,6 +66,7 @@ res=true
 while IFS="" read -r ligne || [ -n "$ligne" ]; do
   #while read ligne; do
   # Récupère le nom du fichier à tester et le résultat attendu
+
   if ! test_script "$ligne"; then
     res=false
   fi

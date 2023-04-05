@@ -20,12 +20,18 @@ public class Payoff {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Store store;
+    private boolean isVfp;
 
-    public Payoff(String name, double cost, int pointCost, Store store) {
+    public Payoff(String name, double cost, int pointCost, Store store, boolean isVfp) {
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
         this.store = store;
+        this.isVfp = isVfp;
+    }
+
+    public Payoff() {
+
     }
 
     @Override
@@ -39,10 +45,6 @@ public class Payoff {
     @Override
     public int hashCode() {
         return Objects.hash(name, cost, pointCost, store);
-    }
-
-    public Payoff() {
-
     }
 
     public Long getId() {
@@ -79,5 +81,13 @@ public class Payoff {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    public boolean isVfp() {
+        return isVfp;
+    }
+
+    public void setVfp(boolean vfp) {
+        isVfp = vfp;
     }
 }

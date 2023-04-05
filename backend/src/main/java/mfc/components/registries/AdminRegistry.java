@@ -2,6 +2,7 @@ package mfc.components.registries;
 
 import mfc.entities.Admin;
 import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.NoCorrespongingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
 import mfc.repositories.AdminRepository;
@@ -15,13 +16,13 @@ import java.util.Optional;
 @Transactional
 public class AdminRegistry implements AdminFinder, AdminRegistration {
 
-    @Autowired
     private final AdminRepository adminRepository;
 
+    @Autowired
     public AdminRegistry(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
         //create a basic Admin by default
-        if (findAdminByMail("a@a").isEmpty())
+        if (adminRepository.findAll().isEmpty())
             adminRepository.save(new Admin("a", "a@a", "a"));
     }
 
@@ -48,5 +49,14 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
             return newAdmin;
         }
         throw new AlreadyExistingAccountException();
+    }
+
+    @Override
+    public Admin delete(Admin admin) throws NoCorrespongingAccountException {
+        if (adminRepository.existsById(admin.getId())) {
+            adminRepository.delete(admin);
+            return admin;
+        }
+        throw new NoCorrespongingAccountException();
     }
 }

@@ -1,15 +1,11 @@
-register-customer rewardCustomer reward@customer pwd 5251896983
 login-customer reward@customer pwd
 refill 500
 logout
 
-register-admin rewardAdmin reward@admin pwd
 login-admin reward@admin pwd
-register-owner rewardOwner reward@owner pwd
 logout
 
 login-owner reward@owner pwd
-register-store rewardStore 22 15 08 20 rewardOwner
 add-payoff rewardPayoff 200 15 rewardStore
 add-purchase rewardStore reward@customer 25
 add-payoff parking 200 15 rewardStore

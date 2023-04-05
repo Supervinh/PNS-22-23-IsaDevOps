@@ -3,7 +3,9 @@ package mfc.entities;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +16,14 @@ public class Customer extends Account {
     private String matriculation;
     private int fidelityPoints;
     private double balance;
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Store> favoriteStores;
     private LocalDate vfp;
     private String creditCard;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Store> favoriteStores;
+    private LocalDateTime lastConnexion;
 
     public Customer() {
     }
-
-    public Customer(String name, String creditCard) {
-        this(name, "", "", creditCard);
-    }
-
-
 
     public Customer(String name, String mail, String password) {
         super(name, mail, password);
@@ -93,8 +90,16 @@ public class Customer extends Account {
         return creditCard;
     }
 
-    public void setCreditCard(String creditCard) {
+    public void setCreditCard(@Pattern(regexp = "\\d{10}+", message = "credit card should be exactly 10 digits") String creditCard) {
         this.creditCard = creditCard;
+    }
+
+    public LocalDateTime getLastConnexion() {
+        return lastConnexion;
+    }
+
+    public void setLastConnexion(LocalDateTime lastConnexion) {
+        this.lastConnexion = lastConnexion;
     }
 
     @Override

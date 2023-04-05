@@ -24,4 +24,5 @@ public interface PayoffRepository extends JpaRepository<Payoff, Long> {
     }
 
     Optional<Payoff> findPayoffByNameAndStore_Name(String name, String store);
+
 }

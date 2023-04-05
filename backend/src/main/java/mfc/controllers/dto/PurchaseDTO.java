@@ -1,6 +1,5 @@
 package mfc.controllers.dto;
 
-import java.util.UUID;
 
 public class PurchaseDTO {
 

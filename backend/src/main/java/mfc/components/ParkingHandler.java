@@ -1,14 +1,17 @@
 package mfc.components;
 
+import mfc.entities.Customer;
 import mfc.exceptions.NoMatriculationException;
 import mfc.exceptions.ParkingException;
 import mfc.interfaces.Parking;
 import mfc.interfaces.ParkingProcessor;
-import mfc.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
+@Transactional
 public class ParkingHandler implements ParkingProcessor {
 
     private final Parking parking;

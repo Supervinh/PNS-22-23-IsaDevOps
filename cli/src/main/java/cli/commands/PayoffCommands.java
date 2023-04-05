@@ -22,11 +22,15 @@ public class PayoffCommands {
 
     public static final String BASE_URI = "/payoff";
 
-    @Autowired
-    RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+
+    private final CliContext cliContext;
 
     @Autowired
-    private CliContext cliContext;
+    public PayoffCommands(RestTemplate restTemplate, CliContext cliContext) {
+        this.restTemplate = restTemplate;
+        this.cliContext = cliContext;
+    }
 
     @ShellMethod("Add balance to account (claimPayoff STORE_NAME PAY_OFF)")
     public CliPayoffPurchase claimPayoff(String storeName, String payOff) {
@@ -41,7 +45,7 @@ public class PayoffCommands {
     @Scheduled(fixedRate = 10000)
     public void getNotifications() {
         CliNotification cliNotification = null;
-        if (!isNull(cliContext.getLoggedInUser()) && cliContext.getLoggedInUser().getClass()== CliCustomer.class)
+        if (!isNull(cliContext.getLoggedInUser()) && cliContext.getLoggedInUser().getClass() == CliCustomer.class)
             cliNotification = restTemplate.getForObject(getUriForCustomer() + "/getNotification", CliNotification.class);
         if (!isNull(cliNotification))
             System.out.println(cliNotification);

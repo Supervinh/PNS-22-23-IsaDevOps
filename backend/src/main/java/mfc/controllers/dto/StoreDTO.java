@@ -1,21 +1,21 @@
 package mfc.controllers.dto;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 public class StoreDTO {
 
-    private Long id;
+    private final Long id;
     private String name;
-    private List<String> schedule;
-    private String owner;
+    private Map<String, String> schedule;
+    private LocalDateTime lastUpdate;
 
-    public StoreDTO(Long id, String name, List<String> schedule, String owner) {
+    public StoreDTO(Long id, String name, Map<String, String> schedule, LocalDateTime lastUpdate) {
         this.name = name;
         this.schedule = schedule;
-        this.owner = owner;
         this.id = id;
+        this.lastUpdate = lastUpdate;
     }
 
     public Long getId() {
@@ -30,32 +30,31 @@ public class StoreDTO {
         this.name = name;
     }
 
-    public List<String> getSchedule() {
+    public Map<String, String> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<String> schedule) {
+    public void setSchedule(Map<String, String> schedule) {
         this.schedule = schedule;
     }
 
-    public String getOwner() {
-        return owner;
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StoreDTO store = (StoreDTO) o;
-        return Objects.equals(id, store.id) && Objects.equals(name, store.name) && Objects.equals(owner, store.owner);
+        if (!(o instanceof StoreDTO storeDTO)) return false;
+        return Objects.equals(id, storeDTO.id) && Objects.equals(name, storeDTO.name) && Objects.equals(schedule, storeDTO.schedule);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, owner);
+        return Objects.hash(id, name);
     }
 }

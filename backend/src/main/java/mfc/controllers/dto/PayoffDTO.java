@@ -1,28 +1,32 @@
 package mfc.controllers.dto;
 
-import java.util.UUID;
-
 public class PayoffDTO {
     private Long id;
     private String name;
     private double cost;
     private int pointCost;
     private String storeName;
+    private boolean isVfp;
 
 
     public PayoffDTO() {
     }
 
-    public PayoffDTO(Long id, String name, double cost, int pointCost, String storeName) {
+    public PayoffDTO(Long id, String name, double cost, int pointCost, String storeName, boolean isVfp) {
+        this.id = id;
         this.name = name;
         this.cost = cost;
         this.pointCost = pointCost;
         this.storeName = storeName;
-        this.id = id;
+        this.isVfp = isVfp;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -49,16 +53,20 @@ public class PayoffDTO {
         this.pointCost = pointCost;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getStoreName() {
         return storeName;
     }
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public boolean isVfp() {
+        return isVfp;
+    }
+
+    public void setVfp(boolean vfp) {
+        isVfp = vfp;
     }
 
     @Override
@@ -69,6 +77,7 @@ public class PayoffDTO {
                 ", cost=" + cost +
                 ", pointCost=" + pointCost +
                 ", storeName='" + storeName + '\'' +
+                ", isVfp=" + isVfp +
                 '}';
     }
 }

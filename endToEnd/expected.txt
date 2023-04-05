@@ -1,1 +1,6 @@
-buySomething : CliPurchase\{id=.*, customerEmail='customer@abc', cost=25.0, storeName='abcdaire', internalAccount=false\}
+registerStore : CliStore.*name='dashStore'.*
+addPayoffs : CliPayoff.*name='lowPayoff', cost=10.0, pointCost=5, storeName='dashStore', isVfp=true}
+addPurchases : CliPurchase\{id=.*, customerEmail='firstCustomer@customer.fr', cost=35.0, storeName='dashStore', internalAccount=false\}
+claimPayoffFirst : CliPayoffPurchase\{id=.*, name='expensivePayoff', cost=50.0, pointCost=25, storeName='dashStore', customerEmail='firstCustomer@customer.fr'}
+claimPayoffsSecond : CliPayoffPurchase\{id=.*, name='mediumPayoff', cost=30.0, pointCost=15, storeName='dashStore', customerEmail='thirdCustomer@customer.fr'}
+dashboardTest : ------------------------------------
