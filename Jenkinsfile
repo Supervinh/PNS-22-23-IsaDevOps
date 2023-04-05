@@ -149,7 +149,7 @@ node {
     }finally{
         stage('Cleaning up'){
             sh '''
-            rm ${HOME}/.m2/settings.xml
+            rm -f ${HOME}/.m2/settings.xml
             docker compose down --remove-orphans
             docker logout
             '''
