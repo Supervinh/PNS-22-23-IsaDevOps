@@ -1,6 +1,14 @@
 customer
-    -name: theo
-    -mail: refill@customer
+    -mail: firstCustomer@customer.fr
+customer
+    -mail: secondCustomer@customer.fr
+customer
+    -mail: thirdCustomer@customer.fr
 Init
-register-customer theo refill@customer pwd 5251896983
-login-customer refill@customer pwd
+login-admin a@a a
+register-owner owner ow@ner pwd
+logout
+register-customer theo firstCustomer@customer.fr abc 5251896983
+register-customer second secondCustomer@customer.fr abc 5251896983
+register-customer third thirdCustomer@customer.fr abc 5251896983
+login-owner ow@ner pwd
