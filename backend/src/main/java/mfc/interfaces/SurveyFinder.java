@@ -10,7 +10,5 @@ public interface SurveyFinder {
 
     Optional<Survey> findByName(String name);
 
-    Set<Survey> getSurveys();
-
     Set<Survey> findByCustomerDidntAnswered(Customer customer);
 }

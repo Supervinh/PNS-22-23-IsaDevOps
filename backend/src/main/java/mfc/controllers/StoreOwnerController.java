@@ -5,11 +5,13 @@ import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.*;
+import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.CredentialsException;
+import mfc.exceptions.StoreNotFoundException;
+import mfc.exceptions.StoreOwnerNotFoundException;
 import mfc.interfaces.StoreDataGathering;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
-import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,15 +38,13 @@ public class StoreOwnerController {
     private final StoreOwnerFinder ownerFind;
     private final StoreFinder storeFinder;
     private final StoreDataGathering storeDataGathering;
-    private final StoreModifier storeModifier;
 
     @Autowired
-    public StoreOwnerController(StoreOwnerRegistration ownerReg, StoreOwnerFinder ownerFind, StoreFinder storeFinder, StoreDataGathering storeDataGathering, StoreModifier storeModifier) {
+    public StoreOwnerController(StoreOwnerRegistration ownerReg, StoreOwnerFinder ownerFind, StoreFinder storeFinder, StoreDataGathering storeDataGathering) {
         this.ownerReg = ownerReg;
         this.ownerFind = ownerFind;
         this.storeFinder = storeFinder;
         this.storeDataGathering = storeDataGathering;
-        this.storeModifier = storeModifier;
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -108,18 +108,6 @@ public class StoreOwnerController {
             return ResponseEntity.ok().body(convertOwnerToDto(ownerReg.delete(storeOwner)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @DeleteMapping(path = LOGGED_URI + "deleteStore/{storeName}")
-    public ResponseEntity<Void> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @PathVariable("storeName") String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
-        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
-        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
-        if (store.getOwner().equals(storeOwner)) {
-            storeModifier.delete(store);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            throw new CredentialsException();
         }
     }
 }

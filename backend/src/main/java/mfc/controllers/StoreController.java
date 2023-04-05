@@ -7,10 +7,7 @@ import mfc.entities.Customer;
 import mfc.entities.Purchase;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.CustomerNotFoundException;
-import mfc.exceptions.NegativeCostException;
-import mfc.exceptions.StoreNotFoundException;
-import mfc.exceptions.StoreOwnerNotFoundException;
+import mfc.exceptions.*;
 import mfc.interfaces.TransactionProcessor;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
@@ -113,6 +110,18 @@ public class StoreController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(convertStoreToDto(storeModifier.updateOpeningHours(store, storeDTO.getSchedule())));
+    }
+
+    @DeleteMapping(path = LOGGED_URI + "deleteStore/{storeName}")
+    public ResponseEntity<Void> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @PathVariable("storeName") String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
+        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
+        StoreOwner storeOwner = ownerFinder.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+        if (store.getOwner().equals(storeOwner)) {
+            storeModifier.delete(store);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            throw new CredentialsException();
+        }
     }
 
 }

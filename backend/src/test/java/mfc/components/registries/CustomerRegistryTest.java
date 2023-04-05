@@ -12,7 +12,6 @@ import mfc.repositories.CustomerRepository;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +31,7 @@ class CustomerRegistryTest {
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
-    private Map<String, String> schedule = new HashMap<>();
+    private final Map<String, String> schedule = new HashMap<>();
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired

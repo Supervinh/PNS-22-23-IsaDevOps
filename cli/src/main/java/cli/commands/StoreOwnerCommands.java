@@ -60,19 +60,6 @@ public class StoreOwnerCommands {
         cliContext.setLoggedInUser(null);
     }
 
-    @ShellMethod("Delete store (deleteStore STORE_NAME)")
-    public void deleteStore(String storeName) {
-        if (cliContext.getLoggedInUser() == null) {
-            System.out.println("You are not logged in");
-            return;
-        }
-        if (!(cliContext.getLoggedInUser().getClass().equals(CliStoreOwner.class))) {
-            System.out.println("You are not a store owner");
-            return;
-        }
-        restTemplate.delete(getUri() + "/deleteStore/" + storeName);
-    }
-
     private String getUri() {
         return BASE_URI + "/" + cliContext.getLoggedInUser().getId();
     }
