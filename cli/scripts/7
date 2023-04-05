@@ -1,0 +1,5 @@
+login-admin ad@min pwd
+create-survey test "Etes vous content?"
+create-survey test "Etes vous content?"
+get-survey test
+logout

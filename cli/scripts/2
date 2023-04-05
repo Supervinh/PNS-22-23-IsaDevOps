@@ -1,0 +1,3 @@
+login-customer firstCustomer@customer.fr abc
+refill 25
+logout

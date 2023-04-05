@@ -16,9 +16,6 @@ claim-payoff dashStore expensivePayoff
 claim-payoff dashStore lowPayoff
 logout
 
-login-customer secondCustomer@customer.fr abc
-logout
-
 login-customer thirdCustomer@customer.fr abc
 claim-payoff dashStore mediumPayoff
 logout
