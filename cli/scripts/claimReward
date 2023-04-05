@@ -1,10 +1,3 @@
-login-customer reward@customer pwd
-refill 500
-logout
-
-login-admin reward@admin pwd
-logout
-
 login-owner reward@owner pwd
 add-payoff rewardPayoff 200 15 rewardStore
 add-purchase rewardStore reward@customer 25

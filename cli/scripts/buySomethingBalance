@@ -1,0 +1,3 @@
+login-owner to@a owner
+add-purchase abcdaire firstCustomer@customer.fr 25 true
+logout

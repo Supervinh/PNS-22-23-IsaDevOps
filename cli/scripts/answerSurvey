@@ -1,0 +1,5 @@
+login-customer firstCustomer@customer.fr abc
+show-survey test
+answer-survey test Yes
+answer-survey test Yes
+logout
