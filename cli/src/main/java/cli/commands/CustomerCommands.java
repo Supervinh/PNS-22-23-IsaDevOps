@@ -46,6 +46,10 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
+        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+            System.out.println("You are not a customer");
+            return null;
+        }
         return restTemplate.postForObject(getUriForCustomer() + "/addFavoriteStore", storeName, CliCustomer.class);
     }
 
@@ -55,6 +59,10 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
+        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+            System.out.println("You are not a customer");
+            return null;
+        }
         return restTemplate.postForObject(getUriForCustomer() + "/removeFavoriteStore", storeName, CliCustomer.class);
     }
 
@@ -62,6 +70,10 @@ public class CustomerCommands {
     public CliCustomer modifyCreditCard(String creditCard) {
         if (cliContext.getLoggedInUser() == null) {
             System.out.println("You are not logged in");
+            return null;
+        }
+        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+            System.out.println("You are not a customer");
             return null;
         }
         CliCustomer res = restTemplate.postForObject(getUriForCustomer() + "/modifyCreditCard",
@@ -77,6 +89,10 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
+        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+            System.out.println("You are not a customer");
+            return null;
+        }
         CliCustomer res = restTemplate.postForObject(getUriForCustomer() + "/modifyMatriculation",
                 matriculation,
                 CliCustomer.class);
@@ -90,11 +106,19 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
+        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+            System.out.println("You are not a customer");
+            return null;
+        }
         return restTemplate.postForObject(getUriForCustomer() + "/refill", amount, CliCustomer.class);
     }
 
     @ShellMethod("Delete customer account (deleteCustomer)")
     public void deleteCustomer() {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return;
+        }
         if (!cliContext.getLoggedInUser().getClass().equals(CliCustomer.class)) {
             System.out.println("You are not a customer");
             return;

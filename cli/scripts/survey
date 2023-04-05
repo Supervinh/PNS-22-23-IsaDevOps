@@ -2,6 +2,7 @@ login-admin ad@min pwd
 create-survey test "Etes vous content?"
 create-survey test "Etes vous content?"
 get-survey test
+logout
 login-customer firstCustomer@customer.fr abc
 show-survey test
 answer-survey test Yes
@@ -10,5 +11,3 @@ logout
 login-admin ad@min pwd
 get-survey test
 delete-survey test
-
-add-favorite-store test

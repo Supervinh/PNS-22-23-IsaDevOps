@@ -1,7 +1,3 @@
-login-admin ad@min pwd
-
-logout
-
 login-owner ow@ner pwd
 add-payoff expensivePayoff 50 25 dashStore
 add-payoff mediumPayoff 30 15 dashStore
