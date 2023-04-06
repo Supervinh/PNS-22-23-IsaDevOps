@@ -42,7 +42,7 @@ public class PayoffHandler implements PayOffProcessor {
             parkingProcessor.useParkingPayOff(customer);
         }
 //        customer = customerBalancesModifier.editFidelityPoints(customer, -payoff.getPointCost());
-        customer = customerBalancesModifier.editFidelityPoints(customer, payoff.getPointCost());
+        customer = customerBalancesModifier.editFidelityPoints(customer, -payoff.getPointCost());
         if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
             customer.setVfp(LocalDate.now().plusDays(7));
         }
