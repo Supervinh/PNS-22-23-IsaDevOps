@@ -15,7 +15,9 @@ import java.util.Optional;
 @Component
 @Transactional
 public class AdminRegistry implements AdminFinder, AdminRegistration {
-
+    /**
+     * AdminRepository
+     */
     private final AdminRepository adminRepository;
 
     @Autowired
