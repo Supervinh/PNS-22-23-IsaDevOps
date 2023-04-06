@@ -1,19 +1,29 @@
 register-customer kadoc a@a abc 5251896983
+login-admin a@a a
 register-admin admin a@æ admin
-login-admin a@æ admin
 register-owner to to@a owner
+logout
+login-owner to@a owner
 register-store abcdaire 22 15 08 20 to
+logout
 register-customer catalogCustomer catalog@customer pwd 5251896983
 register-customer rewardCustomer reward@customer pwd 5251896983
+login-admin a@a a
 register-admin rewardAdmin reward@admin pwd
 register-owner rewardOwner reward@owner pwd
+logout
+login-owner reward@owner pwd
 register-store rewardStore 22 15 08 20 rewardOwner
+logout
 register-customer firstCustomer firstCustomer@customer.fr abc 5251896983
 register-customer secondCustomer secondCustomer@customer.fr abc 5251896983
 register-customer thirdCustomer thirdCustomer@customer.fr abc 5251896983
+login-admin a@a a
 register-admin admin ad@min pwd
 register-owner owner ow@ner pwd
+logout
+login-owner ow@ner pwd
 register-store dashStore 22 15 08 20 owner
-register-customer refillCustomer refill@customer pwd 5251896983
 register-store store 22 15 08 20 owner
 logout
+register-customer refillCustomer refill@customer pwd 5251896983

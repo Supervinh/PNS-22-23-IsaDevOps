@@ -68,7 +68,7 @@ customer
     -balance: 100
 Init
 script buySomething.txt
-logout
+logout  
 ```
 
 Ce fichier va d'abord verifier qu'il n'existe pas d'instance de `admin` dans la base de données avec les

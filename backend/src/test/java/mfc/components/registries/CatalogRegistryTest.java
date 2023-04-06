@@ -51,9 +51,9 @@ class CatalogRegistryTest {
 
     @BeforeEach
     void setUp() {
-        john = new Customer("john", "john@mail.com", "01234");
-        robert = new Customer("robert", "robert@mail.com", "012354");
-        bob = new Customer("bob", "bob@mail.com", "012354");
+        john = new Customer("john", "john@mail.com", "01234", "");
+        robert = new Customer("robert", "robert@mail.com", "012354", "");
+        bob = new Customer("bob", "bob@mail.com", "012354", "");
         robert.setFidelityPoints(500);
         john.setFidelityPoints(500);
         bob.setVfp(LocalDate.now().minusDays(1));

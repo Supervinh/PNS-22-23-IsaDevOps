@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,81 +42,102 @@ class AdminControllerTest {
     @MockBean
     private AdminFinder adminFind;
 
-    @BeforeEach
-    void setUp() throws AlreadyExistingAccountException {
-        when(adminReg.registerAdmin(anyString(), anyString(), anyString())).thenReturn(new Admin("admin", "admin", "admin"));
-        when(adminReg.registerAdmin(eq("exist"), anyString(), anyString())).thenThrow(AlreadyExistingAccountException.class);
-        when(adminFind.findAdminByMail(anyString())).thenReturn(Optional.of(new Admin("admin", "admin", "admin")));
-        when(adminFind.findAdminByMail("password")).thenReturn(Optional.of(new Admin("admin", "admin", "password")));
-        when(adminFind.findAdminByMail("none")).thenReturn(Optional.empty());
-    }
-
-    /*@Test
+    @Test
     void registerAdminNoId() throws Exception {
+        Admin admin = mock(Admin.class);
+        when(admin.getId()).thenReturn(null);
+        when(admin.getName()).thenReturn("admin");
+        when(admin.getMail()).thenReturn("admin@mail");
+        when(admin.getPassword()).thenReturn("admin");
+        when(adminReg.registerAdmin(admin.getName(), admin.getMail(), admin.getPassword())).thenReturn(admin);
         mockMvc.perform(post(AdminController.BASE_URI + "/registerAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(null, "admin", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(null, "admin", "admin@mail", "admin")))
                         .contentType(APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("admin"))
                 .andExpect(jsonPath("$.password").value("admin"))
-                .andExpect(jsonPath("$.mail").value("admin"))
+                .andExpect(jsonPath("$.mail").value("admin@mail"))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void registerAdmin() throws Exception {
+        Admin admin = mock(Admin.class);
+        when(admin.getId()).thenReturn(1L);
+        when(admin.getName()).thenReturn("admin");
+        when(admin.getMail()).thenReturn("admin@mail");
+        when(admin.getPassword()).thenReturn("admin");
+        when(adminReg.registerAdmin(admin.getName(), admin.getMail(), admin.getPassword())).thenReturn(admin);
         mockMvc.perform(post(AdminController.BASE_URI + "/registerAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(null, "admin", "admin@mail", "admin")))
                         .contentType(APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("admin"))
                 .andExpect(jsonPath("$.password").value("admin"))
-                .andExpect(jsonPath("$.mail").value("admin"))
+                .andExpect(jsonPath("$.mail").value("admin@mail"))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void registerAdminExists() throws Exception {
+        Admin admin = mock(Admin.class);
+        when(admin.getId()).thenReturn(1L);
+        when(admin.getName()).thenReturn("admin");
+        when(admin.getMail()).thenReturn("admin@mail");
+        when(admin.getPassword()).thenReturn("admin");
+        when(adminReg.registerAdmin("admin", "admin@mail", "admin")).thenThrow(AlreadyExistingAccountException.class);
         mockMvc.perform(post(AdminController.BASE_URI + "/registerAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "exist", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(null, "admin", "admin@mail", "admin")))
                         .contentType(APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isConflict());
     }
 
     @Test
     void loginAdmin() throws Exception {
+        Admin admin = mock(Admin.class);
+        when(admin.getId()).thenReturn(1L);
+        when(admin.getName()).thenReturn("admin");
+        when(admin.getMail()).thenReturn("admin@mail");
+        when(admin.getPassword()).thenReturn("admin");
+        when(adminFind.findAdminByMail("admin@mail")).thenReturn(Optional.of(admin));
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "admin", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "admin@mail", "admin")))
                         .contentType(APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("admin"))
                 .andExpect(jsonPath("$.password").value("admin"))
-                .andExpect(jsonPath("$.mail").value("admin"))
+                .andExpect(jsonPath("$.mail").value("admin@mail"))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void wrongPasswordLogin() throws Exception {
+        Admin admin = mock(Admin.class);
+        when(admin.getId()).thenReturn(1L);
+        when(admin.getName()).thenReturn("admin");
+        when(admin.getMail()).thenReturn("admin@mail");
+        when(admin.getPassword()).thenReturn("admin");
+        when(adminFind.findAdminByMail("admin@mail")).thenReturn(Optional.of(admin));
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "password", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "admin@mail", "wrong")))
                         .contentType(APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void notFoundLogin() throws Exception {
+        Admin admin = mock(Admin.class);
+        when(admin.getId()).thenReturn(1L);
+        when(admin.getName()).thenReturn("admin");
+        when(admin.getMail()).thenReturn("admin@mail");
+        when(admin.getPassword()).thenReturn("admin");
+        when(adminFind.findAdminByMail("admin@mail")).thenReturn(Optional.of(admin));
         mockMvc.perform(post(AdminController.BASE_URI + "/loginAdmin")
-                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "none", "admin")))
+                        .content(objectMapper.writeValueAsString(new AdminDTO(0L, "admin", "an@mail", "admin")))
                         .contentType(APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isNotFound());
-    }*/
+    }
 }

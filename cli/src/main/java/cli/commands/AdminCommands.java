@@ -23,8 +23,12 @@ public class AdminCommands {
         this.cliContext = cliContext;
     }
 
-    @ShellMethod("Register an admin in the CoD backend (registerAdmin ADMIN_NAME ADMIN_MAIL ADMIN_PWD AUTH_MAIL, AUTH_PWD)")
+    @ShellMethod("Register an admin in the CoD backend (registerAdmin ADMIN_NAME ADMIN_MAIL ADMIN_PWD)")
     public CliAdmin registerAdmin(String name, String mail, String password) {
+        if(cliContext.getLoggedInUser() != null && !cliContext.getLoggedInUser().getClass().equals(CliAdmin.class)) {
+            System.out.println("You are not an admin");
+            return null;
+        }
         return restTemplate.postForObject(BASE_URI + "/registerAdmin", new CliAdmin(name, mail, password), CliAdmin.class);
     }
 

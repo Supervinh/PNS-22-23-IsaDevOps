@@ -16,6 +16,5 @@ public interface StoreModifier {
 
     Store delete(Store store) throws NoStoreFoundException;
 
-    boolean deleteStores(StoreOwner store);
 
 }
