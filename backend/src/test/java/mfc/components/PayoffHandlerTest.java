@@ -8,6 +8,7 @@ import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.PurchaseRecording;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -70,22 +71,11 @@ class PayoffHandlerTest {
         assertEquals(new PayoffPurchase("low", 10, 10, low.getStore(), customer), payoffHandler.claimPayoff(customer, low));
     }
 
-//    @Test
-//    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, PayoffNotFoundException, NoPreviousPurchaseException {
-//        payoffHandler.claimPayoff(customer, low);
-//        Mockito.verify(customerRegistry, Mockito.times(1)).editFidelityPoints(customer, -10);
-//        Mockito.verify(customerRegistry, Mockito.times(1)).editVFP(customer, LocalDate.now().plusDays(2));
-//    }
-
-//    @Test
-//    void claimPayoffInvalid() {
-//        assertThrows(VFPExpiredException.class, () -> payoffHandler.claimPayoff(customer, expensive));
-//    }
-//
-//    @Test
-//    void claimPayoffNoPayoff() {
-//        assertThrows(VFPExpiredException.class, () -> payoffHandler.claimPayoff(noPayOffCustomer, low));
-//    }
+    @Test
+    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, PayoffNotFoundException, NoPreviousPurchaseException {
+        payoffHandler.claimPayoff(customer, low);
+        Mockito.verify(customerRegistry, Mockito.times(1)).editFidelityPoints(customer, -10);
+    }
 
     @Test
     void updateVfp() throws NoMatriculationException, NegativePointCostException, VFPExpiredException, ParkingException, InsufficientBalanceException, CustomerNotFoundException, NoPreviousPurchaseException {
