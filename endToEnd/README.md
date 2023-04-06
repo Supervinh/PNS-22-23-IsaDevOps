@@ -1,4 +1,4 @@
-# Tests End to End tests
+# Tests End-to-End tests
 
 Ce dossier contient un environnement de tests end to end primitif pour le projet.
 Pour lancer les tests, il suffit de faire `./endToEnd.sh`.
@@ -17,10 +17,11 @@ Ce fichier permet également de lancer des commandes dans la cli, pour peupler l
 section `Init`. \
 \
 Le fichier `afterAll.txt` est lancé après le dernier test et permet de lancer des commandes dans la cli. Il peut
-notamment être utilisé pour supprimer les données créées dans la base de données pendant les tests.\
+notamment être utilisé pour supprimer les données créées dans la base de données pendant les tests.
+\
 \
 Vous pouvez verifier les actions de `beforeAll.txt` et `afterAll.txt` en consultant les fichiers de logs, respectivement
-`beforeAll.log` et `afterAll.log`.\
+`beforeAll.log` et `afterAll.log`.
 
 ## Troubleshooting
 
@@ -67,7 +68,7 @@ customer
     -balance: 100
 Init
 script buySomething.txt
-logout
+logout  
 ```
 
 Ce fichier va d'abord verifier qu'il n'existe pas d'instance de `admin` dans la base de données avec les

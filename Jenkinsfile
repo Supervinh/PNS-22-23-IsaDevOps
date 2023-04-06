@@ -121,7 +121,7 @@ node {
                 }
             }
         }
-        if(behaviour != 'main'){
+        if(behaviour != 'main' && behaviour != 'PR'){
             stage('Deploy'){
                         echo 'Deploy on artifactory(8002:8081) and send to SonarQube (8001:9000)..'
                         withCredentials([string(credentialsId: 'Sonar', variable: 'SONAR_ID')]) {
@@ -149,7 +149,7 @@ node {
     }finally{
         stage('Cleaning up'){
             sh '''
-            rm ${HOME}/.m2/settings.xml
+            rm -f ${HOME}/.m2/settings.xml
             docker compose down --remove-orphans
             docker logout
             '''
