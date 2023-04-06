@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
 
+    /**
+     * PayoffRepository
+     */
     private final PayoffRepository payoffRepository;
     private final PurchaseFinder purchaseFinder;
 
