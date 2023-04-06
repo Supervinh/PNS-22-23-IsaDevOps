@@ -8,6 +8,7 @@ public class AdminDTO {
     private String name;
     private Long id;
     @Email(message = "mail should be a valid email")
+    @NotBlank(message = "mail should not be blank")
     private String mail;
     @NotBlank(message = "password should not be blank")
     private String password;

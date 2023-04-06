@@ -1,10 +1,12 @@
-customer
-    -mail: firstCustomer@customer.fr
-customer
-    -mail: secondCustomer@customer.fr
-customer
-    -mail: thirdCustomer@customer.fr
 Init
+login-owner ow@ner pwd
+delete-store-owner
+login-customer firstCustomer@customer.fr abc
+delete-customer
+login-customer  secondCustomer@customer.fr abc
+delete-customer
+login-customer thirdCustomer@customer.fr abc
+delete-customer
 login-admin a@a a
 register-owner owner ow@ner pwd
 logout
