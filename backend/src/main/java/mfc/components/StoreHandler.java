@@ -34,11 +34,6 @@ public class StoreHandler implements StoreFinder, StoreModifier {
     }
 
     @Override
-    public Optional<Store> findStoreById(Long id) {
-        return storeRepository.findStoreById(id);
-    }
-
-    @Override
     public Store register(String name, Map<String, String> schedule, StoreOwner storeOwner) throws AlreadyExistingStoreException {
         Optional<Store> store = findStoreByName(name);
         if (store.isEmpty()) {

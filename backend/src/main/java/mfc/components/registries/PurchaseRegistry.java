@@ -37,11 +37,6 @@ public class PurchaseRegistry implements PurchaseRecording, PurchaseFinder {
     }
 
     @Override
-    public Set<Purchase> lookUpPayPurchases() {
-        return null;
-    }
-
-    @Override
     public Set<Purchase> lookUpPurchasesByCustomer(Customer customer) {
         return purchaseRepository.findPurchasesByCustomer(customer);
     }

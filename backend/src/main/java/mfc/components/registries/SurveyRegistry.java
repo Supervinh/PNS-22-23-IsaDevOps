@@ -6,8 +6,8 @@ import mfc.exceptions.AlreadyAnsweredException;
 import mfc.exceptions.InvalidAnswerException;
 import mfc.exceptions.SurveyAlreadyExistsException;
 import mfc.exceptions.SurveyNotFoundException;
-import mfc.interfaces.SurveyFinder;
-import mfc.interfaces.SurveyModifier;
+import mfc.interfaces.explorer.SurveyFinder;
+import mfc.interfaces.modifier.SurveyModifier;
 import mfc.repositories.SurveyRepository;
 import org.springframework.stereotype.Component;
 

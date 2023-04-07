@@ -8,9 +8,9 @@ import mfc.entities.Customer;
 import mfc.entities.Store;
 import mfc.exceptions.*;
 import mfc.interfaces.Payment;
-import mfc.interfaces.SurveyFinder;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
+import mfc.interfaces.explorer.SurveyFinder;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +132,7 @@ public class CustomerController {
     }
 
     @DeleteMapping(path = LOGGED_URI + "deleteCustomer")
-    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("customerId") Long customerId) throws CustomerNotFoundException, NoCorrespongingAccountException {
+    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("customerId") Long customerId) {
         try {
             Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
             customerRegistration.delete(customer);
