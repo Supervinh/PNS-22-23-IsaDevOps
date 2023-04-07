@@ -7,44 +7,45 @@ import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.interfaces.TransactionProcessor;
+import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.PurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 
 @Component
 @Transactional
 public class TransactionHandler implements TransactionProcessor {
     private final CustomerBalancesModifier customerBalancesModifier;
     private final PurchaseRecording purchaseRecording;
+    private final PurchaseFinder purchaseFinder;
 
     @Autowired
-    public TransactionHandler(CustomerBalancesModifier customerBalancesModifier, PurchaseRecording purchaseRecording) {
+    public TransactionHandler(CustomerBalancesModifier customerBalancesModifier, PurchaseRecording purchaseRecording, PurchaseFinder purchaseFinder) {
         this.customerBalancesModifier = customerBalancesModifier;
         this.purchaseRecording = purchaseRecording;
+        this.purchaseFinder = purchaseFinder;
     }
 
     @Override
-    public Purchase purchase(Customer customer, double cost, Store store) {
+    public Purchase purchase(Customer customer, double cost, Store store) throws NegativePointCostException, CustomerNotFoundException {
         //gain a point by euro
-        try {
-            customerBalancesModifier.editFidelityPoints(customer, (int) cost);
-            return purchaseRecording.recordPurchase(customer, cost, store);
-        } catch (NegativePointCostException | CustomerNotFoundException e) {
-            throw new RuntimeException(e);
+        customerBalancesModifier.editFidelityPoints(customer, (int) cost);
+        if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
+            customer.setVfp(LocalDate.now().plusDays(7));
         }
+        return purchaseRecording.recordPurchase(customer, cost, store);
     }
 
     @Override
-    public Purchase purchaseFidelityCardBalance(Customer user, double cost, Store store) {
-        try {
-            customerBalancesModifier.editBalance(user, -cost);
-            return purchase(user, cost, store);
-
-        } catch (InsufficientBalanceException | CustomerNotFoundException e) {
-            throw new RuntimeException(e);
+    public Purchase purchaseFidelityCardBalance(Customer customer, double cost, Store store) throws InsufficientBalanceException, CustomerNotFoundException, NegativePointCostException {
+        customerBalancesModifier.editBalance(customer, -cost);
+        if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
+            customer.setVfp(LocalDate.now().plusDays(7));
         }
+        return purchase(customer, cost, store);
     }
 }

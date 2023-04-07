@@ -32,11 +32,6 @@ public class SurveyRegistry implements SurveyFinder, SurveyModifier {
     }
 
     @Override
-    public Set<Survey> getSurveys() {
-        return surveyRepository.findAllSet();
-    }
-
-    @Override
     public Set<Survey> findByCustomerDidntAnswered(Customer customer) {
         return surveyRepository.findAll().stream().filter(e -> !e.getCustomersAnswered().contains(customer)).collect(Collectors.toSet());
     }

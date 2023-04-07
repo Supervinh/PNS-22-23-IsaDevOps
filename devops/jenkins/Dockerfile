@@ -2,7 +2,7 @@ FROM jenkins/ssh-agent:jdk17
 
 RUN apt update && apt-get install -y curl iptables lvm2 systemctl socat
     # Maven
-RUN curl -L https://dlcdn.apache.org/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz --output maven.tgz \
+RUN curl -L https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz --output maven.tgz \
     && tar xzvf maven.tgz
 RUN cp -r apache-maven-*/* /usr/local/ \
     && rm -r apache-maven-*/ maven.tgz

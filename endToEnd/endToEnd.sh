@@ -74,12 +74,12 @@ while IFS="" read -r ligne || [ -n "$ligne" ]; do
     read -r </dev/tty
   fi
 done <"$fichier"
-#rm res.txt
+
 if [ "$res" = false ]; then
   echo "Some tests are failing"
   exit 2
 fi
 echo "Everything was tested successfully"
 
-afterAll #Do the afterAll check
+afterAll
 exit 0

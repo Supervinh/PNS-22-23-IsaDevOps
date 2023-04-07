@@ -3,7 +3,6 @@ package mfc.controllers.store;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.StoreController;
 import mfc.controllers.dto.StoreDTO;
-import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
 import mfc.interfaces.StoreDataGathering;
@@ -81,5 +80,72 @@ class StoreControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
+
+//    @Test
+//    void deleteStore() throws Exception {
+//        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+//        String storeName = "store";
+//        Map<String, String> storeSchedule = new HashMap<>();
+//        storeModifier.register(storeName, storeSchedule, owner);
+//
+//        mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/deleteStore/" + storeName)
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    void deleteStoreWithUnknownId() throws Exception {
+//        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+//        String storeName = "store";
+//        Map<String, String> storeSchedule = new HashMap<>();
+//        storeModifier.register(storeName, storeSchedule, owner);
+//
+//        assertThrows(StoreOwnerNotFoundException.class, () -> {
+//            try {
+//                mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + -1L + "/deleteStore/" + storeName)
+//                                .contentType(MediaType.APPLICATION_JSON))
+//                        .andExpect(status().isNotFound());
+//            } catch (NestedServletException e) {
+//                throw e.getCause();
+//            }
+//        });
+//    }
+//
+//    @Test
+//    void deleteStoreWithUnknownStoreName() throws Exception {
+//        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+//        String storeName = "store";
+//        Map<String, String> storeSchedule = new HashMap<>();
+//        storeModifier.register(storeName, storeSchedule, owner);
+//
+//        assertThrows(StoreNotFoundException.class, () -> {
+//            try {
+//                mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/deleteStore/" + "store1")
+//                                .contentType(MediaType.APPLICATION_JSON))
+//                        .andExpect(status().isNotFound());
+//            } catch (NestedServletException e) {
+//                throw e.getCause();
+//            }
+//        });
+//    }
+//
+//    @Test
+//    void deleteNotOwnedStore() throws Exception {
+//        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
+//        StoreOwner secondOwner = storeOwnerRegistration.registerStoreOwner("b", "b@b", "pwd");
+//        String storeName = "store";
+//        Map<String, String> storeSchedule = new HashMap<>();
+//        storeModifier.register(storeName, storeSchedule, secondOwner);
+//
+//        assertThrows(CredentialsException.class, () -> {
+//            try {
+//                mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/deleteStore/" + storeName)
+//                                .contentType(MediaType.APPLICATION_JSON))
+//                        .andExpect(status().isNotFound());
+//            } catch (NestedServletException e) {
+//                throw e.getCause();
+//            }
+//        });
+//    }
 }
 
