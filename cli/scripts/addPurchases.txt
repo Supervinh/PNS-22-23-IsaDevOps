@@ -1,0 +1,5 @@
+add-purchase dashStore firstCustomer@customer.fr 15
+add-purchase dashStore firstCustomer@customer.fr 25
+add-purchase dashStore secondCustomer@customer.fr 50
+add-purchase dashStore thirdCustomer@customer.fr 80
+add-purchase dashStore firstCustomer@customer.fr 35

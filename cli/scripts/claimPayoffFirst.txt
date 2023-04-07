@@ -1,0 +1,3 @@
+logout
+login-customer firstCustomer@customer.fr abc
+claim-payoff dashStore expensivePayoff
