@@ -56,14 +56,14 @@ public class CatalogRegistry implements CatalogExplorer, CatalogModifier {
     }
 
     @Override
-    public Optional<Payoff> findPayoff(String payoffName, String storeName) throws PayoffNotFoundException {
+    public Optional<Payoff> findPayoff(String payoffName, String storeName) {
         return payoffRepository.findPayoffByNameAndStore_Name(payoffName, storeName);
     }
 
     @Override
     public Payoff addPayOff(String name, double cost, int pointCost, Store store, boolean isVfp) throws NegativeCostException, NegativePointCostException, AlreadyExistingPayoffException {
-        if (cost <= 0) throw new NegativeCostException();
-        if (pointCost <= 0) throw new NegativePointCostException();
+        if (cost < 0) throw new NegativeCostException();
+        if (pointCost < 0) throw new NegativePointCostException();
         if (!payoffRepository.explore(name).isEmpty()) throw new AlreadyExistingPayoffException();
         Payoff payOff = new Payoff(name, cost, pointCost, store, isVfp);
         payoffRepository.save(payOff);

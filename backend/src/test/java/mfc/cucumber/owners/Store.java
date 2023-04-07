@@ -1,4 +1,4 @@
-package mfc.cucumber.purchase;
+package mfc.cucumber.owners;
 
 import io.cucumber.java.en.Given;
 import mfc.exceptions.AlreadyExistingAccountException;

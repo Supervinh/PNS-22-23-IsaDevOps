@@ -4,7 +4,6 @@ import mfc.entities.Customer;
 import mfc.entities.Payoff;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NoPreviousPurchaseException;
-import mfc.exceptions.PayoffNotFoundException;
 import mfc.exceptions.VFPExpiredException;
 
 import java.util.Optional;
@@ -17,6 +16,6 @@ public interface CatalogExplorer {
 
     Set<Payoff> exploreCatalogue(Customer customer, String search);
 
-    Optional<Payoff> findPayoff(String payOffName, String storeName) throws PayoffNotFoundException;
+    Optional<Payoff> findPayoff(String payOffName, String storeName);
 }
 

@@ -43,6 +43,7 @@ public class TransactionHandler implements TransactionProcessor {
     @Override
     public Purchase purchaseFidelityCardBalance(Customer customer, double cost, Store store) throws InsufficientBalanceException, CustomerNotFoundException, NegativePointCostException {
         customerBalancesModifier.editBalance(customer, -cost);
+        customerBalancesModifier.editFidelityPoints(customer, (int) cost);
         if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
             customer.setVfp(LocalDate.now().plusDays(7));
         }

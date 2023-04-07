@@ -1,4 +1,4 @@
-package mfc.cucumber.purchase;
+package mfc.cucumber.accounts;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

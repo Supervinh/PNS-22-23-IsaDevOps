@@ -1,4 +1,4 @@
-package mfc.cucumber.purchase;
+package mfc.cucumber.transactions;
 
 import io.cucumber.java.en.When;
 import mfc.entities.Customer;
