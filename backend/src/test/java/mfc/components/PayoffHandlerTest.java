@@ -60,7 +60,7 @@ class PayoffHandlerTest {
     }
 
     @Test
-    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, PayoffNotFoundException, NoPreviousPurchaseException {
+    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, NoPreviousPurchaseException {
         assertEquals(new PayoffPurchase("low", 10, 10, low.getStore(), customer), payoffHandler.claimPayoff(customer, low));
     }
 

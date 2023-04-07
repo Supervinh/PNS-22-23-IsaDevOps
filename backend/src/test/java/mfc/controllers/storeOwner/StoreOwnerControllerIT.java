@@ -56,7 +56,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwner() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "a", "a@a", "pwd"))))
@@ -70,8 +69,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyName() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
-
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", "a@a", "pwd"))))
@@ -82,8 +79,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
-
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "a", "a@a", ""))))
@@ -94,8 +89,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyNameAndMail() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
-
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", null, "pwd"))))
@@ -106,7 +99,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyNameAndPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", "a@a", ""))))
@@ -117,7 +109,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyMailAndPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "a", null, ""))))
@@ -128,7 +119,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyNameAndMailAndPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", null, ""))))
@@ -139,7 +129,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyBody() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO())))
@@ -150,7 +139,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyBodyAndNull() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, null, null, null))))

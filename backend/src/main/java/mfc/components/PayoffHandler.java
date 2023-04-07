@@ -7,7 +7,6 @@ import mfc.exceptions.*;
 import mfc.interfaces.ParkingProcessor;
 import mfc.interfaces.PayOffProcessor;
 import mfc.interfaces.explorer.CatalogExplorer;
-import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.CustomerBalancesModifier;
 import mfc.interfaces.modifier.PayOffPurchaseRecording;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class PayoffHandler implements PayOffProcessor {
     private final PayOffPurchaseRecording payOffPurchaseRecording;
 
     @Autowired
-    public PayoffHandler(CatalogExplorer catalogExplorer, CustomerBalancesModifier customerBalancesModifier, ParkingProcessor parkingProcessor, PayOffPurchaseRecording payOffPurchaseRecording, PurchaseFinder purchaseFinder) {
+    public PayoffHandler(CatalogExplorer catalogExplorer, CustomerBalancesModifier customerBalancesModifier, ParkingProcessor parkingProcessor, PayOffPurchaseRecording payOffPurchaseRecording) {
         this.catalogExplorer = catalogExplorer;
         this.customerBalancesModifier = customerBalancesModifier;
         this.parkingProcessor = parkingProcessor;

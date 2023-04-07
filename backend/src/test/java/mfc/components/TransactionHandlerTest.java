@@ -2,7 +2,6 @@ package mfc.components;
 
 import mfc.components.registries.CustomerRegistry;
 import mfc.entities.Customer;
-import mfc.entities.Payoff;
 import mfc.entities.Purchase;
 import mfc.entities.Store;
 import mfc.exceptions.CustomerNotFoundException;
@@ -29,7 +28,6 @@ import static org.mockito.Mockito.when;
 class TransactionHandlerTest {
 
     Customer customer;
-    Set<Payoff> payoffs;
     Store s;
     @Autowired
     TransactionHandler transactionalHandler;
