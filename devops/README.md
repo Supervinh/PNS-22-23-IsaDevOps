@@ -7,14 +7,14 @@ outils.
 ## Table des matières
 
 * [Problèmes et Solutions](#problèmes-et-solutions)
-  * [Artifactory, Jenkins ou SonarQube n'est pas disponible](#artifactory-jenkins-ou-sonarqube-nest-pas-disponible)
-  * [Les versions utilisées dans l'agent Jenkins ne sont plus disponibles](#les-versions-utilisées-dans-lagent-jenkins-ne-sont-plus-disponibles)
-  * [Docker Hub n'est plus utilisable](#docker-hub-nest-plus-utilisable)
   * [GitHub n'est pas disponible](#github-nest-pas-disponible)
+  * [Docker Hub n'est plus utilisable](#docker-hub-nest-plus-utilisable)
   * [Smee n'est plus disponible](#smee-nest-plus-disponible)
   * [La VM ne redémarre plus](#la-vm-ne-redémarre-plus)
-  * [La VM redémarre](#la-vm-redémarre)
   * [La VM redémarre et tous les volumes sont perdus](#la-vm-redémarre-et-tous-les-volumes-sont-perdus)
+  * [Les versions utilisées dans l'agent Jenkins ne sont plus disponibles](#les-versions-utilisées-dans-lagent-jenkins-ne-sont-plus-disponibles)
+  * [La VM redémarre](#la-vm-redémarre)
+  * [Artifactory, Jenkins ou SonarQube ne sont plus disponibles](#artifactory-jenkins-ou-sonarqube-ne-sont-plus-disponibles)
 * [Relancer la chaîne DevOps](#relancer-la-chaîne-devops)
 * [Installation depuis zéro](#installation-depuis-zéro)
   * [Jenkins et SonarQube](#jenkins-et-sonarqube)
@@ -29,41 +29,8 @@ outils.
 
 ## Problèmes et Solutions
 
-### Artifactory, Jenkins ou SonarQube n'est pas disponible
-
-Temps estimé : 5 minutes
-
-En cas d'indisponibilité de ces services, il faut d'abord vérifier la connexion au VPN. Si la connexion au VPN est
-Active, il faut vérifier que la VM est toujours connectée. Le cas échéant, il faut vérifier que les conteneurs tournent.
-Sinon, `screen -r docker` permet de s'y attacher,
-et `docker compose -f ./artifactory-oss-7.49.8/docker-compose.yaml -f ./jenkins/docker-compose.yml logs` permet de
-récupérer les logs pour trouver une éventuelle erreur. Pour relancer les conteneurs, les instructions sont
-données [plus bas](#relancer-la-chaîne-devops).
-
-### Les versions utilisées dans l'agent Jenkins ne sont plus disponibles
-
-Temps estimé : 15 minutes
-
-L'agent utilise des versions spécifiques de maven (3.8.8), docker (23.0.1) et docker-compose (2.16.0). Il est possible
-que ces versions ne soient plus disponibles sur les dépôts. Il faut alors sauvegarder les versions utilisées en local,
-pour les récupérer quand elles ne seront plus disponibles, ou être capable de changer les versions. Les
-versions peuvent être changées dans le [Dockerfile](jenkins/Dockerfile) de l'agent Jenkins.
-
-### Docker Hub n'est plus utilisable
-
-Temps estimé : 30 minutes
-
-Si Docker Hub n'est plus accessible, nous ne pouvons plus héberger les images du projet sur Docker Hub. Il faut alors
-les
-héberger sur un autre site, comme GitBucket. Pour cela, la partie 'Deploy on docker' du [Jenkinsfile](../Jenkinsfile)
-doit être modifiée.
-
-Les images Jenkins, Jenkins-agent, et Artifactory sont également hébergées sur Docker Hub. Il faut alors les récupérer
-par
-un autre moyen. Pour les images Jenkins et Jenkins Agent, il est possible de les trouver sur le site
-de [Jenkins](https://www.jenkins.io/download/). Le site
-d'[Artifactory](https://jfrog.com/community/download-artifactory-oss/) permet aussi de récupérer les images en cas
-de problème.
+Ci-dessous, les problèmes les plus courants et leurs solutions sont listés, par ordre de gravité avec un temps estimé
+pour résoudre chaque problème.
 
 ### GitHub n'est pas disponible
 
@@ -71,9 +38,22 @@ Temps estimé : 35 minutes
 
 Si GitHub n'est plus disponible, il est nécessaire d'utiliser un autre outil de versioning et de collaboration, tel que
 GitLab ou SourceForge. Il faut alors configurer les machines des utilisateurs pour push le code non plus sur GitHub,
-mais
-sur le nouvel outil,
-et reconfigurer Smee pour transmettre les informations d'un webhook de l'outil choisi vers Jenkins
+mais sur le nouvel outil, et reconfigurer Smee pour transmettre les informations d'un webhook de l'outil choisi vers
+Jenkins
+
+### Docker Hub n'est plus utilisable
+
+Temps estimé : 30 minutes
+
+Si Docker Hub n'est plus accessible, nous ne pouvons plus héberger les images du projet sur Docker Hub. Il faut alors
+les héberger sur un autre site, comme GitBucket. Pour cela, la partie 'Deploy on docker'
+du [Jenkinsfile](../Jenkinsfile) doit être modifiée.
+
+Les images Jenkins, Jenkins-agent, et Artifactory sont également hébergées sur Docker Hub. Il faut alors les récupérer
+par un autre moyen. Pour les images Jenkins et Jenkins Agent, il est possible de les trouver sur le site
+de [Jenkins](https://www.jenkins.io/download/). Le site
+d'[Artifactory](https://jfrog.com/community/download-artifactory-oss/) permet aussi de récupérer les images en cas de
+problème.
 
 ### Smee n'est plus disponible
 
@@ -94,13 +74,6 @@ Si la VM n'est pas disponible, la chaîne DevOps peut être lancer sur une autre
 démonstrations. Pour cela, il faut les suivre les instructions d'installation dans la
 partie [Installation depuis Zéro](#installation-depuis-zéro).
 
-### La VM redémarre
-
-Temps estimé : 3 minutes
-
-En cas de redémarrage, si les volumes sont intacts, il suffit
-de [relancer la chaîne DevOps](#relancer-la-chaîne-devops).
-
 ### La VM redémarre et tous les volumes sont perdus
 
 Temps estimé : 20 minutes
@@ -109,6 +82,33 @@ Si les volumes sont inutilisables après un redémarrage, il faudra recréer les
 dans la partie [Jenkins & SonarQube](#jenkins-et-sonarqube). Il faudra également recréer les identifiants des
 utilisateurs pour Jenkins, Artifactory et SonarQube. Les artefacts stockés dans Artifactory seront perdus, il peut alors
 être intéressant de sauvegarder les versions majeures des artefacts ailleurs, sur BitBucket par exemple.
+
+### Les versions utilisées dans l'agent Jenkins ne sont plus disponibles
+
+Temps estimé : 15 minutes
+
+L'agent utilise des versions spécifiques de maven (3.8.8), docker (23.0.1) et docker-compose (2.16.0). Il est possible
+que ces versions ne soient plus disponibles sur les dépôts. Il faut alors sauvegarder les versions utilisées en local,
+pour les récupérer quand elles ne seront plus disponibles, ou être capable de changer les versions. Les
+versions peuvent être changées dans le [Dockerfile](jenkins/Dockerfile) de l'agent Jenkins.
+
+### La VM redémarre
+
+Temps estimé : 3 minutes
+
+En cas de redémarrage, si les volumes sont intacts, il suffit
+de [relancer la chaîne DevOps](#relancer-la-chaîne-devops).
+
+### Artifactory, Jenkins ou SonarQube ne sont plus disponibles
+
+Temps estimé : 5 minutes
+
+En cas d'indisponibilité de ces services, il faut d'abord vérifier la connexion au VPN. Si la connexion au VPN est
+Active, il faut vérifier que la VM est toujours connectée. Le cas échéant, il faut vérifier que les conteneurs tournent.
+Sinon, `screen -r docker` permet de s'y attacher,
+et `docker compose -f ./artifactory-oss-7.49.8/docker-compose.yaml -f ./jenkins/docker-compose.yml logs` permet de
+récupérer les logs pour trouver une éventuelle erreur. Pour relancer les conteneurs, les instructions sont
+données [plus bas](#relancer-la-chaîne-devops).
 
 ## Relancer la chaîne DevOps
 
