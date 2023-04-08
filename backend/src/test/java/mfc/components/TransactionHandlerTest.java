@@ -1,15 +1,19 @@
 package mfc.components;
 
-import mfc.components.registries.CustomerRegistry;
 import mfc.entities.Customer;
 import mfc.entities.Purchase;
 import mfc.entities.Store;
 import mfc.exceptions.CustomerNotFoundException;
 import mfc.exceptions.NegativePointCostException;
+import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.PurchaseFinder;
+import mfc.interfaces.modifier.CustomerBalancesModifier;
+import mfc.interfaces.modifier.CustomerProfileModifier;
+import mfc.interfaces.modifier.CustomerRegistration;
 import mfc.interfaces.modifier.PurchaseRecording;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,9 +22,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -36,7 +38,13 @@ class TransactionHandlerTest {
     @MockBean
     private PurchaseRecording purchaseRecording;
     @MockBean
-    private CustomerRegistry customerRegistry;
+    private CustomerFinder customerFinder;
+    @MockBean
+    private CustomerBalancesModifier customerBalancesModifier;
+    @MockBean
+    private CustomerRegistration customerRegistration;
+    @MockBean
+    private CustomerProfileModifier customerProfileModifier;
 
     @BeforeEach
     void setUp() throws CustomerNotFoundException {
@@ -51,12 +59,11 @@ class TransactionHandlerTest {
         purchase3.setDate(LocalDate.now().minusDays(5));
         Purchase purchase4 = new Purchase(200, customer, s);
         when(purchaseFinder.lookUpPurchasesByCustomer(any())).thenReturn(Set.of(purchase1, purchase2, purchase3, purchase4));
-        when(customerRegistry.editVFP(eq(customer), any())).thenReturn(customer);
     }
 
     @Test
     void updateVfp() throws NegativePointCostException, CustomerNotFoundException {
         transactionalHandler.purchase(customer, 40, s);
-        assertEquals(LocalDate.now().plusDays(7), customer.getVfp());
+        Mockito.verify(customerBalancesModifier, Mockito.times(1)).editVFP(customer, LocalDate.now().plusDays(7));
     }
 }

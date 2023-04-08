@@ -28,7 +28,6 @@ public class Store {
     @ElementCollection
     private Map<String, String> schedule;
     private LocalDateTime lastUpdate;
-
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StoreOwner owner;
@@ -99,5 +98,16 @@ public class Store {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, owner);
+    }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+//                ", schedule=" + schedule +
+                ", lastUpdate=" + lastUpdate +
+                ", owner=" + owner +
+                '}';
     }
 }

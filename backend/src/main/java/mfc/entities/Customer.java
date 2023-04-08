@@ -1,6 +1,7 @@
 package mfc.entities;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Entity
 public class Customer extends Account {
@@ -16,8 +18,7 @@ public class Customer extends Account {
     private double balance;
     private LocalDate vfp;
     private String creditCard;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
+    @ManyToMany
     private List<Store> favoriteStores;
     private LocalDateTime lastConnexion;
 
@@ -97,7 +98,11 @@ public class Customer extends Account {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Customer customer = (Customer) o;
-        return fidelityPoints == customer.fidelityPoints && Double.compare(customer.balance, balance) == 0 && Objects.equals(matriculation, customer.matriculation) && favoriteStores.equals(customer.favoriteStores) && Objects.equals(vfp, customer.vfp) && Objects.equals(creditCard, customer.creditCard);
+        AtomicBoolean res = new AtomicBoolean(true);
+        favoriteStores.forEach(store -> {
+            if (!customer.favoriteStores.contains(store)) res.set(false);
+        });
+        return res.get() && fidelityPoints == customer.fidelityPoints && Double.compare(customer.balance, balance) == 0 && Objects.equals(matriculation, customer.matriculation) && Objects.equals(vfp, customer.vfp) && Objects.equals(creditCard, customer.creditCard);
     }
 
     @Override
@@ -107,13 +112,6 @@ public class Customer extends Account {
 
     @Override
     public String toString() {
-        return "Customer{" + getName() + '\'' +
-                "matriculation='" + matriculation + '\'' +
-                ", fidelityPoints=" + fidelityPoints +
-                ", balance=" + balance +
-                ", favoriteStores=" + favoriteStores +
-                ", vfp=" + vfp +
-                ", creditCard='" + creditCard + '\'' +
-                '}';
+        return "Customer{" + getName() + '\'' + "matriculation='" + matriculation + '\'' + ", fidelityPoints=" + fidelityPoints + ", balance=" + balance + ", vfp=" + vfp + ", creditCard='" + creditCard + '\'' + '}';
     }
 }

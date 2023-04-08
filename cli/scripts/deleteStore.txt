@@ -1,4 +1,11 @@
+login-admin a@a a
+register-owner owner ow@ner pwd
+logout
+register-customer to firstCustomer@customer.fr abc
+register-customer tom secondCustomer@customer.fr abc
 login-owner ow@ner pwd
+
+register-store dashStore
 
 add-payoff expensivePayoff 50 25 dashStore
 add-payoff mediumPayoff 30 15 dashStore
@@ -8,9 +15,9 @@ logout
 
 login-customer firstCustomer@customer.fr abc
 claim-payoff dashStore expensivePayoff
-delete-customer
+add-favorite-store dashStore
+logout
 
-login-owner ow@ner pwd
-delete-payoff dashStore expensivePayoff
-
+login-customer secondCustomer@customer.fr abc
+add-favorite-store dashStore
 logout

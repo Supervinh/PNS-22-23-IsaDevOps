@@ -1,7 +1,7 @@
 package mfc.cucumber.owners;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
-import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.AlreadyExistingStoreException;
 import mfc.interfaces.modifier.StoreModifier;
 import mfc.repositories.StoreOwnerRepository;
@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static mfc.cucumber.Helper.resetException;
+
 @SpringBootTest
 public class Store {
 
@@ -19,14 +21,19 @@ public class Store {
     private StoreModifier storeModifier;
 
     @Autowired
+    private StoreOwnerRepository storeOwnerRepository;
+    @Autowired
     private StoreRepository storeRepository;
 
-    @Autowired
-    private StoreOwnerRepository storeOwnerRepository;
-
-    @Given("a store named {string}, owned by {string}, with opening hours from {int}:{int} to {int}:{int}")
-    public void aStoreNamedOwnedByWithOpeningHoursFromTo(String storeName, String ownerMail, int openingHour, int openingMinute, int closingHour, int closingMinute) throws AlreadyExistingStoreException, AlreadyExistingAccountException {
+    @Before
+    public void settingUpContext() {
+        resetException();
         storeRepository.deleteAll();
+        System.out.println("Store deleted");
+    }
+
+    @Given("a store named {string}, owned by {string}")
+    public void aStoreNamedOwnedByWithOpeningHoursFromTo(String storeName, String ownerMail) throws AlreadyExistingStoreException {
         Map<String, String> scheduleList = new HashMap<>();
         storeModifier.register(storeName, scheduleList, storeOwnerRepository.findStoreOwnerByMail(ownerMail).get());
     }

@@ -7,7 +7,7 @@ outils.
 ## Table des matières
 
 * [Problèmes et Solutions](#problèmes-et-solutions)
-  * [GitHub n'est pas disponible](#github-nest-pas-disponible)
+  * [Git n'est pas disponible](#git-nest-pas-disponible)
   * [Docker Hub n'est plus utilisable](#docker-hub-nest-plus-utilisable)
   * [Smee n'est plus disponible](#smee-nest-plus-disponible)
   * [La VM ne redémarre plus](#la-vm-ne-redémarre-plus)
@@ -32,14 +32,14 @@ outils.
 Ci-dessous, les problèmes les plus courants et leurs solutions sont listés, par ordre de gravité avec un temps estimé
 pour résoudre chaque problème.
 
-### GitHub n'est pas disponible
+### Git n'est pas disponible
 
 Temps estimé : 35 minutes
 
-Si GitHub n'est plus disponible, il est nécessaire d'utiliser un autre outil de versioning et de collaboration, tel que
-GitLab ou SourceForge. Il faut alors configurer les machines des utilisateurs pour push le code non plus sur GitHub,
+Si Git n'est plus disponible, il est nécessaire d'utiliser un autre outil de versioning et de collaboration, tel que
+SourceForge. Il faut alors configurer les machines des utilisateurs pour push le code non plus sur GitHub,
 mais sur le nouvel outil, et reconfigurer Smee pour transmettre les informations d'un webhook de l'outil choisi vers
-Jenkins
+Jenkins.
 
 ### Docker Hub n'est plus utilisable
 

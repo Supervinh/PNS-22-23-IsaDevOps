@@ -1,5 +1,6 @@
 package mfc.cucumber.accounts;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,7 +11,12 @@ import mfc.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
+
+import static mfc.cucumber.Helper.resetException;
+
 @SpringBootTest
+@Transactional
 public class Customer {
 
     @Autowired
@@ -19,6 +25,12 @@ public class Customer {
     private CustomerRegistration customerRegistration;
     @Autowired
     private CustomerFinder customerFinder;
+
+    @Before
+    public void settingUpContext() {
+        resetException();
+        customerRepository.deleteAll();
+    }
 
     @Given("a customer named {string} with {string} as mail address and {string} as password")
     public void aCustomerNamedWithAsMailAddressAndAsPassword(String name, String mail, String password) throws AlreadyExistingAccountException {

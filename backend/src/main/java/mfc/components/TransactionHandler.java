@@ -34,9 +34,7 @@ public class TransactionHandler implements TransactionProcessor {
     public Purchase purchase(Customer customer, double cost, Store store) throws NegativePointCostException, CustomerNotFoundException {
         //gain a point by euro
         customerBalancesModifier.editFidelityPoints(customer, (int) cost);
-        if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
-            customer.setVfp(LocalDate.now().plusDays(7));
-        }
+        updateVFP(customer);
         return purchaseRecording.recordPurchase(customer, cost, store);
     }
 
@@ -44,9 +42,13 @@ public class TransactionHandler implements TransactionProcessor {
     public Purchase purchaseFidelityCardBalance(Customer customer, double cost, Store store) throws InsufficientBalanceException, CustomerNotFoundException, NegativePointCostException {
         customerBalancesModifier.editBalance(customer, -cost);
         customerBalancesModifier.editFidelityPoints(customer, (int) cost);
+        updateVFP(customer);
+        return purchaseRecording.recordPurchase(customer, cost, store);
+    }
+
+    private void updateVFP(Customer customer) throws CustomerNotFoundException {
         if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
-            customer.setVfp(LocalDate.now().plusDays(7));
+            customerBalancesModifier.editVFP(customer, LocalDate.now().plusDays(7));
         }
-        return purchase(customer, cost, store);
     }
 }
