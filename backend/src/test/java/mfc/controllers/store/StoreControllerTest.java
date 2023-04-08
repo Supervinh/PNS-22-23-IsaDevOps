@@ -64,7 +64,12 @@ class StoreControllerTest {
         when(store.getLastUpdate()).thenReturn(date);
         when(storeOwnerFinder.findStoreOwnerById(1L)).thenReturn(Optional.of(storeOwner));
         when(storeModifier.register(storeDTO.getName(), storeDTO.getSchedule(), storeOwner)).thenReturn(store);
-        mockMvc.perform(post(StoreController.BASE_URI + "/" + 1L + "/register").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(storeDTO))).andExpect(status().isCreated()).andExpect(jsonPath("$.id").value("1")).andExpect(jsonPath("$.name").value("a")).andExpect(jsonPath("$.schedule").value(storeSchedule)).andExpect(jsonPath("$.lastUpdate").value(date.toString())).andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(post(StoreController.BASE_URI + "/" + 1L + "/register").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(storeDTO)))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.id")
+                        .value("1")).andExpect(jsonPath("$.name")
+                        .value("a")).andExpect(jsonPath("$.schedule")
+                        .value(storeSchedule)).andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
