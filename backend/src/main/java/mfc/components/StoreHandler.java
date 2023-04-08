@@ -3,7 +3,6 @@ package mfc.components;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
 import mfc.exceptions.AlreadyExistingStoreException;
-import mfc.exceptions.NoStoreFoundException;
 import mfc.exceptions.StoreNotFoundException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.modifier.StoreModifier;
@@ -45,12 +44,18 @@ public class StoreHandler implements StoreFinder, StoreModifier {
     }
 
     @Override
-    public Store delete(Store store) throws NoStoreFoundException {
+    public Store delete(Store store) throws StoreNotFoundException {
         if (storeRepository.existsById(store.getId())) {
-            storeRepository.delete(store);
+            storeRepository.deleteFromFavoritesStores(store.getId());
             return store;
         }
-        throw new NoStoreFoundException();
+        throw new StoreNotFoundException();
+    }
+
+    @Override
+    public void deleteStoresByOwner(StoreOwner storeOwner) {
+        storeRepository.findByOwner(storeOwner).forEach(store -> storeRepository.deleteFromFavoritesStores(store.getId()));
+        storeRepository.deleteByOwner(storeOwner);
     }
 
 

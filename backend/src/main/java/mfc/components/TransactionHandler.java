@@ -3,7 +3,7 @@ package mfc.components;
 import mfc.entities.Customer;
 import mfc.entities.Purchase;
 import mfc.entities.Store;
-import mfc.exceptions.CustomerNotFoundException;
+import mfc.exceptions.AccountNotFoundException;
 import mfc.exceptions.InsufficientBalanceException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.interfaces.TransactionProcessor;
@@ -31,7 +31,7 @@ public class TransactionHandler implements TransactionProcessor {
     }
 
     @Override
-    public Purchase purchase(Customer customer, double cost, Store store) throws NegativePointCostException, CustomerNotFoundException {
+    public Purchase purchase(Customer customer, double cost, Store store) throws NegativePointCostException, AccountNotFoundException {
         //gain a point by euro
         customerBalancesModifier.editFidelityPoints(customer, (int) cost);
         updateVFP(customer);
@@ -39,14 +39,14 @@ public class TransactionHandler implements TransactionProcessor {
     }
 
     @Override
-    public Purchase purchaseFidelityCardBalance(Customer customer, double cost, Store store) throws InsufficientBalanceException, CustomerNotFoundException, NegativePointCostException {
+    public Purchase purchaseFidelityCardBalance(Customer customer, double cost, Store store) throws InsufficientBalanceException, AccountNotFoundException, NegativePointCostException {
         customerBalancesModifier.editBalance(customer, -cost);
         customerBalancesModifier.editFidelityPoints(customer, (int) cost);
         updateVFP(customer);
         return purchaseRecording.recordPurchase(customer, cost, store);
     }
 
-    private void updateVFP(Customer customer) throws CustomerNotFoundException {
+    private void updateVFP(Customer customer) throws AccountNotFoundException {
         if (purchaseFinder.lookUpPurchasesByCustomer(customer).stream().filter(e -> e.getDate().isAfter(LocalDate.now().minusDays(7))).count() >= 4) {
             customerBalancesModifier.editVFP(customer, LocalDate.now().plusDays(7));
         }

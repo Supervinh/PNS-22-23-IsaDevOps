@@ -39,7 +39,7 @@ public class StoreOwnerCommands {
             System.out.println("You are not logged in");
             return null;
         }
-        if(cliContext.getLoggedInUser().getClass() != CliStoreOwner.class) {
+        if (cliContext.getLoggedInUser().getClass() != CliStoreOwner.class) {
             System.out.println("You are not a store owner");
             return null;
         }

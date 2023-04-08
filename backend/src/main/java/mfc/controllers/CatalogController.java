@@ -2,7 +2,6 @@ package mfc.controllers;
 
 import mfc.controllers.dto.CatalogDTO;
 import mfc.controllers.dto.DeletePayoffDTO;
-import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.PayoffDTO;
 import mfc.entities.Customer;
 import mfc.entities.Payoff;
@@ -17,7 +16,6 @@ import mfc.interfaces.modifier.CatalogModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -54,59 +52,36 @@ public class CatalogController {
         this.storeFinder = storeFinder;
     }
 
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
-    // (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is
-    // correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained
-    // instructions.
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ErrorDTO handleExceptions(MethodArgumentNotValidException e) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setError("Cannot process catalog information");
-        errorDTO.setDetails(e.getMessage());
-        return errorDTO;
-    }
-
     @GetMapping(path = LOGGED_URI + "availableCatalog")
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
-        Optional<Customer> customer = customerFinder.findCustomerById(customerID);
-        if (customer.isPresent()) {
-            CatalogDTO c = convertCatalogToDTO(catalogExplorer.showAvailablePayoffs((customer.get())));
-            return ResponseEntity.status(HttpStatus.CREATED).body(c);
-        } else throw new CustomerNotFoundException();
+    public ResponseEntity<CatalogDTO> availableCatalog(@PathVariable("customerID") Long customerID) throws AccountNotFoundException {
+        Customer customer = customerFinder.findCustomerById(customerID).orElseThrow(AccountNotFoundException::new);
+        CatalogDTO c = convertCatalogToDTO(catalogExplorer.showAvailablePayoffs((customer)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
 
     @PostMapping(path = LOGGED_URI + "exploreCatalog")
-    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") Long customerID) throws CustomerNotFoundException {
-        Optional<Customer> customer = customerFinder.findCustomerById(customerID);
-        if (customer.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer.get(), string)));
-        } else throw new CustomerNotFoundException();
+    public ResponseEntity<CatalogDTO> exploreCatalog(@RequestBody String string, @PathVariable("customerID") Long customerID) throws AccountNotFoundException {
+        Customer customer = customerFinder.findCustomerById(customerID).orElseThrow(AccountNotFoundException::new);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertCatalogToDTO(catalogExplorer.exploreCatalogue(customer, string)));
     }
 
     @PostMapping(path = STORE_OWNER_URI + "addPayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<PayoffDTO> addPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException {
-        try {
-            Store store = getStore(payoffDTO, storeOwnerID);
-            return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(catalogModifier.addPayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store, payoffDTO.isVfp())));
-        } catch (StoreNotFoundException | NegativeCostException | NegativePointCostException |
-                 AlreadyExistingPayoffException e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<PayoffDTO> addPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws AccountNotFoundException, StoreNotFoundException, NegativePointCostException, NegativeCostException, AlreadyExistingPayoffException {
+        Store store = getStore(payoffDTO, storeOwnerID);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertPayoffToDTO(catalogModifier.addPayOff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store, payoffDTO.isVfp())));
     }
 
-    private Store getStore(PayoffDTO payoffDTO, Long storeOwnerID) throws StoreOwnerNotFoundException, StoreNotFoundException {
-        storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(StoreOwnerNotFoundException::new); // Only for authentication, no point in saving the storeOwner
+    private Store getStore(PayoffDTO payoffDTO, Long storeOwnerID) throws AccountNotFoundException, StoreNotFoundException {
+        storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(AccountNotFoundException::new); // Only for authentication, no point in saving the storeOwner
         return storeFinder.findStoreByName(payoffDTO.getStoreName()).orElseThrow(StoreNotFoundException::new);
     }
 
     @PostMapping(path = STORE_OWNER_URI + "deletePayoff", consumes = APPLICATION_JSON_VALUE)
     // path is a REST CONTROLLER NAME
-    public ResponseEntity<Void> deletePayoff(@RequestBody @Valid DeletePayoffDTO deletePayoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException, CredentialsException, PayoffNotFoundException {
-        StoreOwner storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(StoreOwnerNotFoundException::new);
+    public ResponseEntity<Void> deletePayoff(@RequestBody @Valid DeletePayoffDTO deletePayoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws AccountNotFoundException, CredentialsException, PayoffNotFoundException {
+        StoreOwner storeOwner = storeOwnerFinder.findStoreOwnerById(storeOwnerID).orElseThrow(AccountNotFoundException::new);
         Payoff payOff = catalogExplorer.findPayoff(deletePayoffDTO.getPayoffName(), deletePayoffDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
         if (payOff.getStore().getOwner().equals(storeOwner)) {
             catalogModifier.deletePayoff(payOff);
@@ -115,7 +90,7 @@ public class CatalogController {
     }
 
     @PostMapping(path = STORE_OWNER_URI + "editPayoff", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws StoreOwnerNotFoundException, StoreNotFoundException, NegativePointCostException, NegativeCostException, PayoffNotFoundException {
+    public ResponseEntity<PayoffDTO> editPayoff(@RequestBody @Valid PayoffDTO payoffDTO, @PathVariable("storeOwnerID") Long storeOwnerID) throws AccountNotFoundException, StoreNotFoundException, NegativePointCostException, NegativeCostException, PayoffNotFoundException {
         Store store = getStore(payoffDTO, storeOwnerID);
         Payoff payOff = new Payoff(payoffDTO.getName(), payoffDTO.getCost(), payoffDTO.getPointCost(), store, payoffDTO.isVfp());
         Optional<Double> cost = payOff.getCost() == 0 ? Optional.empty() : Optional.of(payOff.getCost());

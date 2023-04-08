@@ -1,12 +1,12 @@
 package mfc.controllers.dto;
 
 public class PayoffPurchaseDTO {
-    private Long id;
     private final String name;
     private final double cost;
     private final int pointCost;
     private final String storeName;
     private final String customerEmail;
+    private Long id;
 
     public PayoffPurchaseDTO(String name, double cost, int pointCost, String storeName, String customerEmail) {
         this.name = name;

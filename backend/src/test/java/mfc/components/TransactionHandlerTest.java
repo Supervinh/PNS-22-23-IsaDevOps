@@ -3,7 +3,7 @@ package mfc.components;
 import mfc.entities.Customer;
 import mfc.entities.Purchase;
 import mfc.entities.Store;
-import mfc.exceptions.CustomerNotFoundException;
+import mfc.exceptions.AccountNotFoundException;
 import mfc.exceptions.NegativePointCostException;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.PurchaseFinder;
@@ -47,7 +47,7 @@ class TransactionHandlerTest {
     private CustomerProfileModifier customerProfileModifier;
 
     @BeforeEach
-    void setUp() throws CustomerNotFoundException {
+    void setUp() {
         s = new Store("StoreA", null, null);
         customer = new Customer("Mark", "a@a.fr", "password", "0123456789");
         customer.setFidelityPoints(50);
@@ -62,7 +62,7 @@ class TransactionHandlerTest {
     }
 
     @Test
-    void updateVfp() throws NegativePointCostException, CustomerNotFoundException {
+    void updateVfp() throws NegativePointCostException, AccountNotFoundException {
         transactionalHandler.purchase(customer, 40, s);
         Mockito.verify(customerBalancesModifier, Mockito.times(1)).editVFP(customer, LocalDate.now().plusDays(7));
     }

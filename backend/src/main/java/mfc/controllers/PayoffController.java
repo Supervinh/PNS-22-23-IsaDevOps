@@ -47,8 +47,8 @@ public class PayoffController {
     }
 
     @PostMapping(path = LOGGED_URI + "claimPayoff", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") Long customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) throws PayoffNotFoundException, CustomerNotFoundException, NoMatriculationException, NegativePointCostException, VFPExpiredException, ParkingException, InsufficientBalanceException, NoPreviousPurchaseException {
-        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
+    public ResponseEntity<PayoffPurchaseDTO> claimPayoff(@PathVariable("customerId") Long customerId, @RequestBody @Valid PayoffIndentifierDTO payoffIndentifierDTO) throws PayoffNotFoundException, AccountNotFoundException, NoMatriculationException, NegativePointCostException, VFPExpiredException, ParkingException, InsufficientBalanceException, NoPreviousPurchaseException {
+        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(AccountNotFoundException::new);
         Payoff payoff = catalogExplorer.findPayoff(payoffIndentifierDTO.getPayOffName(), payoffIndentifierDTO.getStoreName()).orElseThrow(PayoffNotFoundException::new);
         return ResponseEntity.ok(ConvertDTO.convertPayoffPurchaseToDTO(payOffProcessor.claimPayoff(customer, payoff)));
     }
@@ -56,7 +56,7 @@ public class PayoffController {
     @GetMapping(path = LOGGED_URI + "getNotification")
     public ResponseEntity<NotificationDTO> getNotification(@PathVariable("customerId") long customerId) {
         try {
-            Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
+            Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(AccountNotFoundException::new);
             NotificationDTO notificationDTO = notifications.get(customer.getMatriculation());
             if (!isNull(notificationDTO)) {
                 notifications.remove(notificationDTO.getNumberplate());

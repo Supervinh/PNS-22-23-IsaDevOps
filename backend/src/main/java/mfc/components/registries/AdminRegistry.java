@@ -1,8 +1,8 @@
 package mfc.components.registries;
 
 import mfc.entities.Admin;
+import mfc.exceptions.AccountNotFoundException;
 import mfc.exceptions.AlreadyExistingAccountException;
-import mfc.exceptions.NoCorrespongingAccountException;
 import mfc.interfaces.explorer.AdminFinder;
 import mfc.interfaces.modifier.AdminRegistration;
 import mfc.repositories.AdminRepository;
@@ -52,11 +52,11 @@ public class AdminRegistry implements AdminFinder, AdminRegistration {
     }
 
     @Override
-    public Admin delete(Admin admin) throws NoCorrespongingAccountException {
+    public Admin delete(Admin admin) throws AccountNotFoundException {
         if (adminRepository.existsById(admin.getId())) {
             adminRepository.delete(admin);
             return admin;
         }
-        throw new NoCorrespongingAccountException();
+        throw new AccountNotFoundException();
     }
 }

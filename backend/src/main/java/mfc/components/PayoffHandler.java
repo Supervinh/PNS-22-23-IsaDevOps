@@ -32,7 +32,7 @@ public class PayoffHandler implements PayOffProcessor {
     }
 
     @Override
-    public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws InsufficientBalanceException, VFPExpiredException, NoMatriculationException, ParkingException, CustomerNotFoundException, NoPreviousPurchaseException, NegativePointCostException {
+    public PayoffPurchase claimPayoff(Customer customer, Payoff payoff) throws InsufficientBalanceException, VFPExpiredException, NoMatriculationException, ParkingException, AccountNotFoundException, NoPreviousPurchaseException, NegativePointCostException {
         catalogExplorer.isAvailablePayoff(customer, payoff); //check if payoff is available, throws exception if not
         if (payoff.getName().equals("Parking")) {
             parkingProcessor.useParkingPayOff(customer);

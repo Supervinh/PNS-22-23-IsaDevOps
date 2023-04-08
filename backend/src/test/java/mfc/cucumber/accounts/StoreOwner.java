@@ -3,9 +3,9 @@ package mfc.cucumber.accounts;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import mfc.exceptions.AccountNotFoundException;
 import mfc.exceptions.AlreadyExistingAccountException;
 import mfc.exceptions.AlreadyExistingStoreException;
-import mfc.exceptions.StoreOwnerNotFoundException;
 import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import mfc.repositories.StoreOwnerRepository;
@@ -20,12 +20,11 @@ import static mfc.cucumber.Helper.resetException;
 public class StoreOwner {
 
     @Autowired
+    StoreModifier storeModifier;
+    @Autowired
     private StoreOwnerRegistration storeOwnerRegistration;
     @Autowired
     private StoreOwnerRepository storeOwnerRepository;
-
-    @Autowired
-    StoreModifier storeModifier;
 
     @Before
     public void settingUpContext() {
@@ -45,7 +44,7 @@ public class StoreOwner {
 
 
     @And("{string} own the store {string}")
-    public void ownTheStore(String owner, String string) throws StoreOwnerNotFoundException, AlreadyExistingStoreException {
-        storeModifier.register(string, new HashMap<>(), storeOwnerRepository.findStoreOwnerByName(owner).orElseThrow(StoreOwnerNotFoundException::new));
+    public void ownTheStore(String owner, String string) throws AccountNotFoundException, AlreadyExistingStoreException {
+        storeModifier.register(string, new HashMap<>(), storeOwnerRepository.findStoreOwnerByName(owner).orElseThrow(AccountNotFoundException::new));
     }
 }

@@ -37,8 +37,8 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     }
 
     @Override
-    public Customer delete(Customer customer) throws NoCorrespongingAccountException {
-        findCustomerByMail(customer.getMail()).orElseThrow(NoCorrespongingAccountException::new);
+    public Customer delete(Customer customer) throws AccountNotFoundException {
+        findCustomerByMail(customer.getMail()).orElseThrow(AccountNotFoundException::new);
         customerRepository.delete(customer);
         return customer;
     }
@@ -71,15 +71,15 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
     }
 
     @Override
-    public Customer editVFP(Customer customer, LocalDate localDate) throws CustomerNotFoundException {
-        Customer customerUpdatedVFP = customerRepository.findById(customer.getId()).orElseThrow(CustomerNotFoundException::new);
+    public Customer editVFP(Customer customer, LocalDate localDate) throws AccountNotFoundException {
+        Customer customerUpdatedVFP = customerRepository.findById(customer.getId()).orElseThrow(AccountNotFoundException::new);
         customerUpdatedVFP.setVfp(localDate);
         customerRepository.save(customerUpdatedVFP);
         return customerUpdatedVFP;
     }
 
     @Override
-    public Customer editBalance(Customer customer, double balanceChange) throws InsufficientBalanceException, CustomerNotFoundException {
+    public Customer editBalance(Customer customer, double balanceChange) throws InsufficientBalanceException, AccountNotFoundException {
         Optional<Customer> customerUpdatedBalance = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedBalance.isPresent()) {
             customerUpdatedBalance.get().setBalance(customerUpdatedBalance.get().getBalance() + balanceChange);
@@ -87,11 +87,11 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
             customerRepository.save(customerUpdatedBalance.get());
             return customerUpdatedBalance.get();
         }
-        throw new CustomerNotFoundException();
+        throw new AccountNotFoundException();
     }
 
     @Override
-    public Customer editFidelityPoints(Customer customer, int fidelityPointsBalanceChange) throws NegativePointCostException, CustomerNotFoundException {
+    public Customer editFidelityPoints(Customer customer, int fidelityPointsBalanceChange) throws NegativePointCostException, AccountNotFoundException {
         Optional<Customer> customerUpdatedFidelityPoints = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedFidelityPoints.isPresent()) {
             customerUpdatedFidelityPoints.get().setFidelityPoints(customerUpdatedFidelityPoints.get().getFidelityPoints() + fidelityPointsBalanceChange);
@@ -99,45 +99,45 @@ public class CustomerRegistry implements CustomerRegistration, CustomerFinder, C
             customerRepository.save(customerUpdatedFidelityPoints.get());
             return customerUpdatedFidelityPoints.get();
         }
-        throw new CustomerNotFoundException();
+        throw new AccountNotFoundException();
     }
 
     @Override
-    public Customer recordMatriculation(Customer customer, String matriculation) throws CustomerNotFoundException {
+    public Customer recordMatriculation(Customer customer, String matriculation) throws AccountNotFoundException {
         Optional<Customer> customerUpdatedMatriculation = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedMatriculation.isPresent()) {
             customerUpdatedMatriculation.get().setMatriculation(matriculation);
             customerRepository.save(customerUpdatedMatriculation.get());
             return customerUpdatedMatriculation.get();
         }
-        throw new CustomerNotFoundException();
+        throw new AccountNotFoundException();
     }
 
     @Override
-    public Customer recordCreditCard(Customer customer, String creditCard) throws CustomerNotFoundException {
+    public Customer recordCreditCard(Customer customer, String creditCard) throws AccountNotFoundException {
         Optional<Customer> customerUpdatedCreditCard = customerRepository.findCustomerByMail(customer.getMail());
         if (customerUpdatedCreditCard.isPresent()) {
             customerUpdatedCreditCard.get().setCreditCard(creditCard);
             customerRepository.save(customerUpdatedCreditCard.get());
             return customerUpdatedCreditCard.get();
         }
-        throw new CustomerNotFoundException();
+        throw new AccountNotFoundException();
 
     }
 
     @Override
-    public Customer recordNewFavoriteStore(Customer customer, Store store) throws CustomerNotFoundException, StoreAlreadyRegisteredException {
-        Customer customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName()).orElseThrow(CustomerNotFoundException::new);
+    public Customer recordNewFavoriteStore(Customer customer, Store store) throws AccountNotFoundException, AlreadyRegisteredStoreException {
+        Customer customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName()).orElseThrow(AccountNotFoundException::new);
         if (customerUpdatedFavoriteStore.getFavoriteStores().stream().anyMatch(e -> e.equals(store)))
-            throw new StoreAlreadyRegisteredException();
+            throw new AlreadyRegisteredStoreException();
         customerUpdatedFavoriteStore.getFavoriteStores().add(store);
         customerRepository.save(customerUpdatedFavoriteStore);
         return customerUpdatedFavoriteStore;
     }
 
     @Override
-    public Customer removeFavoriteStore(Customer customer, Store store) throws StoreNotFoundException, CustomerNotFoundException {
-        Customer customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName()).orElseThrow(CustomerNotFoundException::new);
+    public Customer removeFavoriteStore(Customer customer, Store store) throws StoreNotFoundException, AccountNotFoundException {
+        Customer customerUpdatedFavoriteStore = customerRepository.findCustomerByName(customer.getName()).orElseThrow(AccountNotFoundException::new);
         if (customerUpdatedFavoriteStore.getFavoriteStores().stream().noneMatch(e -> e.equals(store)))
             throw new StoreNotFoundException();
         customerUpdatedFavoriteStore.getFavoriteStores().remove(store);

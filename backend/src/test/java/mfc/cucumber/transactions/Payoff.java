@@ -58,7 +58,7 @@ public class Payoff {
     @When("{string} use points to buy {string} at {string}")
     public void usePointsToBuy(String name, String payoffName, String storeName) {
         try {
-            Customer customer = customerFinder.findCustomerByName(name).orElseThrow(CustomerNotFoundException::new);
+            Customer customer = customerFinder.findCustomerByName(name).orElseThrow(AccountNotFoundException::new);
             mfc.entities.Payoff payoff = catalogExplorer.findPayoff(payoffName, storeName).orElseThrow(PayoffNotFoundException::new);
             payOffProcessor.claimPayoff(customer, payoff);
         } catch (Exception e) {

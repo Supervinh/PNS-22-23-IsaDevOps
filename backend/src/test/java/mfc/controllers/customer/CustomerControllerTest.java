@@ -32,24 +32,18 @@ class CustomerControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
-
     @MockBean
     CustomerRegistration customerRegistration;
-
     @MockBean
     CustomerFinder customerFinder;
-
     @MockBean
     CustomerProfileModifier customerProfileModifier;
-
     @MockBean
     CustomerBalancesModifier customerBalancesModifier;
-
     @MockBean
     Payment payment;
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void registerCustomerWithoutCreditCard() throws Exception {
@@ -138,7 +132,7 @@ class CustomerControllerTest {
         when(customer.getMatriculation()).thenReturn("XX-XX-XX");
         when(customerFinder.findCustomerById(customer.getId())).thenReturn(Optional.of(customer));
         when(customerProfileModifier.recordMatriculation
-                (customer,"XX-XX-XX")).thenReturn(customer);
+                (customer, "XX-XX-XX")).thenReturn(customer);
         mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/modifyMatriculation")
                         .contentType(MediaType.ALL_VALUE)
                         .content("XX-XX-XX"))
@@ -150,7 +144,6 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }
-
 
 
     @Test

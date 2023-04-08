@@ -4,9 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.StoreOwnerController;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.CredentialsException;
-import mfc.exceptions.StoreNotFoundException;
-import mfc.exceptions.StoreOwnerNotFoundException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreModifier;
@@ -18,13 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.util.NestedServletException;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,23 +31,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class StoreOwnerControllerIT {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     StoreOwnerFinder storeOwnerFinder;
-
     @Autowired
     StoreOwnerRegistration storeOwnerRegistration;
-
     @Autowired
     StoreModifier storeModifier;
-
     @Autowired
     StoreFinder storeFinder;
-
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void registerStoreOwner() throws Exception {
@@ -267,30 +256,19 @@ class StoreOwnerControllerIT {
         String storeName = "store";
         Map<String, String> storeSchedule = new HashMap<>();
         storeModifier.register(storeName, storeSchedule, owner);
-        assertThrows(StoreOwnerNotFoundException.class, () -> {
-            try {
-                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + -1L + "/dashboard/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(storeName));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + -1L + "/dashboard/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(storeName)).andExpect(status().isNotFound());
     }
 
     @Test
     void retrieveDashBordForUnknownStore() throws Exception {
         StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
         String storeName = "store";
-        assertThrows(StoreNotFoundException.class, () -> {
-            try {
-                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(storeName));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(storeName)).andExpect(status().isNotFound());
+
     }
 
     @Test
@@ -300,15 +278,9 @@ class StoreOwnerControllerIT {
         String storeName = "store";
         Map<String, String> storeSchedule = new HashMap<>();
         storeModifier.register(storeName, storeSchedule, secondOwner);
-        assertThrows(CredentialsException.class, () -> {
-            try {
-                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(storeName));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(storeName)).andExpect(status().isUnauthorized());
     }
 
     @Test

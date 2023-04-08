@@ -46,7 +46,7 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
-        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+        if (cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
             System.out.println("You are not a customer");
             return null;
         }
@@ -59,7 +59,7 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
-        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+        if (cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
             System.out.println("You are not a customer");
             return null;
         }
@@ -72,7 +72,7 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
-        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+        if (cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
             System.out.println("You are not a customer");
             return null;
         }
@@ -89,7 +89,7 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
-        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+        if (cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
             System.out.println("You are not a customer");
             return null;
         }
@@ -106,7 +106,7 @@ public class CustomerCommands {
             System.out.println("You are not logged in");
             return null;
         }
-        if(cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
+        if (cliContext.getLoggedInUser().getClass() != CliCustomer.class) {
             System.out.println("You are not a customer");
             return null;
         }

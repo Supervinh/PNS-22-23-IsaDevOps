@@ -1,8 +1,8 @@
 package mfc.interfaces.explorer;
 
 import mfc.entities.Customer;
+import mfc.exceptions.AccountNotFoundException;
 import mfc.exceptions.CredentialsException;
-import mfc.exceptions.CustomerNotFoundException;
 
 import java.util.Optional;
 
@@ -13,5 +13,5 @@ public interface CustomerFinder {
 
     Optional<Customer> findCustomerByName(String name);
 
-    Optional<Customer> findCustomerAtConnexion(String mail, String password) throws CredentialsException, CustomerNotFoundException;
+    Optional<Customer> findCustomerAtConnexion(String mail, String password) throws CredentialsException, AccountNotFoundException;
 }

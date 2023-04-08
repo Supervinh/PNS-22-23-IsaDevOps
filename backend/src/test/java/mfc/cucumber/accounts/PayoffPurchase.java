@@ -2,7 +2,7 @@ package mfc.cucumber.accounts;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
-import mfc.exceptions.CustomerNotFoundException;
+import mfc.exceptions.AccountNotFoundException;
 import mfc.exceptions.PayoffPurchaseNotFoundException;
 import mfc.exceptions.StoreNotFoundException;
 import mfc.interfaces.explorer.CustomerFinder;
@@ -35,7 +35,7 @@ public class PayoffPurchase {
     @And("a payoff is registered for {string} with {string} as payoff and {string} as store")
     public void aPayoffIsRegisteredForWithAsPayoffAndAsStore(String customer, String payoff, String store) {
         assertDoesNotThrow(() -> payoffPurchaseRepository.findByCustomerAndStoreAndName(
-                customerFinder.findCustomerByName(customer).orElseThrow(CustomerNotFoundException::new),
+                customerFinder.findCustomerByName(customer).orElseThrow(AccountNotFoundException::new),
                 storeFinder.findStoreByName(store).orElseThrow(StoreNotFoundException::new),
                 payoff).orElseThrow(PayoffPurchaseNotFoundException::new));
     }
