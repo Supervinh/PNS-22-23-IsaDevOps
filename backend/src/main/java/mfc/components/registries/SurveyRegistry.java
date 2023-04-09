@@ -3,11 +3,11 @@ package mfc.components.registries;
 import mfc.entities.Customer;
 import mfc.entities.Survey;
 import mfc.exceptions.AlreadyAnsweredException;
+import mfc.exceptions.AlreadyExistingSurveyException;
 import mfc.exceptions.InvalidAnswerException;
-import mfc.exceptions.SurveyAlreadyExistsException;
 import mfc.exceptions.SurveyNotFoundException;
-import mfc.interfaces.SurveyFinder;
-import mfc.interfaces.SurveyModifier;
+import mfc.interfaces.explorer.SurveyFinder;
+import mfc.interfaces.modifier.SurveyModifier;
 import mfc.repositories.SurveyRepository;
 import org.springframework.stereotype.Component;
 
@@ -32,11 +32,6 @@ public class SurveyRegistry implements SurveyFinder, SurveyModifier {
     }
 
     @Override
-    public Set<Survey> getSurveys() {
-        return surveyRepository.findAllSet();
-    }
-
-    @Override
     public Set<Survey> findByCustomerDidntAnswered(Customer customer) {
         return surveyRepository.findAll().stream().filter(e -> !e.getCustomersAnswered().contains(customer)).collect(Collectors.toSet());
     }
@@ -58,9 +53,9 @@ public class SurveyRegistry implements SurveyFinder, SurveyModifier {
     }
 
     @Override
-    public Survey createSurvey(Survey survey) throws SurveyAlreadyExistsException {
+    public Survey createSurvey(Survey survey) throws AlreadyExistingSurveyException {
         if (surveyRepository.findByName(survey.getName()).isPresent()) {
-            throw new SurveyAlreadyExistsException();
+            throw new AlreadyExistingSurveyException();
         }
         return surveyRepository.save(survey);
     }

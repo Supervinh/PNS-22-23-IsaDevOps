@@ -13,10 +13,9 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class BankProxy implements Bank {
 
+    private final RestTemplate restTemplate = new RestTemplate();
     @Value("${bank.host.baseurl}")
     private String bankHostandPort;
-
-    private RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public boolean pay(Customer customer, double value) {

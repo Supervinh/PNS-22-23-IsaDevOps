@@ -6,8 +6,6 @@ import mfc.controllers.dto.CustomerDTO;
 import mfc.entities.Customer;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
-import mfc.interfaces.Bank;
-import mfc.interfaces.Payment;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
 import mfc.interfaces.modifier.StoreModifier;
@@ -22,9 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,20 +36,15 @@ class CustomerControllerIT {
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     CustomerRegistration customerRegistration;
-
     @Autowired
     StoreOwnerRegistration storeOwnerRegistration;
-
     @Autowired
     StoreModifier storeModifier;
-
     @Autowired
     CustomerProfileModifier customerProfileModifier;
-
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void registerCustomerWithInvalidCreditCard() throws Exception {
@@ -236,7 +227,6 @@ class CustomerControllerIT {
         Customer customer = customerRegistration.register("a", "a@a", "pwd", "");
         StoreOwner storeOwner = storeOwnerRegistration.registerStoreOwner("StoreOwner", "store@owner", "pwd");
         Store store = storeModifier.register("store", new HashMap<>(), storeOwner);
-        List<Store> favoriteStores = new ArrayList<>();
         customerProfileModifier.recordNewFavoriteStore(customer, store);
         mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/removeFavoriteStore")
                         .contentType(MediaType.ALL_VALUE)
@@ -360,7 +350,7 @@ class CustomerControllerIT {
         mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/refill")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(String.valueOf(amount)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isPreconditionFailed());
     }
 
 
@@ -371,6 +361,6 @@ class CustomerControllerIT {
         mockMvc.perform(post(CustomerController.BASE_URI + "/" + customer.getId() + "/refill")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(String.valueOf(amount)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isPreconditionFailed());
     }
 }

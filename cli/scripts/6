@@ -1,0 +1,25 @@
+login-owner ow@ner pwd
+add-payoff expensivePayoff 50 25 dashStore
+add-payoff mediumPayoff 30 15 dashStore
+add-payoff lowPayoff 10 5 dashStore
+
+add-purchase dashStore firstCustomer@customer.fr 15
+add-purchase dashStore firstCustomer@culogustomer.fr 25
+add-purchase dashStore secondCustomer@customer.fr 50
+add-purchase dashStore thirdCustomer@customer.fr 80
+add-purchase dashStore firstCustomer@customer.fr 35
+logout
+
+
+login-customer firstCustomer@customer.fr abc
+claim-payoff dashStore expensivePayoff
+claim-payoff dashStore lowPayoff
+logout
+
+login-customer thirdCustomer@customer.fr abc
+claim-payoff dashStore mediumPayoff
+logout
+
+login-owner ow@ner pwd
+dashboard dashStore
+logout

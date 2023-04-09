@@ -2,18 +2,21 @@ package mfc.components;
 
 import mfc.components.registries.CatalogRegistry;
 import mfc.components.registries.CustomerRegistry;
-import mfc.entities.*;
+import mfc.entities.Customer;
+import mfc.entities.Payoff;
+import mfc.entities.PayoffPurchase;
+import mfc.entities.Store;
 import mfc.exceptions.*;
 import mfc.interfaces.explorer.PurchaseFinder;
 import mfc.interfaces.modifier.PurchaseRecording;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,14 +39,14 @@ class PayoffHandlerTest {
     @MockBean
     PurchaseRecording purchaseRecording;
     @MockBean
+    PurchaseFinder purchaseFinder;
+    @MockBean
     private CustomerRegistry customerRegistry;
     @Autowired
     private PayoffHandler payoffHandler;
-    @MockBean
-    private PurchaseFinder purchaseFinder;
 
     @BeforeEach
-    void setUp() throws NegativePointCostException, CustomerNotFoundException {
+    void setUp() throws NegativePointCostException, AccountNotFoundException {
         low = new Payoff("low", 10, 10, new Store("StoreA", null, null), false);
         medium = new Payoff("medium", 25, 25, new Store("StoreA", null, null), false);
         expensive = new Payoff("expensive", 50, 50, new Store("StoreC", null, null), false);
@@ -51,45 +54,18 @@ class PayoffHandlerTest {
         customer = new Customer("Mark", "a@a.fr", "password", "0123456789");
         noPayOffCustomer = new Customer("Mark", "a@a.fr", "password", "0123456789");
         customer.setFidelityPoints(50);
-        when(catalogRegistry.showAvailablePayoffs(customer)).thenReturn(payoffs);
-        when(catalogRegistry.showAvailablePayoffs(noPayOffCustomer)).thenReturn(new HashSet<>());
         when(customerRegistry.editVFP(eq(customer), any())).thenReturn(customer);
         when(customerRegistry.editFidelityPoints(eq(customer), anyInt())).thenReturn(customer);
-        Purchase purchase1 = new Purchase(200, customer, low.getStore());
-        purchase1.setDate(LocalDate.now().minusDays(6));
-        Purchase purchase2 = new Purchase(200, customer, low.getStore());
-        purchase2.setDate(LocalDate.now().minusDays(4));
-        Purchase purchase3 = new Purchase(200, customer, low.getStore());
-        purchase3.setDate(LocalDate.now().minusDays(5));
-        Purchase purchase4 = new Purchase(200, customer, low.getStore());
-        when(purchaseFinder.lookUpPurchasesByCustomer(any())).thenReturn(Set.of(purchase1, purchase2, purchase3, purchase4));
     }
 
     @Test
-    void claimPayoff() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, PayoffNotFoundException, NoPreviousPurchaseException {
+    void claimPayoff() throws VFPExpiredException, NegativePointCostException, AccountNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, NoPreviousPurchaseException {
         assertEquals(new PayoffPurchase("low", 10, 10, low.getStore(), customer), payoffHandler.claimPayoff(customer, low));
     }
 
-//    @Test
-//    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, CustomerNotFoundException, NoMatriculationException, ParkingException, InsufficientBalanceException, PayoffNotFoundException, NoPreviousPurchaseException {
-//        payoffHandler.claimPayoff(customer, low);
-//        Mockito.verify(customerRegistry, Mockito.times(1)).editFidelityPoints(customer, -10);
-//        Mockito.verify(customerRegistry, Mockito.times(1)).editVFP(customer, LocalDate.now().plusDays(2));
-//    }
-
-//    @Test
-//    void claimPayoffInvalid() {
-//        assertThrows(VFPExpiredException.class, () -> payoffHandler.claimPayoff(customer, expensive));
-//    }
-//
-//    @Test
-//    void claimPayoffNoPayoff() {
-//        assertThrows(VFPExpiredException.class, () -> payoffHandler.claimPayoff(noPayOffCustomer, low));
-//    }
-
     @Test
-    void updateVfp() throws NoMatriculationException, NegativePointCostException, VFPExpiredException, ParkingException, InsufficientBalanceException, CustomerNotFoundException, NoPreviousPurchaseException {
+    void claimPayoffEditCustomer() throws VFPExpiredException, NegativePointCostException, NoMatriculationException, ParkingException, InsufficientBalanceException, NoPreviousPurchaseException, AccountNotFoundException {
         payoffHandler.claimPayoff(customer, low);
-        assertEquals(LocalDate.now().plusDays(7), customer.getVfp());
+        Mockito.verify(customerRegistry, Mockito.times(1)).editFidelityPoints(customer, -10);
     }
 }

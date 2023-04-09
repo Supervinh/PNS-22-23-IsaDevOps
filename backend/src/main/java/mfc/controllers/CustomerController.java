@@ -2,26 +2,23 @@ package mfc.controllers;
 
 import mfc.controllers.dto.ConvertDTO;
 import mfc.controllers.dto.CustomerDTO;
-import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.SurveyDTO;
 import mfc.entities.Customer;
 import mfc.entities.Store;
 import mfc.exceptions.*;
 import mfc.interfaces.Payment;
-import mfc.interfaces.SurveyFinder;
 import mfc.interfaces.explorer.CustomerFinder;
 import mfc.interfaces.explorer.StoreFinder;
+import mfc.interfaces.explorer.SurveyFinder;
 import mfc.interfaces.modifier.CustomerProfileModifier;
 import mfc.interfaces.modifier.CustomerRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 import static mfc.controllers.dto.ConvertDTO.convertCustomerToDto;
 import static org.springframework.http.MediaType.ALL_VALUE;
@@ -56,118 +53,73 @@ public class CustomerController {
         this.storeFinder = storeFinder;
     }
 
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
-    // (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is
-    // correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained
-    // instructions.
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ErrorDTO handleExceptions(MethodArgumentNotValidException e) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setError("Cannot process Customer information");
-        errorDTO.setDetails(e.getMessage());
-        return errorDTO;
-    }
-
     @PostMapping(path = "registerCustomer", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
-    public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) {
+    public ResponseEntity<CustomerDTO> register(@RequestBody @Valid CustomerDTO cusdto) throws AlreadyExistingAccountException {
         // Note that there is no validation at all on the CustomerDto mapped
         String creditCard = cusdto.getCreditCard();
         if (!creditCard.equals("") && !creditCard.matches("\\d{10}+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(convertCustomerToDto(customerRegistration.register(cusdto.getName(), cusdto.getMail(), cusdto.getPassword(), creditCard)));
-        } catch (AlreadyExistingAccountException e) {
-            // Note: Returning 409 (Conflict) can also be seen a security/privacy vulnerability, exposing a service for account enumeration
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertCustomerToDto(customerRegistration.register(cusdto.getName(), cusdto.getMail(), cusdto.getPassword(), creditCard)));
     }
 
     @PostMapping(path = "loginCustomer", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> login(@RequestBody @Valid CustomerDTO cusdto) throws CustomerNotFoundException, CredentialsException {
-        Optional<Customer> customer = customerFinder.findCustomerAtConnexion(cusdto.getMail(), cusdto.getPassword());
-        if (customer.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        CustomerDTO c = convertCustomerToDto(customer.get());
-        List<SurveyDTO> surveys = surveyFinder.findByCustomerDidntAnswered(customer.get()).stream().map(ConvertDTO::convertToSurveyDisplayDto).toList();
+    public ResponseEntity<CustomerDTO> login(@RequestBody @Valid CustomerDTO cusdto) throws AccountNotFoundException, CredentialsException {
+        Customer customer = customerFinder.findCustomerAtConnexion(cusdto.getMail(), cusdto.getPassword()).orElseThrow(AccountNotFoundException::new);
+        CustomerDTO c = convertCustomerToDto(customer);
+        List<SurveyDTO> surveys = surveyFinder.findByCustomerDidntAnswered(customer).stream().map(ConvertDTO::convertToSurveyDisplayDto).toList();
         c.setSurveysToAnswer(surveys);
-        c.setLastConnexion(customer.get().getLastConnexion());
+        c.setLastConnexion(customer.getLastConnexion());
         return ResponseEntity.status(HttpStatus.OK).body(c);
 
     }
 
     @PostMapping(path = LOGGED_URI + "modifyCreditCard", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") Long customerId, @RequestBody @Valid String creditCard) throws CustomerNotFoundException {
+    public ResponseEntity<CustomerDTO> modifyCreditCard(@PathVariable("customerId") Long customerId, @RequestBody @Valid String creditCard) throws AccountNotFoundException {
         if (!creditCard.matches("\\d{10}+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok().body(
-                convertCustomerToDto(
-                        customerProfileModifier.recordCreditCard(
-                                customerFinder.findCustomerById(customerId).orElseThrow(), creditCard)));
+        return ResponseEntity.ok().body(convertCustomerToDto(customerProfileModifier.recordCreditCard(customerFinder.findCustomerById(customerId).orElseThrow(), creditCard)));
 
     }
 
     @PostMapping(path = LOGGED_URI + "modifyMatriculation", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> modifyMatriculation(@PathVariable("customerId") Long customerId, @RequestBody @Valid String matriculation) throws CustomerNotFoundException {
+    public ResponseEntity<CustomerDTO> modifyMatriculation(@PathVariable("customerId") Long customerId, @RequestBody @Valid String matriculation) throws AccountNotFoundException {
         return ResponseEntity.ok().body(convertCustomerToDto(customerProfileModifier.recordMatriculation(customerFinder.findCustomerById(customerId).orElseThrow(), matriculation)));
     }
 
     @PostMapping(path = LOGGED_URI + "refill", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") Long customerId) throws NoCreditCardException, PaymentException, NegativeRefillException {
-        Optional<Customer> customer = customerFinder.findCustomerById(customerId);
-        if (customer.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        if(customer.get().getCreditCard().equals("")){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    public ResponseEntity<CustomerDTO> refill(@RequestBody @Valid double amount, @PathVariable("customerId") Long customerId) throws NoCreditCardException, PaymentException, NegativeRefillException, AccountNotFoundException {
+        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(AccountNotFoundException::new);
+        if (customer.getCreditCard().equals("")) {
+            throw new NoCreditCardException();
         }
         if (amount <= 0) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            throw new NegativeRefillException();
         }
-        return ResponseEntity.ok().body(convertCustomerToDto(payment.refillBalance(customer.get(), amount)));
+        return ResponseEntity.ok().body(convertCustomerToDto(payment.refillBalance(customer, amount)));
     }
 
     @DeleteMapping(path = LOGGED_URI + "deleteCustomer")
-    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("customerId") Long customerId) throws CustomerNotFoundException, NoCorrespongingAccountException {
-        try {
-            Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(CustomerNotFoundException::new);
-            customerRegistration.delete(customer);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("customerId") Long customerId) throws AccountNotFoundException {
+        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(AccountNotFoundException::new);
+        customerRegistration.delete(customer);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(path = LOGGED_URI + "removeFavoriteStore", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> removeFavoriteStore(@PathVariable("customerId") Long customerId, @RequestBody @Valid String storeName) throws CustomerNotFoundException, StoreNotFoundException {
-
-            Optional<Customer> customer = customerFinder.findCustomerById(customerId);
-            Optional<Store> store = storeFinder.findStoreByName(storeName);
-            if(customer.isEmpty() || store.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            if(!customer.get().getFavoriteStores().contains(store.get())){
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            }
-            return ResponseEntity.ok().body(ConvertDTO.convertCustomerToDto(customerProfileModifier.removeFavoriteStore(customer.get(), store.get())));
+    public ResponseEntity<CustomerDTO> removeFavoriteStore(@PathVariable("customerId") Long customerId, @RequestBody @Valid String storeName) throws AccountNotFoundException, StoreNotFoundException {
+        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(AccountNotFoundException::new);
+        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
+        return ResponseEntity.ok().body(ConvertDTO.convertCustomerToDto(customerProfileModifier.removeFavoriteStore(customer, store)));
 
     }
 
     @PostMapping(path = LOGGED_URI + "addFavoriteStore", consumes = ALL_VALUE)
-    public ResponseEntity<CustomerDTO> addFavoriteStore(@PathVariable("customerId") Long customerId, @RequestBody @Valid String storeName) throws CustomerNotFoundException, StoreNotFoundException, StoreAlreadyRegisteredException {
-            Optional<Customer> customer = customerFinder.findCustomerById(customerId);
-            Optional<Store> store = storeFinder.findStoreByName(storeName);
-            if(customer.isEmpty() || store.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            if(customer.get().getFavoriteStores().contains(store.get())){
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            }
-            return ResponseEntity.ok().body(ConvertDTO.convertCustomerToDto(customerProfileModifier.recordNewFavoriteStore(customer.get(), store.get())));
+    public ResponseEntity<CustomerDTO> addFavoriteStore(@PathVariable("customerId") Long customerId, @RequestBody @Valid String storeName) throws AccountNotFoundException, StoreNotFoundException, AlreadyRegisteredStoreException {
+        Customer customer = customerFinder.findCustomerById(customerId).orElseThrow(AccountNotFoundException::new);
+        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
+        return ResponseEntity.ok().body(ConvertDTO.convertCustomerToDto(customerProfileModifier.recordNewFavoriteStore(customer, store)));
     }
 }
 

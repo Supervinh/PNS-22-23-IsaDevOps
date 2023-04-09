@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CustomerDTO {
 
-    private Long id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
+    private final Long id; // expected to be empty when POSTing the creation of Customer, and containing the UUID when returned
 
     @NotBlank(message = "name should not be blank")
     private String name;

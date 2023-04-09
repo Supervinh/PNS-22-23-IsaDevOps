@@ -4,9 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.StoreOwnerController;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.CredentialsException;
-import mfc.exceptions.StoreNotFoundException;
-import mfc.exceptions.StoreOwnerNotFoundException;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
 import mfc.interfaces.modifier.StoreModifier;
@@ -18,13 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.util.NestedServletException;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,27 +31,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class StoreOwnerControllerIT {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     StoreOwnerFinder storeOwnerFinder;
-
     @Autowired
     StoreOwnerRegistration storeOwnerRegistration;
-
     @Autowired
     StoreModifier storeModifier;
-
     @Autowired
     StoreFinder storeFinder;
-
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void registerStoreOwner() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "a", "a@a", "pwd"))))
@@ -70,8 +58,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyName() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
-
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", "a@a", "pwd"))))
@@ -82,8 +68,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
-
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "a", "a@a", ""))))
@@ -94,8 +78,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyNameAndMail() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
-
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", null, "pwd"))))
@@ -106,7 +88,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyNameAndPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", "a@a", ""))))
@@ -117,7 +98,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyMailAndPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "a", null, ""))))
@@ -128,7 +108,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyNameAndMailAndPassword() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, "", null, ""))))
@@ -139,7 +118,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyBody() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO())))
@@ -150,7 +128,6 @@ class StoreOwnerControllerIT {
 
     @Test
     void registerStoreOwnerWithEmptyBodyAndNull() throws Exception {
-        StoreOwner owner = new StoreOwner("a", "a@a", "pwd");
         mockMvc.perform(post(StoreOwnerController.BASE_URI + "/registerOwner")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new StoreOwnerDTO(null, null, null, null))))
@@ -279,30 +256,19 @@ class StoreOwnerControllerIT {
         String storeName = "store";
         Map<String, String> storeSchedule = new HashMap<>();
         storeModifier.register(storeName, storeSchedule, owner);
-        assertThrows(StoreOwnerNotFoundException.class, () -> {
-            try {
-                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + -1L + "/dashboard/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(storeName));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + -1L + "/dashboard/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(storeName)).andExpect(status().isNotFound());
     }
 
     @Test
     void retrieveDashBordForUnknownStore() throws Exception {
         StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
         String storeName = "store";
-        assertThrows(StoreNotFoundException.class, () -> {
-            try {
-                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(storeName));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(storeName)).andExpect(status().isNotFound());
+
     }
 
     @Test
@@ -312,15 +278,9 @@ class StoreOwnerControllerIT {
         String storeName = "store";
         Map<String, String> storeSchedule = new HashMap<>();
         storeModifier.register(storeName, storeSchedule, secondOwner);
-        assertThrows(CredentialsException.class, () -> {
-            try {
-                mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(storeName));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
+        mockMvc.perform(post(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/dashboard/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(storeName)).andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -353,72 +313,5 @@ class StoreOwnerControllerIT {
         mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + "/deleteStoreOwner")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void deleteStore() throws Exception {
-        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
-        String storeName = "store";
-        Map<String, String> storeSchedule = new HashMap<>();
-        storeModifier.register(storeName, storeSchedule, owner);
-
-        mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/deleteStore/" + storeName)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void deleteStoreWithUnknownId() throws Exception {
-        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
-        String storeName = "store";
-        Map<String, String> storeSchedule = new HashMap<>();
-        storeModifier.register(storeName, storeSchedule, owner);
-
-        assertThrows(StoreOwnerNotFoundException.class, () -> {
-            try {
-                mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + -1L + "/deleteStore/" + storeName)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isNotFound());
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
-    }
-
-    @Test
-    void deleteStoreWithUnknownStoreName() throws Exception {
-        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
-        String storeName = "store";
-        Map<String, String> storeSchedule = new HashMap<>();
-        storeModifier.register(storeName, storeSchedule, owner);
-
-        assertThrows(StoreNotFoundException.class, () -> {
-            try {
-                mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/deleteStore/" + "store1")
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isNotFound());
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
-    }
-
-    @Test
-    void deleteNotOwnedStore() throws Exception {
-        StoreOwner owner = storeOwnerRegistration.registerStoreOwner("a", "a@a", "pwd");
-        StoreOwner secondOwner = storeOwnerRegistration.registerStoreOwner("b", "b@b", "pwd");
-        String storeName = "store";
-        Map<String, String> storeSchedule = new HashMap<>();
-        storeModifier.register(storeName, storeSchedule, secondOwner);
-
-        assertThrows(CredentialsException.class, () -> {
-            try {
-                mockMvc.perform(delete(StoreOwnerController.BASE_URI + "/" + owner.getId() + "/deleteStore/" + storeName)
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isNotFound());
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
     }
 }

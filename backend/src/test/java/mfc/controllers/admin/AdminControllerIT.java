@@ -3,11 +3,7 @@ package mfc.controllers.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mfc.controllers.AdminController;
 import mfc.controllers.dto.AdminDTO;
-import mfc.entities.Admin;
-import mfc.exceptions.StoreOwnerNotFoundException;
 import mfc.interfaces.modifier.AdminRegistration;
-import mfc.repositories.AdminRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,12 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.util.NestedServletException;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -59,8 +52,6 @@ class AdminControllerIT {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnprocessableEntity());
     }
-
-    //TODO registerAdminWeakPassword
 
     @Test
     void registerAdminExists() throws Exception {

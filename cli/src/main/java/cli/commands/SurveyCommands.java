@@ -22,7 +22,7 @@ public class SurveyCommands {
         this.cliContext = cliContext;
     }
 
-    @ShellMethod("Answer a survey.txt (answerSurvey SURVEY_NAME ANSWER)")
+    @ShellMethod("Answer a survey (answerSurvey SURVEY_NAME ANSWER)")
     public CliSurvey answerSurvey(String name, String answer) {
         if (cliContext.getLoggedInUser() == null) {
             System.out.println("You are not logged in");
@@ -31,7 +31,7 @@ public class SurveyCommands {
         return restTemplate.postForObject(getUri() + "/answer/" + name, answer, CliSurvey.class);
     }
 
-    @ShellMethod("Show survey.txt (showSurvey SURVEY_NAME)")
+    @ShellMethod("Show survey (showSurvey SURVEY_NAME)")
     public CliSurvey showSurvey(String name) {
         if (cliContext.getLoggedInUser() == null) {
             System.out.println("You are not logged in");
@@ -40,17 +40,17 @@ public class SurveyCommands {
         return restTemplate.getForObject(getUri() + "/show/" + name, CliSurvey.class);
     }
 
-    @ShellMethod("Create survey.txt (createSurvey SURVEY_NAME QUESTION)")
+    @ShellMethod("Create survey (createSurvey SURVEY_NAME QUESTION)")
     public CliSurvey createSurvey(String name, String question) {
         return restTemplate.postForObject(getUri() + "/create", new CliSurvey(name, question), CliSurvey.class);
     }
 
-    @ShellMethod("Get a survey.txt (getSurvey SURVEY_NAME)")
+    @ShellMethod("Get a survey (getSurvey SURVEY_NAME)")
     public CliSurvey getSurvey(String name) {
         return restTemplate.getForObject(getUri() + "/get/" + name, CliSurvey.class);
     }
 
-    @ShellMethod("Delete  a survey.txt (deleteSurvey SURVEY_NAME)")
+    @ShellMethod("Delete  a survey (deleteSurvey SURVEY_NAME)")
     public void deleteSurvey(String name) {
         restTemplate.delete(getUri() + "/delete/" + name);
     }

@@ -25,7 +25,11 @@ public class AdminCommands {
 
     @ShellMethod("Register an admin in the CoD backend (registerAdmin ADMIN_NAME ADMIN_MAIL ADMIN_PWD)")
     public CliAdmin registerAdmin(String name, String mail, String password) {
-        if(cliContext.getLoggedInUser() != null && !cliContext.getLoggedInUser().getClass().equals(CliAdmin.class)) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
+        if (!cliContext.getLoggedInUser().getClass().equals(CliAdmin.class)) {
             System.out.println("You are not an admin");
             return null;
         }
@@ -45,7 +49,11 @@ public class AdminCommands {
 
     @ShellMethod("Register a store owner in the CoD backend (registerOwner OWNER_NAME OWNER_MAIL OWNER_PWD)")
     public CliStoreOwner registerOwner(String name, String mail, String password) {
-        if(!(cliContext.getLoggedInUser().getClass().equals(CliAdmin.class))) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
+        if (!cliContext.getLoggedInUser().getClass().equals(CliAdmin.class)) {
             System.out.println("You are not an admin");
             return null;
         }
@@ -54,7 +62,11 @@ public class AdminCommands {
 
     @ShellMethod("Delete an admin account in the CoD backend (deleteAdmin)")
     public void deleteAdmin() {
-        if (!(cliContext.getLoggedInUser().getClass().equals(CliAdmin.class))) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return;
+        }
+        if (!cliContext.getLoggedInUser().getClass().equals(CliAdmin.class)) {
             System.out.println("You are not an admin");
             return;
         }

@@ -33,7 +33,7 @@ public class PaymentHandler implements Payment {
             throw new NoCreditCardException();
         try {
             user = customerBalancesModifier.editBalance(user, amount);
-        } catch (CustomerNotFoundException | InsufficientBalanceException e) {
+        } catch (AccountNotFoundException | InsufficientBalanceException e) {
             e.printStackTrace();
         }
         return user;

@@ -15,6 +15,4 @@ public interface StoreOwnerRepository extends JpaRepository<StoreOwner, Long> {
 
     Optional<StoreOwner> findStoreOwnerByMailAndPassword(String mail, String password);
 
-    Optional<StoreOwner> findStoreOwnerById(Long id);
-
 }

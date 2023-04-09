@@ -30,12 +30,10 @@ node {
         }
         stage('Initialize') {
             if (behaviour == 'PR') {
-                echo 'Pull request'
                 checkout([$class: 'GitSCM', branches: [[name: "FETCH_HEAD"]],
                             extensions: [[$class: 'LocalBranch']],
                             userRemoteConfigs: [[refspec: "+refs/pull/${CHANGE_ID}/head:refs/remotes/origin/PR-${CHANGE_ID}",credentialsId: 'GlobalGitIds', url: "https://github.com/pns-isa-devops/isa-devops-22-23-team-b-23.git"]]])
             } else {
-                echo 'Standard branch'
                 checkout scmGit(branches: [[name: "${env.BRANCH_NAME}"]],
                         extensions: [], gitTool: 'Git',
                         userRemoteConfigs: [[credentialsId: 'GlobalGitIds', url: 'https://github.com/pns-isa-devops/isa-devops-22-23-team-b-23.git']])
@@ -60,7 +58,7 @@ node {
             }
         }
         if(behaviour == 'dev'|| pr_behaviour == 'feature' || pr_behaviour == 'dev'){
-            stage('Tests unitaires'){
+            stage('Tests d\'integrations'){
                 dir('backend'){
                     sh 'mvn verify -Dtest=!* -DfailIfNoTests=false '
                 }
@@ -121,7 +119,7 @@ node {
                 }
             }
         }
-        if(behaviour != 'main' && behaviour != 'PR'){
+        if(behaviour == 'feature' || behaviour == 'dev' || pr_behaviour == 'dev'){
             stage('Deploy'){
                         echo 'Deploy on artifactory(8002:8081) and send to SonarQube (8001:9000)..'
                         withCredentials([string(credentialsId: 'Sonar', variable: 'SONAR_ID')]) {

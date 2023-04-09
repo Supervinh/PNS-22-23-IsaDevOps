@@ -43,6 +43,18 @@ public class Payoff {
     }
 
     @Override
+    public String toString() {
+        return "Payoff{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", cost=" + cost +
+                ", pointCost=" + pointCost +
+                ", store=" + store +
+                ", isVfp=" + isVfp +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(name, cost, pointCost, store);
     }

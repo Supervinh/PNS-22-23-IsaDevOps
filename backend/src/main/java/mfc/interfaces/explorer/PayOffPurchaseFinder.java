@@ -7,6 +7,4 @@ import java.util.Set;
 
 public interface PayOffPurchaseFinder {
     Set<PayoffPurchase> lookUpPayOffPurchasesByStore(Store store);
-
-    Set<PayoffPurchase> lookUpPayOffPurchases();
 }

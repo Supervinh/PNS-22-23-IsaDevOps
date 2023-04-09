@@ -2,15 +2,21 @@ package mfc.components;
 
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
+import mfc.exceptions.StoreNotFoundException;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 
 @SpringBootTest
 @Transactional
@@ -29,32 +35,23 @@ class StoreHandlerTest {
     void setUp() {
         storeRepository.deleteAll();
         ownerRepository.deleteAll();
-        Map<String, String> setup = new HashMap<>();
-//        for(int i = 0; i <= 6; i++){
-//            setup.put("8h00");
-//            setup.put("20h00");
-//        }
         StoreOwner philippe = new StoreOwner("Philippe", "p@gmail.com", "pwd");
         ownerRepository.save(philippe);
-        System.out.println(philippe.getId());
         philippe = ownerRepository.findStoreOwnerByMail(philippe.getMail()).get();
-        System.out.println(philippe.getId());
-        storeRepository.save(new Store("Leclerc", setup, philippe));
+        storeRepository.save(new Store("Leclerc", philippe));
     }
 
-
-//    //    @Test
-//     void UpdateStoreSchedule() throws CredentialsException {
-//         Map<String, String> update = new HashMap<>();
-////        for(int i = 0; i <= 6; i++){
-////            update.put("7h30");
-////            update.put("19h30");
-////        }
-//         Optional<Store> carrouf = storeRepository.findStoreByName("Leclerc");
-//         Map<String, String> tocompare = carrouf.get().getSchedule();
-//         StoreOwner own = carrouf.get().getOwner();
-//         storeHandler.updateOpeningHours(carrouf.get(), update, own);
-//         Optional<Store> carroufReloaded = storeRepository.findStoreByName("Leclerc");
-//         assertNotEquals(tocompare, carroufReloaded.get().getSchedule());
-//     }
+    @Test
+    void updateStoreSchedule() throws StoreNotFoundException {
+        Optional<Store> carrouf = storeRepository.findStoreByName("Leclerc");
+        Map<String, String> tocompare = new HashMap<>(carrouf.orElseThrow(StoreNotFoundException::new).getSchedule());
+        Map<String, String> update = new HashMap<>();
+        for (int i = 0; i <= 6; i++) {
+            update.put("Mo0", "7:20");
+            update.put("Mo1", "19:30");
+        }
+        storeHandler.updateOpeningHours(carrouf.get(), update);
+        Store carroufReloaded = storeRepository.findStoreByName("Leclerc").orElseThrow(StoreNotFoundException::new);
+        assertNotEquals(tocompare, carroufReloaded.getSchedule());
+    }
 }

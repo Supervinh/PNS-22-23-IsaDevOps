@@ -1,20 +1,20 @@
 package mfc.controllers;
 
 import mfc.controllers.dto.DashboardDTO;
-import mfc.controllers.dto.ErrorDTO;
 import mfc.controllers.dto.StoreOwnerDTO;
 import mfc.entities.Store;
 import mfc.entities.StoreOwner;
-import mfc.exceptions.*;
+import mfc.exceptions.AccountNotFoundException;
+import mfc.exceptions.AlreadyExistingAccountException;
+import mfc.exceptions.CredentialsException;
+import mfc.exceptions.StoreNotFoundException;
 import mfc.interfaces.StoreDataGathering;
 import mfc.interfaces.explorer.StoreFinder;
 import mfc.interfaces.explorer.StoreOwnerFinder;
-import mfc.interfaces.modifier.StoreModifier;
 import mfc.interfaces.modifier.StoreOwnerRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,28 +36,13 @@ public class StoreOwnerController {
     private final StoreOwnerFinder ownerFind;
     private final StoreFinder storeFinder;
     private final StoreDataGathering storeDataGathering;
-    private final StoreModifier storeModifier;
 
     @Autowired
-    public StoreOwnerController(StoreOwnerRegistration ownerReg, StoreOwnerFinder ownerFind, StoreFinder storeFinder, StoreDataGathering storeDataGathering, StoreModifier storeModifier) {
+    public StoreOwnerController(StoreOwnerRegistration ownerReg, StoreOwnerFinder ownerFind, StoreFinder storeFinder, StoreDataGathering storeDataGathering) {
         this.ownerReg = ownerReg;
         this.ownerFind = ownerFind;
         this.storeFinder = storeFinder;
         this.storeDataGathering = storeDataGathering;
-        this.storeModifier = storeModifier;
-    }
-
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    // The 422 (Unprocessable Entity) status code means the server understands the content type of the request entity
-    // (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is
-    // correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained
-    // instructions.
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ErrorDTO handleExceptions(MethodArgumentNotValidException e) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setError("Cannot process admin registration");
-        errorDTO.setDetails(e.getMessage());
-        return errorDTO;
     }
 
     @PostMapping(path = "registerOwner", consumes = APPLICATION_JSON_VALUE) // path is a REST CONTROLLER NAME
@@ -91,9 +76,9 @@ public class StoreOwnerController {
     }
 
     @PostMapping(path = LOGGED_URI + "dashboard", consumes = ALL_VALUE)
-    public ResponseEntity<DashboardDTO> dashboard(@PathVariable("ownerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException {
+    public ResponseEntity<DashboardDTO> dashboard(@PathVariable("ownerId") Long storeOwnerId, @RequestBody @Valid String storeName) throws StoreNotFoundException, CredentialsException, AccountNotFoundException {
         Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
-        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(AccountNotFoundException::new);
         if (store.getOwner().equals(storeOwner)) {
             return ResponseEntity.status(HttpStatus.OK).body(storeDataGathering.gather(store));
         } else {
@@ -104,22 +89,10 @@ public class StoreOwnerController {
     @DeleteMapping(path = LOGGED_URI + "deleteStoreOwner")
     public ResponseEntity<StoreOwnerDTO> deleteStoreOwner(@PathVariable("ownerId") Long storeOwnerId) {
         try {
-            StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
+            StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(AccountNotFoundException::new);
             return ResponseEntity.ok().body(convertOwnerToDto(ownerReg.delete(storeOwner)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @DeleteMapping(path = LOGGED_URI + "deleteStore/{storeName}")
-    public ResponseEntity<Void> deleteStore(@PathVariable("ownerId") Long storeOwnerId, @PathVariable("storeName") String storeName) throws StoreNotFoundException, CredentialsException, StoreOwnerNotFoundException, NoStoreFoundException {
-        Store store = storeFinder.findStoreByName(storeName).orElseThrow(StoreNotFoundException::new);
-        StoreOwner storeOwner = ownerFind.findStoreOwnerById(storeOwnerId).orElseThrow(StoreOwnerNotFoundException::new);
-        if (store.getOwner().equals(storeOwner)) {
-            storeModifier.delete(store);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            throw new CredentialsException();
         }
     }
 }

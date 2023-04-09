@@ -12,7 +12,6 @@ import mfc.repositories.CustomerRepository;
 import mfc.repositories.StoreOwnerRepository;
 import mfc.repositories.StoreRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +31,7 @@ class CustomerRegistryTest {
     private final String mail = "Mark@pns.fr";
     private final String name = "Mark";
     private final String password = "password";
-    private Map<String, String> schedule = new HashMap<>();
+    private final Map<String, String> schedule = new HashMap<>();
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
@@ -108,7 +107,7 @@ class CustomerRegistryTest {
     @Test
     void editBalanceOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password, "");
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerBalancesModifier.editBalance(customer, 100));
+        Assertions.assertThrows(AccountNotFoundException.class, () -> customerBalancesModifier.editBalance(customer, 100));
     }
 
     @Test
@@ -121,17 +120,13 @@ class CustomerRegistryTest {
     @Test
     void cannotEditFidelityPointsWithNegativeValue() throws Exception {
         Customer customer = customerRegistration.register(name, mail, password, "");
-        Assertions.assertThrows(NegativePointCostException.class, () -> {
-            customerBalancesModifier.editFidelityPoints(customer, -100);
-        });
+        Assertions.assertThrows(NegativePointCostException.class, () -> customerBalancesModifier.editFidelityPoints(customer, -100));
     }
 
     @Test
-    void editFidelityPointsOfUnknownCustomer() throws Exception {
+    void editFidelityPointsOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password, "");
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
-            customerBalancesModifier.editFidelityPoints(customer, 100);
-        });
+        Assertions.assertThrows(AccountNotFoundException.class, () -> customerBalancesModifier.editFidelityPoints(customer, 100));
     }
 
     @Test
@@ -146,7 +141,7 @@ class CustomerRegistryTest {
     @Test
     void cannotRecordMatriculationOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password, "");
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordMatriculation(customer, "AB-123-CD"));
+        Assertions.assertThrows(AccountNotFoundException.class, () -> customerProfileModifier.recordMatriculation(customer, "AB-123-CD"));
     }
 
     @Test
@@ -161,7 +156,7 @@ class CustomerRegistryTest {
     @Test
     void cannotRecordCreditCardOfUnknownCustomer() {
         Customer customer = new Customer(name, mail, password, "");
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordCreditCard(customer, "1234 5678 9012 3456"));
+        Assertions.assertThrows(AccountNotFoundException.class, () -> customerProfileModifier.recordCreditCard(customer, "1234 5678 9012 3456"));
     }
 
     @Test
@@ -187,7 +182,7 @@ class CustomerRegistryTest {
         storeRepository.save(store);
         store = storeRepository.findStoreByName(store.getName()).get();
         Store finalStore = store;
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> customerProfileModifier.recordNewFavoriteStore(customer, finalStore));
+        Assertions.assertThrows(AccountNotFoundException.class, () -> customerProfileModifier.recordNewFavoriteStore(customer, finalStore));
     }
 
     @Test
@@ -201,7 +196,7 @@ class CustomerRegistryTest {
         store = storeRepository.findStoreByName(store.getName()).get();
         Store finalStore = store;
         Customer finalCustomer = customerProfileModifier.recordNewFavoriteStore(customer, finalStore);
-        Assertions.assertThrows(StoreAlreadyRegisteredException.class, () -> customerProfileModifier.recordNewFavoriteStore(finalCustomer, finalStore));
+        Assertions.assertThrows(AlreadyRegisteredStoreException.class, () -> customerProfileModifier.recordNewFavoriteStore(finalCustomer, finalStore));
     }
 
     @Test
@@ -224,9 +219,7 @@ class CustomerRegistryTest {
         Customer customer = new Customer(name, mail, password, "");
         StoreOwner storeOwner = new StoreOwner("Owner", "owner@store.com", "password");
         Store store = new Store("Carrefour", schedule, storeOwner);
-        Assertions.assertThrows(CustomerNotFoundException.class, () -> {
-            customerProfileModifier.removeFavoriteStore(customer, store);
-        });
+        Assertions.assertThrows(AccountNotFoundException.class, () -> customerProfileModifier.removeFavoriteStore(customer, store));
     }
 
     @Test

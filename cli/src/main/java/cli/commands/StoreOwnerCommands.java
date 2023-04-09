@@ -35,26 +35,29 @@ public class StoreOwnerCommands {
 
     @ShellMethod("Ask indicators regarding the fidelity program (dashboard STORE_NAME)")
     public CliDashboard dashboard(String storeName) {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return null;
+        }
+        if (cliContext.getLoggedInUser().getClass() != CliStoreOwner.class) {
+            System.out.println("You are not a store owner");
+            return null;
+        }
         return restTemplate.postForObject(getUri() + "/dashboard", storeName, CliDashboard.class);
     }
 
     @ShellMethod("Delete account(deleteStoreOwner)")
     public void deleteStoreOwner() {
+        if (cliContext.getLoggedInUser() == null) {
+            System.out.println("You are not logged in");
+            return;
+        }
         if (cliContext.getLoggedInUser().getClass() != CliStoreOwner.class) {
             System.out.println("You are not a store owner");
             return;
         }
         restTemplate.delete(getUri() + "/deleteStoreOwner");
         cliContext.setLoggedInUser(null);
-    }
-
-    @ShellMethod("Delete store (deleteStore STORE_NAME)")
-    public void deleteStore(String storeName) {
-        if (!(cliContext.getLoggedInUser().getClass().equals(CliStoreOwner.class))) {
-            System.out.println("You are not a store owner");
-            return;
-        }
-        restTemplate.delete(getUri() + "/deleteStore/" + storeName);
     }
 
     private String getUri() {
