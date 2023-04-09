@@ -10,6 +10,7 @@
         * [Pipeline : Pull Request from Feature to Dev & Pull Request from Dev to Main](#pipeline--pull-request-from-feature-to-dev--pull-request-from-dev-to-main)
         * [Pipeline : Main](#pipeline--main)
     * [Tests End-to-End](#tests-end-to-end)
+* [Axes d'améliorations](#axe-daméliorations)
 * [Plan de reprise d'activité](#plan-de-reprise-dactivité)
 * [Identifiants et Accès](#identifiants-et-accès)
     * [Smee](#smee)
@@ -29,8 +30,7 @@ qualité du code produit.
 
 Nous avons mis en place un agent Jenkins qui intègre tous les outils nécessaires au déroulement des pipelines. Pour
 cela, nous avons créé une [image Docker](../devops/jenkins/Dockerfile) qui
-contient `maven`, `docker`, `docker-compose`, `curl`
-et `socat`. Nous avons ensuite créé un conteneur Docker à
+contient `maven`, `docker`, `docker-compose`, `curl` et `socat`. Nous avons ensuite créé un conteneur Docker à
 partir de l'agent SSH fourni par Jenkins, et nous avons ajouté maven, docker et docker compose, socat ainsi que curl.
 Les avantages de cette solution sont multiples. Pour commencer, puisque notre agent est un conteneur Docker, il est
 possible de lancer les pipelines sans
@@ -43,7 +43,9 @@ l'agent pour stocker les dépendances, et les images docker temporaires.
 
 ### Définitions des Pipelines
 
-Nous n'utilisons qu'un seul [Jenkinsfile](../Jenkinsfile) pour lancer tous les pipelines. Pour comprendre la logique de
+Nous n'utilisons qu'un seul [Jenkinsfile](../Jenkinsfile) pour lancer tous les pipelines, ce qui permet de faire évoluer
+le comportement de chaque pipeline facilement. De plus, cela évite de dupliquer les étapes communes à plusieurs
+pipelines. Pour comprendre la logique de
 chaque pipeline, il est essentiel de comprendre notre stratégie de branches.
 
 #### Git Branching Strategy
@@ -120,6 +122,22 @@ End-to-End, une documentation est disponible dans le dossier [endToEnd](../endTo
 
 Notre plan de reprise d'activité est disponible [ici](../devops/README.md), et contient notamment la marche à suivre
 pour reconstruire la chaîne DevOps depuis zéro.
+
+## Axe d'améliorations
+
+Une premiere faiblesse de notre projet se situe au niveau de la gestion des identifiants. D'une part, le
+fichier [settings.xml](../settings.xml) contient les identifiants de connexion à Artifactory en clair. D'autre part, le
+Jenkinsfile utilise plusieurs identifiants qui sont interpolés dans des chaines de caracteres. Il serait interessant
+de trouver une solution pour utiliser les identifiants sans les interpoler.
+
+Un point d'amélioration réside dans la compilation de ressources inutiles. En effet, les services externes sont
+re-compilés à chaque fois que le projet est lancé, alors qu'ils ne changent pas. Stocker les services externes dans des
+artefacts Artifactory permettrait de ne pas recompiler les services externes à chaque fois.
+
+Un dernier point d'amélioration concerne le changement de version, dans
+le [docker-compose d'exemple](../deploy/docker-compose.yaml) et les deux pom.xml,
+celui du [server](../backend/pom.xml) et celui de la [cli](../cli/pom.xml). Il serait intéressant de trouver une
+solution pour automatiser ce changement de version, ou de ne pas avoir à modifier la valeur à trois endroits différents.
 
 ## Identifiants et Accès
 
